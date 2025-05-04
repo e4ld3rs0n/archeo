@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <title>Anagrafiche</title>
+</head>
+
+{% include 'header.html' %}
+
+<body>
+    <div class="container">
+        {% include 'notifications.html' %}
+
+        <h1>Nuova anagrafica</h1>
+
+        <form method="POST">
+            <label>Nome: <input type="text" name="nome" required></label><br>
+            <label>Cognome: <input type="text" name="cognome" required></label><br>
+            <label>Email: <input type="email" name="email" required></label><br>
+            <label>Telefono: <input type="text" name="tel" required></label><br>
+            <button type="submit">Aggiungi</button>
+        </form>
+    </div>
+    
+    {% include 'footer.html' %}
+</body>
+</html>

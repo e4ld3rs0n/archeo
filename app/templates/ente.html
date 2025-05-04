@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <title>Enti</title>
+</head>
+
+{% include 'header.html' %}
+
+<body>
+    <div class="container">
+        {% include 'notifications.html' %}
+
+        <h1>Nuovo ente</h1>
+
+        <form method="POST">
+            <label>Nome: <input type="text" name="nome" required></label><br>
+            <label>Telefono: <input type="text" name="tel"></label><br>
+            <label>Email: <input type="email" name="email"></label><br>
+            <label>Località: 
+                <select name="id_loc" id="localita" required>
+                    {% for loc in lista_localita %}
+                        <option value="{{ loc.id }}">{{ loc.denom }} - {{ loc.via }}, {{ loc.citta }}</option>
+                    {% endfor %}
+                </select></label><br>
+                La località che cerchi non è presente? <a href="{{ url_for('create.nuova_localita') }}">Puoi crearla qui</a><br><br>
+            <button type="submit">Aggiungi</button>
+        </form>
+    </div>
+
+    {% include 'footer.html' %}
+</body>
+</html>

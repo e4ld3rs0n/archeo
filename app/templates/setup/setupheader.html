@@ -1,0 +1,23 @@
+<!-- templates/header.html -->
+<header>
+    <nav>
+      <ul>
+        <li><a href="{{ url_for('main.index') }}">Archeo</a></li>
+                
+        <li class="dropdown">
+          <a href="#" class="dropbtn">Configurazione</a>
+          <ul class="dropdown-content">
+            <li><a href="{{ url_for('main.initdb') }}">Inizializza database</a></li>
+          </ul>
+        </li>
+
+        <li class="dropdown">
+          <a href="#" class="dropbtn">Aiuto</a>
+          <ul class="dropdown-content">
+            <li><a class="disabled" href="#">Manuale</a></li>
+            <li><a class="disabled" href="#">Informazioni su Archeo</a></li>
+          </ul>
+        </li>
+      </ul>
+    </nav>
+  </header>

@@ -1,0 +1,53 @@
+<!-- templates/header.html -->
+<header>
+    <nav>
+      <ul>
+        <li><a href="{{ url_for('main.index') }}">Archeo</a></li>
+        
+        <li class="dropdown">
+          <a href="#" class="dropbtn">Crea</a>
+          <ul class="dropdown-content">
+            <li><a href="{{ url_for('create.nuova_anagrafica') }}">Nuova anagrafica</a></li>
+            <li><a href="{{ url_for('create.nuova_localita') }}">Nuova località</a></li>
+            <li><a href="{{ url_for('main.ente') }}">Nuovo ente</a></li>
+            <li><a href="{{ url_for('main.scheda') }}">Nuova scheda US</a></li>
+          </ul>
+        </li>
+
+        <li class="dropdown">
+          <a href="#" class="dropbtn">Esplora</a>
+          <ul class="dropdown-content">
+            <li><a href="{{ url_for('view.visualizza_anagrafiche') }}">Visualizza le anagrafiche</a></li>
+            <li><a href="{{ url_for('view.visualizza_localita') }}">Visualizza le località</a></li>
+            <li><a href="{{ url_for('view.visualizza_enti') }}">Visualizza gli enti</a></li>
+            <li><a href="{{ url_for('view.visualizza_schede') }}">Visualizza le schede US</a></li>
+          </ul>
+        </li>
+
+        <li class="dropdown">
+          <a href="#" class="dropbtn">Modifica</a>
+          <ul class="dropdown-content">
+            <li><a href="{{ url_for('main.sequenza_fisica') }}">Sequenze fisiche</a></li>
+            <li><a href="{{ url_for('main.sequenza_stratigrafica') }}">Sequenze stratigrafiche</a></li>
+          </ul>
+        </li>
+
+        <li class="dropdown">
+          <a href="#" class="dropbtn">Debug</a>
+          <ul class="dropdown-content">
+            <li><a href="{{ url_for('main.initdb') }}">Inizializza database</a></li>
+            <li><a href="{{ url_for('main.dumpdb') }}">Dump database</a></li>
+            <li><a href="{{ url_for('main.create_dummy_data') }}">Crea dei dati di prova</a></li>
+          </ul>
+        </li>
+
+        <li class="dropdown">
+          <a href="#" class="dropbtn">Aiuto</a>
+          <ul class="dropdown-content">
+            <li><a href="{{ url_for('view.visualizza_manuale') }}">Manuale</a></li>
+            <li><a class="disabled" href="#">Informazioni su Archeo</a></li>
+          </ul>
+        </li>
+      </ul>
+    </nav>
+  </header>

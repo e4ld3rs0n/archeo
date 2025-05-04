@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <title>Anagrafiche</title>
+</head>
+
+{% include 'header.html' %}
+
+<body>
+    <div class="container">
+        <h1>Anagrafiche</h1>
+
+        {% include 'notifications.html' %}
+
+        <ul>
+            {% for a in records %}
+                <li class="card card--flex">
+                    <img src="{{ url_for('static', filename='img/person.png') }}" class="card-img">
+                    <div class="card-info">
+                        <h3>{{ a.cognome }}, {{ a.nome }}</h3>
+                        Telefono: {{ a.tel }}<br>
+                        E-mail: {{ a.email }}<br><br>
+
+                        <form method="POST" action="{{ url_for('delete.elimina_anagrafica', id_anagrafica=a.id) }}" onsubmit="return confirm('Sei sicuro di voler eliminare questa anagrafica?');">
+                            <button type="submit">Elimina</button>
+                        </form>
+                    </div>
+                </li>
+            {% else %}
+                <li>Nessun record presente.</li>
+            {% endfor %}
+        </ul>
+    </div>
+    
+    {% include 'footer.html' %}
+</body>
+</html>

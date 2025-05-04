@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <title>Schede US</title>
+</head>
+
+{% include 'header.html' %}
+
+<body>
+    <div class="container">
+        {% include 'notifications.html' %}
+
+        <h1>Schede US</h1>
+
+        <ul>
+            {% for scheda in records %}
+            <li>
+                Scheda US {{ scheda.num_us }} - {{ scheda.descrizione }} ({{ scheda.data.strftime('%d-%m-%Y') }}) - <a href="{{ url_for('main.visualizza_scheda', id=scheda.id) }}">Visualizza scheda</a>
+            </li>
+            {% else %}
+            <li>Nessuna scheda presente.</li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    {% include 'footer.html' %}
+</body>
+</html>

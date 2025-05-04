@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <title>Enti</title>
+</head>
+
+{% include 'header.html' %}
+
+<body>
+    <div class="container">
+        {% include 'notifications.html' %}
+
+        <h1>Enti</h1>
+
+        <ul>
+            {% for ente in records %}
+                <li class="card">
+                    <h3>{{ ente.nome }}</h3>
+                    <p>
+                        Telefono: <strong>{{ ente.tel }}</strong><br>
+                        E-mail: <strong>{{ ente.email }}</strong><br>
+                        
+                        {{ ente.localita.via }}<br>
+                        {{ ente.localita.cap }} {{ ente.localita.citta }} ({{ ente.localita.provincia }})<br>
+                    </p>
+                </li>
+            {% else %}
+                <li>Nessun record.</li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    {% include 'footer.html' %}
+</body>
+</html>

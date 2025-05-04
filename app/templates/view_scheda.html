@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <title>Visualizza Scheda</title>
+</head>
+
+{% include 'header.html' %}
+
+<body>
+    <div class="container">
+        <h1>Dettagli Scheda US</h1>
+        
+        <table class="scheda-us" style="undefined;table-layout: fixed; width: 1020px"><colgroup>
+            <col style="width: 170px">
+            <col style="width: 170px">
+            <col style="width: 170px">
+            <col style="width: 170px">
+            <col style="width: 170px">
+            <col style="width: 170px">
+            </colgroup>
+            <tbody>
+              <tr>
+                <td><strong>US</strong><br>{{ scheda.num_us }}<br></td>
+                <td colspan="4"><strong>Ente responsabile</strong><br>{{ scheda.ente_responsabile.nome }}</td>
+                <td>Data<br>{{ scheda.data.strftime('%d-%m-%Y') }}</td>
+              </tr>            
+              <tr>
+                <td colspan="5"><strong>Località</strong><br>{{ scheda.localita.denom }}<br>{{ scheda.localita.via }}, {{ scheda.localita.cap }} - {{ scheda.localita.citta }} ({{ scheda.localita.provincia }})</td>
+                <td colspan="1"><strong>Quadrato:</strong><br>{{ scheda.quadrato }}</td>
+            </tr>
+              <tr>
+                <td colspan="6">
+                    <strong>Modo di formazione</strong><br>{{ scheda.modo_formazione }}
+                </td>
+              </tr>
+              <tr>
+                <td colspan="3"><strong>Componenti organici</strong><br>{{ scheda.comp_organici }}</td>
+                <td colspan="3"><strong>Componenti inorganici</strong><br>{{ scheda.comp_inorganici }} </td>
+              </tr>
+              <tr>
+                <td colspan="2"><strong>Consistenza:</strong><br>{{ scheda.consistenza }}</td>
+                <td colspan="2"><strong>Colore:</strong><br>{{ scheda.colore }}</td>
+                <td colspan="2"><strong>Misure:</strong><br>{{ scheda.misure }}</td>
+              </tr>
+              <tr>
+                <td colspan="6"><strong>Descrizione</strong><br>{{ scheda.descrizione }}</td>
+              </tr>
+              <tr>
+                <td colspan="6"><strong>Note e osservazioni</strong><br>{{ scheda.note }}</td>
+              </tr>
+              <tr>
+                <td colspan="6"><strong>Interpretazione</strong><br>{{ scheda.interpretazione }}</td>
+              </tr>
+              <tr>
+                <td colspan="6"><strong>Elementi datanti</strong><br>{{ scheda.elem_datanti }}</td>
+              </tr>
+              <tr>
+                <td colspan="3"><strong>Composizione</strong><br>{{ scheda.composizione }}</td>
+                <td colspan="3"><strong>Elementi datanti</strong><br>{{ scheda.elem_datanti }}</td>
+              </tr>
+              <tr>
+                <td colspan="2">
+                    <strong>Campionature:</strong><br>{{ 'Sì' if scheda.campionature else 'No' }}
+                </td>
+                <td colspan="2">
+                    <strong>Flottazione:</strong><br>{{ 'Sì' if scheda.flottazione else 'No' }}
+                </td>
+                <td colspan="2">
+                    <strong>Setacciatura:</strong><br>{{ scheda.setacciatura }}
+                </td>
+              </tr>
+              <tr>
+                <td colspan="6"><strong>Affidabilità stratigrafica</strong><br>{{ scheda.affidabilita_strat }}</td>
+              </tr>
+              <tr>
+                <td colspan="6"><strong>Responsabile</strong><br>{{ scheda.responsabile.nome }} {{ scheda.responsabile.cognome }}</td>
+              </tr>
+              <tr>
+                <td colspan="6"><strong>Responsabile scientifico</strong><br>{{ scheda.responsabile_scientifico.nome }} {{ scheda.responsabile_scientifico.cognome }}</td>
+              </tr>
+            </tbody></table>
+
+        <!--
+        <p><strong>Path foto:</strong> {{ scheda.path_foto }}</p>
+        <p><strong>Path ortofoto:</strong> {{ scheda.path_ortofoto }}</p>
+        -->
+        <h2>Relazioni di Sequenza</h2>
+        
+        <h3>Sequenze fisiche</h3>
+
+        {% if rel_partenza or rel_arrivo %}
+            <ul>
+                {% if rel_partenza %}
+                    {% for rel_p in rel_partenza %}
+                        <li>
+                            {% if rel_p.sequenza == "copre" %}
+                                Copre {{ rel_p.id_seq_b }}
+                            {% elif rel_p.sequenza == "taglia" %}
+                                Taglia {{ rel_p.id_seq_b }}
+                            {% elif rel_p.sequenza == "riempie" %}
+                                Riempie {{ rel_p.id_seq_b }}
+                            {% elif rel_p.sequenza == "si_appoggia_a" %}
+                                Si appoggia a {{ rel_p.id_seq_b }}
+                            {% elif rel_p.sequenza == "uguale_a" %}
+                                Uguale a {{ rel_p.id_seq_b }}
+                            {% elif rel_p.sequenza == "si_lega_a" %}
+                                Si lega a {{ rel_p.id_seq_b }}
+                            {% endif %}
+                        </li>
+                    {% endfor %}
+                {% endif %}
+
+                {% if rel_arrivo %}
+                    {% for rel_a in rel_arrivo %}
+                        <li>
+                            {% if rel_a.sequenza == "copre" %}
+                                Coperta da {{ rel_a.id_seq_a }}
+                            {% elif rel_a.sequenza == "taglia" %}
+                                Tagliata da {{ rel_a.id_seq_a }}
+                            {% elif rel_a.sequenza == "riempie" %}
+                                Riempita da {{ rel_a.id_seq_a }}
+                            {% elif rel_a.sequenza == "si_appoggia_a" %}
+                                Gli si appoggia {{ rel_a.id_seq_a }}
+                            {% elif rel_a.sequenza == "uguale_a" %}
+                                Uguale a {{ rel_a.id_seq_a }}
+                            {% elif rel_a.sequenza == "si_lega_a" %}
+                                Si lega a {{ rel_a.id_seq_a }}
+                            {% endif %}
+                        </li>
+                    {% endfor %}
+                {% endif %}
+            </ul>
+        {% else %}
+            <p>Nessuna sequenza fisica trovata.</p>
+        {% endif %}
+        
+        <h3>Sequenze stratigrafiche</h3>
+
+        {% if rel_strat_partenza or rel_strat_arrivo %}
+        
+            <ul>
+
+            {% if rel_strat_partenza %}
+                {% for rel in rel_strat_partenza %}
+                    <li>
+                        Posteriore a {{ rel.id_seq_b }}
+                    </li>
+                {% endfor %}
+            {% endif %}
+
+            {% if rel_strat_arrivo %}
+                {% for rel in rel_strat_arrivo %}
+                    <li>
+                        Anteriore a {{ rel.id_seq_a }}
+                    </li>
+                {% endfor %}
+            {% endif %}
+            
+            </ul>
+        {% else %}
+            <p>Nessuna sequenza stratigrafica trovata.</p>
+        {% endif %}
+
+        <a href="{{ url_for('main.scheda') }}">Torna alla lista</a>
+        
+    </div>
+
+    {% include 'footer.html' %}
+</body>
+</html>

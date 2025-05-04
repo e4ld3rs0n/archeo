@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <title>Dashboard</title>
+</head>
+
+{% include 'header.html' %}
+
+<body>
+    <div class="container">
+        {% include 'notifications.html' %}
+        <h1>Benvenuti su Archeo</h1>
+        <p>
+            Archeo è un software per la gestione della documentazione dei siti archeologici.
+        </p>
+        <img src="{{ url_for('static', filename='img/pietro.png') }}" class="banner">            
+    </div>
+    
+    {% include 'footer.html' %}
+
+</body>
+</html>

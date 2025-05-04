@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <title>Editor di sequenze stratigrafiche</title>
+</head>
+
+{% include 'header.html' %}
+
+<body>
+    <div class="container">
+        <h1>Gestione Sequenze Stratigrafiche</h1>
+
+        {% include 'notifications.html' %}
+
+        <h2>Definizione nuova sequenza</h2>
+        <form method="POST">
+            <label for="id_seq_a">Unità Strat. A:</label>
+            <select name="id_seq_a" id="id_seq_a" required>
+                {% for scheda in schede %}
+                    <option value="{{ scheda.id }}">{{ scheda.num_us }} - {{ scheda.descrizione }}</option>
+                {% endfor %}
+            </select><br><br>
+
+            <label for="sequenza">Relazione fisica:</label>
+            <select name="sequenza" id="sequenza" required>
+                <option value="posteriore_a">Posteriore a</option>
+                <option value="anteriore_a">Anteriore a</option>
+            </select><br><br>
+
+            <label for="id_seq_b">Unità Strat. B:</label>
+            <select name="id_seq_b" id="id_seq_b" required>
+                {% for scheda in schede %}
+                    <option value="{{ scheda.id }}">{{ scheda.num_us }} - {{ scheda.descrizione }}</option>
+                {% endfor %}
+            </select><br><br>
+
+            <button type="submit">Salva sequenza</button>
+        </form>
+    </div>
+</body>
+</html>

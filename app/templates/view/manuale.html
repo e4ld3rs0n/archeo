@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <title>Manuale</title>
+</head>
+
+{% include 'header.html' %}
+
+<body>
+    <div class="container">
+        {% include 'notifications.html' %}
+        <h1>Manuale di Archeo</h1>
+
+        <h2>Cos'è Archeo?</h2>
+        <p>
+            <strong>Archeo</strong> è un'applicazione web per la gestione e la documentazione di scavi e siti archeologici. 
+            Permette di creare, esplorare e modificare anagrafiche, località, enti e schede stratigrafiche (US).
+        </p>
+
+        <h2>Menu Principale</h2>
+
+        <h3>Crea</h3>
+
+        <p>Questo menu consente di creare nuove entità nel database.</p>
+
+        <ul>
+            <li><strong>Nuova anagrafica</strong>: aggiunge una nuova persona o soggetto.</li>
+            <li><strong>Nuova località</strong>: registra un nuovo sito archeologico.</li>
+            <li><strong>Nuovo ente</strong>: inserisce un nuovo ente (università, museo, ecc.).</li>
+            <li><strong>Nuova scheda US</strong>: crea una nuova Unità Stratigrafica.</li>
+        </ul>
+
+        <h3>Esplora</h3>
+
+        <p>Questo menu consente di visualizzare le entità già presenti nel database.</p>
+
+        <ul>
+            <li>Visualizza le anagrafiche</li>
+            <li>Visualizza le località</li>
+            <li>Visualizza gli enti</li>
+            <li>Visualizza le schede US</li>
+        </ul>
+
+        <h3>Modifica</h3>
+
+        <p>Questo menu consente di definire le sequenze fisiche e stratigrafiche.</p>
+
+        <ul>
+            <li><strong>Sequenze fisiche</strong>: definisce l’ordine fisico delle US.</li>
+            <li><strong>Sequenze stratigrafiche</strong>: definisce la stratigrafia.</li>
+        </ul>
+
+        <h3>Debug</h3>
+
+        <p>Questo menu consente di eseguire operazioni di debug e manutenzione del database.</p>
+
+        <ul>
+            <li><strong>Inizializza database</strong>: ricrea la struttura del database.</li>
+            <li><strong>Dump database</strong>: esporta il contenuto del database.</li>
+            <li><strong>Crea dei dati di prova</strong>: inserisce dati fittizi per testare l’app.</li>
+        </ul>
+
+        <h3>Aiuto</h3>
+
+        <p>Questo menu fornisce informazioni utili sull’applicazione.</p>
+
+        <ul>
+            <li><strong>Manuale</strong>: sezione attuale.</li>
+            <li><strong>Informazioni su Archeo</strong>: in sviluppo.</li>
+        </ul>
+        
+    </div>
+    
+    {% include 'footer.html' %}
+
+</body>
+</html>

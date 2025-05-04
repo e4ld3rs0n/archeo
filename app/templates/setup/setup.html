@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <title>Setup</title>
+</head>
+
+{% include 'setup/setupheader.html' %}
+
+<body>
+    <div class="container">
+        {% include 'notifications.html' %}
+        <h1>Benvenuti su Archeo</h1>
+        <p>
+            Archeo è un software per la gestione della documentazione dei siti archeologici.<br><br>
+            Prima di cominciare, è necessario <a href="{{ url_for('main.initdb') }}">inizializzare il database</a>.
+        </p>
+        <img src="{{ url_for('static', filename='img/pietro.png') }}" class="banner"> 
+    </div>
+    
+    {% include 'footer.html' %}
+
+</body>
+</html>

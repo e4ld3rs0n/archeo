@@ -1,3 +1,18 @@
+# Development database
+dbdata/
+
+# Editor-related stuff
+.vscode/
+.idea/
+.*.swp
+*~
+.DS_Store
+
+# Docker stuff
+*.log
+docker-compose.override.yml
+.docker/
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
