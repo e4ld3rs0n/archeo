@@ -23,7 +23,11 @@
                         E-mail: <strong>{{ ente.email }}</strong><br>
                         
                         {{ ente.localita.via }}<br>
-                        {{ ente.localita.cap }} {{ ente.localita.citta }} ({{ ente.localita.provincia }})<br>
+                        {{ ente.localita.cap }} {{ ente.localita.citta }} ({{ ente.localita.provincia }})<br><br>
+
+                        <form method="POST" action="{{ url_for('delete.elimina_ente', id_ente=ente.id) }}" onsubmit="return confirm('Sei sicuro di voler eliminare questo ente?');">
+                            <button type="submit">Elimina</button>
+                        </form>
                     </p>
                 </li>
             {% else %}

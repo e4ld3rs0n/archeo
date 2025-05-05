@@ -16,8 +16,13 @@
 
         <ul>
             {% for scheda in records %}
-            <li>
-                Scheda US {{ scheda.num_us }} - {{ scheda.descrizione }} ({{ scheda.data.strftime('%d-%m-%Y') }}) - <a href="{{ url_for('main.visualizza_scheda', id=scheda.id) }}">Visualizza scheda</a>
+            <li class="card card--flex">
+                <img src="{{ url_for('static', filename='img/document.png') }}" class="card-img">
+                <div class="card-info">
+                    <h3><a href="{{ url_for('view.scheda', id=scheda.id) }}">Scheda {{ scheda.num_us }}</a></h3>
+                    {{ scheda.descrizione }} ({{ scheda.data.strftime('%d/%m/%Y') }})<br>
+                    {{ scheda.ente_responsabile.nome}}
+                </div>
             </li>
             {% else %}
             <li>Nessuna scheda presente.</li>

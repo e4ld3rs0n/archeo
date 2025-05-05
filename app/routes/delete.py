@@ -49,3 +49,22 @@ def elimina_localita(id_localita):
         flash(f"Errore durante l'eliminazione della località: {str(e)}", "error")
     
     return redirect(url_for("view.visualizza_localita"))
+
+@bp.route("/elimina/ente/<int:id_ente>", methods=["POST"])
+def elimina_ente(id_ente):
+    try:
+        ente = Ente.query.get_or_404(id_ente)
+        
+        desc = ente.nome 
+        
+        db.session.delete(ente)
+        db.session.commit()
+        flash(f"Ente {desc} eliminato con successo.", "success")
+    except IntegrityError as e:
+        db.session.rollback()
+        flash(f"Errore {e.orig.pgcode}: impossibile eliminare questo ente perché è ancora collegato ad altri record. Rimuovi prima i collegamenti.", "error")
+    except Exception as e:
+        db.session.rollback()
+        flash(f"Errore durante l'eliminazione dell'ente: {str(e)}", "error")
+    
+    return redirect(url_for("view.visualizza_enti"))

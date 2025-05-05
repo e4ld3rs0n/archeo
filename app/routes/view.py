@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template
+from flask import Blueprint, render_template, flash, redirect, url_for
 from sqlalchemy import *
 from flask_sqlalchemy import SQLAlchemy
 from models import *
@@ -31,3 +31,25 @@ def visualizza_enti():
 def visualizza_schede():
     records = ModSchedaUs.query.order_by(ModSchedaUs.num_us.asc()).all()
     return render_template("view/visualizza_schede.html", records=records)
+
+@bp.route("/scheda/<int:id>")
+def scheda(id):
+    # Fetch the scheda by ID
+    scheda = ModSchedaUs.query.get(id)
+    if scheda is None:
+        flash("Scheda non trovata", "error")
+        return redirect(url_for("main.scheda"))
+
+    rel_partenza = SeqFisica.query.filter(SeqFisica.id_seq_a == id).all()
+    rel_arrivo = SeqFisica.query.filter(SeqFisica.id_seq_b == id).all()
+    rel_strat_partenza = SeqStrat.query.filter(SeqStrat.id_seq_a == id).all()
+    rel_strat_arrivo = SeqStrat.query.filter(SeqStrat.id_seq_b == id).all()
+
+    return render_template(
+        "view/scheda_us.html", 
+        scheda=scheda, 
+        rel_partenza=rel_partenza, 
+        rel_arrivo=rel_arrivo,
+        rel_strat_partenza=rel_strat_partenza,
+        rel_strat_arrivo=rel_strat_arrivo
+    )

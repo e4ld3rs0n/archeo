@@ -17,7 +17,7 @@
         <ul>
             {% for a in records %}
                 <li class="card card--flex">
-                    <img src="{{ url_for('static', filename='img/person.png') }}" class="card-img">
+                    <img src="{{ url_for('static', filename='img/person.png') }}" class="person-img">
                     <div class="card-info">
                         <h3>{{ a.cognome }}, {{ a.nome }}</h3>
                         Telefono: {{ a.tel }}<br>

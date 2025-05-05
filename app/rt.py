@@ -236,28 +236,6 @@ def sequenza_stratigrafica():
         schede=schede
     )
 
-@bp.route("/scheda/<int:id>")
-def visualizza_scheda(id):
-    # Fetch the scheda by ID
-    scheda = ModSchedaUs.query.get(id)
-    if scheda is None:
-        flash("Scheda non trovata", "error")
-        return redirect(url_for("main.scheda"))
-
-    rel_partenza = SeqFisica.query.filter(SeqFisica.id_seq_a == id).all()
-    rel_arrivo = SeqFisica.query.filter(SeqFisica.id_seq_b == id).all()
-    rel_strat_partenza = SeqStrat.query.filter(SeqStrat.id_seq_a == id).all()
-    rel_strat_arrivo = SeqStrat.query.filter(SeqStrat.id_seq_b == id).all()
-
-    return render_template(
-        "view_scheda.html", 
-        scheda=scheda, 
-        rel_partenza=rel_partenza, 
-        rel_arrivo=rel_arrivo,
-        rel_strat_partenza=rel_strat_partenza,
-        rel_strat_arrivo=rel_strat_arrivo
-    )
-
 
 
 

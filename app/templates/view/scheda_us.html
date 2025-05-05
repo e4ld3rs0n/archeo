@@ -3,28 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    <title>Visualizza Scheda</title>
+    <title>Scheda US {{ scheda.num_us }}</title>
 </head>
 
 {% include 'header.html' %}
 
 <body>
     <div class="container">
-        <h1>Dettagli Scheda US</h1>
+        <h1>Unità stratigrafica {{ scheda.num_us }}</h1>
         
-        <table class="scheda-us" style="undefined;table-layout: fixed; width: 1020px"><colgroup>
-            <col style="width: 170px">
-            <col style="width: 170px">
-            <col style="width: 170px">
-            <col style="width: 170px">
-            <col style="width: 170px">
-            <col style="width: 170px">
+        <table class="scheda-us" style="undefined;table-layout: fixed; width: 100%"><colgroup>
+            <col style="width: 16,6%">
+            <col style="width: 16,6%">
+            <col style="width: 16,6%">
+            <col style="width: 16,6%">
+            <col style="width: 16,6%">
+            <col style="width: 16,6%">
             </colgroup>
             <tbody>
               <tr>
-                <td><strong>US</strong><br>{{ scheda.num_us }}<br></td>
-                <td colspan="4"><strong>Ente responsabile</strong><br>{{ scheda.ente_responsabile.nome }}</td>
-                <td>Data<br>{{ scheda.data.strftime('%d-%m-%Y') }}</td>
+                <td style="text-align: center;">
+                    <p style="font-size: 2.2rem; margin: 0;">US</p><br>
+                    <p style="font-size: 1.2rem; margin: 0;">{{ scheda.num_us }}</p><br>
+                </td>
+                <td colspan="4">
+                    <strong>Ente responsabile</strong><br>
+                    {{ scheda.ente_responsabile.nome }}<br>
+                    {{ scheda.ente_responsabile.localita.via }}<br>
+                    {{ scheda.ente_responsabile.localita.cap }} {{ scheda.ente_responsabile.localita.citta }} ({{ scheda.ente_responsabile.localita.provincia }})<br>
+                </td>
+                <td><strong>Data</strong><br>{{ scheda.data.strftime('%d/%m/%Y') }}</td>
               </tr>            
               <tr>
                 <td colspan="5"><strong>Località</strong><br>{{ scheda.localita.denom }}<br>{{ scheda.localita.via }}, {{ scheda.localita.cap }} - {{ scheda.localita.citta }} ({{ scheda.localita.provincia }})</td>
@@ -163,7 +171,7 @@
             <p>Nessuna sequenza stratigrafica trovata.</p>
         {% endif %}
 
-        <a href="{{ url_for('main.scheda') }}">Torna alla lista</a>
+        <a href="{{ url_for('view.visualizza_schede') }}">Torna alla lista</a>
         
     </div>
 
