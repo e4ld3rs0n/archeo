@@ -14,7 +14,7 @@
 
         <h1>Schede US</h1>
 
-        <ul>
+        <ul class="card-container">
             {% for scheda in records %}
             <li class="card card--flex">
                 <img src="{{ url_for('static', filename='img/document.png') }}" class="card-img">

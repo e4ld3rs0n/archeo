@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <title>Schede US</title>
+</head>
+
+{% include 'header.html' %}
+
+<body>
+    <div class="container">
+        {% include 'notifications.html' %}
+
+        <h1>Nuova Scheda US</h1>
+
+        <form method="POST">
+            <div class="form-row">            
+                <label>Numero US: <input type="text" name="num_us" required></label><br>
+
+                <label>Responsabile:
+                    <select name="id_responsabile" required>
+                        {% for person in anagrafica %}
+                        <option value="{{ person.id }}">{{ person.nome }} {{ person.cognome }}</option>
+                        {% endfor %}
+                    </select>
+                </label>
+
+                <label>Responsabile scientifico:
+                    <select name="id_res_scientifico" required>
+                        {% for person in anagrafica %}
+                        <option value="{{ person.id }}">{{ person.nome }} {{ person.cognome }}</option>
+                        {% endfor %}
+                    </select>
+                </label>
+            </div><!-- form-row -->
+
+            <div class="form-row">
+                <label>Descrizione: <textarea name="descrizione" required></textarea></label><br>
+            </div><!-- form-row -->
+            
+            <div class="form-row">
+                <label>Località:
+                    <select name="id_localita">
+                        {% for loc in localita %}
+                        <option value="{{ loc.id }}">{{ loc.denom }}</option>
+                        {% endfor %}
+                    </select>
+                </label>
+
+                <label>Ente responsabile:
+                    <select name="id_ente_resp">
+                        {% for ente in enti %}
+                        <option value="{{ ente.id }}">{{ ente.nome }}</option>
+                        {% endfor %}
+                    </select>
+                </label>
+            </div><!-- form-row -->
+
+            <div class="form-row">
+                <label>Data: <input type="date" name="data" required></label>
+                <label>Quadrato: <input type="text" name="quadrato" required></label>
+            </div><!-- form-row -->
+
+            <div class="form-row">
+                <label>Colore:<input type="text" name="colore" required></label>
+                <label>Composizione: <input type="text" name="composizione" required></label>
+                <label>Consistenza: <input type="text" name="consistenza" required></label>
+            </div><!-- form-row --> 
+
+            <label>Componenti organici: <input type="text" name="comp_organici"></label><br>
+            <label>Componenti inorganici: <input type="text" name="comp_inorganici"></label><br>
+            <label>Interpretazione: <input type="text" name="interpretazione" required></label><br>
+            <label>Misure: <input type="text" name="misure" required></label><br>
+            <label>Note: <input type="text" name="note" required></label><br>
+
+            <label>Campionature:
+                <select name="campionature" required>
+                    <option value="true">Sì</option>
+                    <option value="false">No</option>
+                </select>
+            </label><br>
+
+            <label>Flottazione:
+                <select name="flottazione" required>
+                    <option value="true">Sì</option>
+                    <option value="false">No</option>
+                </select>
+            </label><br>
+
+            <label>Setacciatura: <input type="text" name="setacciatura"></label><br>
+            <label>Affidabilità stratigrafica: <input type="text" name="affidabilita_strat"></label><br>
+            <label>Modo di formazione: <input type="text" name="modo_formazione"></label><br>
+            <label>Elementi datanti: <input type="text" name="elem_datanti"></label><br>
+            
+            <div class="form-row">
+                <label>Foto: <input type="file" name="foto" multiple></label>
+                <!--<button class="form-button" type="button" onclick="clearFiles()">Rimuovi</button>-->
+            </div><!-- form-row -->
+
+            <!--
+            <label>Path ortofoto: <input type="text" name="path_ortofoto"></label><br>
+            -->
+            <button type="submit">Salva</button>
+        </form>
+    </div>
+
+    {% include 'footer.html' %}
+</body>
+</html>

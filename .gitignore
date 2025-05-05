@@ -1,5 +1,6 @@
-# Development database
+# Development stuff
 dbdata/
+uploads/
 
 # Editor-related stuff
 .vscode/

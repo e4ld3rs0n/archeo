@@ -92,3 +92,63 @@ def nuova_localita():
             flash(f"Errore nella creazione: {str(e)}", "error")
     
     return render_template("localita.html")
+
+@bp.route("/crea/us", methods=["GET", "POST"])
+def nuova_scheda_us():
+    if request.method == "POST":
+        try:
+            unique_num_us = request.form.get("num_us")
+            # Ensure num_us is unique
+            test = ModSchedaUs.query.filter_by(num_us=unique_num_us).first()
+            if test: 
+                flash(f"Errore: il numero US {unique_num_us} esiste già!", "error")
+                return redirect(url_for("main.scheda"))
+
+            new_scheda = ModSchedaUs(
+                num_us = unique_num_us,
+                id_responsabile = request.form.get("id_responsabile"),
+                id_res_scientifico = request.form.get("id_res_scientifico"),
+                descrizione = request.form.get("descrizione"),
+                id_ente_resp = request.form.get("id_ente_resp"),
+                id_localita = request.form.get("id_localita"),
+                data = datetime.strptime(request.form.get("data"), "%Y-%m-%d"),
+                quadrato = request.form.get("quadrato"),
+                colore = request.form.get("colore"),
+                composizione = request.form.get("composizione"),
+                consistenza = request.form.get("consistenza"),
+                comp_organici = request.form.get("comp_organici"),
+                comp_inorganici = request.form.get("comp_inorganici"),
+                interpretazione = request.form.get("interpretazione"),
+                misure = request.form.get("misure"),
+                note = request.form.get("note"),
+                campionature = bool(request.form.get("campionature")),
+                flottazione = bool(request.form.get("flottazione")),
+                setacciatura = request.form.get("setacciatura"),
+                affidabilita_strat = request.form.get("affidabilita_strat"),
+                modo_formazione = request.form.get("modo_formazione"),
+                elem_datanti = request.form.get("elem_datanti"),
+                path_foto = request.form.get("path_foto"),
+                path_ortofoto = request.form.get("path_ortofoto")
+            )
+
+            db.session.add(new_scheda)
+            db.session.commit()
+            flash("Scheda US creata!", "success")
+        except Exception as e:
+            db.session.rollback()
+            flash(f"Errore nella creazione: {str(e)}", "error")
+
+        return redirect(url_for("create.nuova_scheda_us"))
+
+    anagrafica = Anagrafica.query.all()
+    enti = Ente.query.all()
+    localita = Localita.query.all()
+    schede = ModSchedaUs.query.order_by(ModSchedaUs.id.desc()).all()
+
+    return render_template(
+        "create/nuova_scheda.html",
+        anagrafica=anagrafica,
+        enti=enti,
+        localita=localita,
+        schede=schede
+    )

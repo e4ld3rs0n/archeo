@@ -20,3 +20,4 @@ services:
       POSTGRES_PASSWORD: ${DB_PASSWORD}
     volumes:
       - ./dbdata:/var/lib/postgresql/data
+      - ./uploads:/app/static/uploads

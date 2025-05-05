@@ -14,7 +14,7 @@
 
         {% include 'notifications.html' %}
 
-        <ul>
+        <ul class="card-container">
             {% for a in records %}
                 <li class="card card--flex">
                     <img src="{{ url_for('static', filename='img/person.png') }}" class="person-img">

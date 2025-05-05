@@ -1,14 +1,16 @@
+/* Root Variables */
 :root {
     --primary: #8B5E3C;
     --background: #f9f5f1;
     --surface: #ffffff;
     --bodytext: #3e2f23;
-    --lightfont: #efeaea;
+    --light-text: #efeaea;
     --disabledtext: #8c8882;
     --border: #d5c4b1;
     --hover: #a76f4d;
 }
 
+/* Global Styles */
 html {
     font-size: 16px;
 }
@@ -20,9 +22,9 @@ body {
     font-size: 0.9rem;
     margin: 0;
     padding: 0;
-
 }
 
+/* Header */
 header {
     background-color: var(--primary);
     color: #fff;
@@ -56,7 +58,7 @@ header nav ul li .dropbtn {
     display: inline-block;
     padding: 10px 18px;
     background-color: transparent;
-    color: var(--lightfont);
+    color: var(--light-text);
     text-decoration: none;
     font-weight: 500;
     border: none;
@@ -66,7 +68,7 @@ header nav ul li .dropbtn {
 
 header nav ul li a:hover,
 header nav ul li .dropbtn:hover {
-    color: var(--lightfont);
+    color: var(--light-text);
     text-decoration: none;
     background-color: rgba(255, 255, 255, 0.1);
 }
@@ -97,7 +99,8 @@ header nav ul li .dropdown-content li a:hover {
     color: #fff;
 }
 
-ul {
+/* Card Layout */
+ul.card-container {
     display: flex;
     flex-wrap: wrap;
     gap: 20px;
@@ -116,6 +119,7 @@ ul > li.card {
     }
 }
 
+/* Container */
 .container {
     max-width: 70%;
     margin: 80px auto;
@@ -126,11 +130,13 @@ ul > li.card {
     box-shadow: none;
 }
 
+/* Typography */
 h1, h2, h3 {
     color: var(--primary);
     margin-bottom: 20px;
 }
 
+/* Table */
 table {
     width: 100%;
     border-collapse: collapse;
@@ -149,6 +155,7 @@ table th {
     font-weight: 600;
 }
 
+/* Links */
 a {
     color: var(--primary);
     text-decoration: none;
@@ -159,6 +166,7 @@ a:hover {
     text-decoration: underline;
 }
 
+/* Buttons and Inputs */
 button, input[type="submit"] {
     background-color: var(--primary);
     color: #fff;
@@ -174,6 +182,7 @@ button:hover, input[type="submit"]:hover {
     background-color: var(--hover);
 }
 
+/* Forms */
 form input, form select, form textarea {
     width: 100%;
     padding: 10px;
@@ -184,24 +193,53 @@ form input, form select, form textarea {
     background-color: #fff;
 }
 
+form textarea {
+    resize: vertical;
+}
+
+form label {
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: var(--primary);
+}
+
+.form-row {
+    display: flex;
+    gap: 16px;
+    width: 100%; /* Ensure row takes full width */
+    margin-bottom: 16px;
+}
+
+.form-row > * {
+    flex: 1; /* Make inputs inside the row take equal space */
+}
+
+@media (max-width: 768px) {
+    .form-row {
+        flex-direction: column;
+    }
+}
+
+/* Footer */
 footer {
     text-align: center;
-    font-size: 0.9rem;
-    color: var(--lightfont);
+    font-size: 0.8rem;
+    color: var(--light-text);
     padding: 24px;
     background-color: var(--primary);
     border-top: none;
 }
 
 footer a {
-    color: var(--lightfont);
+    color: var(--light-text);
     text-decoration: underline;
 }
 
 footer a:hover {
-    color: var(--lightfont);
+    color: var(--light-text);
 }
 
+/* Flash Messages */
 .flashes {
     list-style: none;
     padding: 0;
@@ -212,8 +250,8 @@ footer a:hover {
     padding: 12px 20px;
     margin-bottom: 16px;
     border-radius: 0;
-    font-size: 1rem;
-    font-weight: 500;
+    font-size: 1.1rem;
+    font-weight: 600;
     border: 1px solid transparent;
 }
 
@@ -252,6 +290,7 @@ footer a:hover {
     font-size: 0.95rem;
 }
 
+/* Banners */
 .banner {
     display: block;
     margin: 40px auto;
@@ -259,6 +298,7 @@ footer a:hover {
     height: auto;
 }
 
+/* Cards */
 .card {
     display: block;
     background-color: #fff;
@@ -310,6 +350,7 @@ footer a:hover {
     margin-left: 10px;
 }
 
+/* Table - Aligning Content */
 table td {
     vertical-align: top;
 }

@@ -8,6 +8,10 @@ from routes.create import bp as create_bp
 from routes.delete import bp as delete_bp
 
 app = Flask(__name__)
+
+app.config["UPLOAD_FOLDER"] = "static/uploads"
+app.config["MAX_CONTENT_LENGTH"] = 16 * 1024 * 1024  # 16MB
+
 app.secret_key = "your_secret_key"
 init_app(app)
 
