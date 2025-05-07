@@ -101,17 +101,31 @@
             <label>Elementi datanti: <input type="text" name="elem_datanti"></label><br>
             
             <div class="form-widget-group">
-                <label>Foto: <input type="file" name="foto" multiple></label>
-                <!--<button class="form-button" type="button" onclick="clearFiles()">Rimuovi</button>-->
+                <label>Fotografie: <input type="file" name="foto" multiple></label>
+                <button class="form-button" type="button" onclick="clearFiles('foto')">X</button>
             </div><!-- form-widget-group -->
 
-            <!--
-            <label>Path ortofoto: <input type="text" name="path_ortofoto"></label><br>
-            -->
+            <div class="form-widget-group">
+                <label>Pianta: <input type="file" name="pianta" multiple></label>
+                <button class="form-button" type="button" onclick="clearFiles('pianta')">X</button>
+            </div><!-- form-widget-group -->
+
+            <div class="form-widget-group">
+                <label>Ortofoto: <input type="file" name="ortofoto" multiple></label>
+                <button class="form-button" type="button" onclick="clearFiles('ortofoto')">X</button>
+            </div><!-- form-widget-group -->
+
             <button type="submit">Salva</button>
         </form>
     </div>
 
     {% include 'footer.html' %}
+
+    <script>
+        function clearFiles(inputName) {
+            const input = document.querySelector(`input[type="file"][name="${inputName}"]`);
+            if (input) input.value = '';
+        }
+    </script>
 </body>
 </html>

@@ -213,10 +213,15 @@ form label {
     margin-bottom: 16px;
 }
 
-.form-widget-group > * {
+.form-widget-group > *:not(button) {
     flex: 1; /* Make inputs inside the row take equal space */
     min-width: 0;       /* Allows flex items to shrink properly */
     max-width: 100%;    /* Prevents overflow */
+}
+
+.form-widget-group > button {
+    align-self: center; /* Prevent button from stretching to full height */
+    height: auto; /* Ensures the button's height is based on its content */
 }
 
 @media (max-width: 768px) {
