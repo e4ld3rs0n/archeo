@@ -58,30 +58,42 @@ class ModSchedaUs(db.Model):
     comp_inorganici = db.Column(db.String(255))
     interpretazione = db.Column(db.String(255), nullable=False)
     misure = db.Column(db.String(255), nullable=False)
-    note = db.Column(db.String(255), nullable=False)
+    note = db.Column(db.String(255), nullable=True)
     campionature = db.Column(db.Boolean, nullable=False)
     flottazione = db.Column(db.Boolean, nullable=False)
     setacciatura = db.Column(db.String(255))
     affidabilita_strat = db.Column(db.String(255))
     modo_formazione = db.Column(db.String(255))
     elem_datanti = db.Column(db.String(255))
-    path_foto = db.Column(db.String(255))
-    path_ortofoto = db.Column(db.String(255))
 
-    piante = db.relationship("Pianta", backref="scheda", cascade="all, delete-orphan")
+    piante = db.relationship("PiantaUS", backref="pianta_us", cascade="all, delete-orphan")
+    foto = db.relationship("FotoUS", backref="foto_us", cascade="all, delete-orphan")
+    ortofoto = db.relationship("OrtofotoUS", backref="ortofoto_us", cascade="all, delete-orphan")
     seq_fisiche_a = db.relationship("SeqFisica", backref="scheda_a", foreign_keys="SeqFisica.id_seq_a")
     seq_fisiche_b = db.relationship("SeqFisica", backref="scheda_b", foreign_keys="SeqFisica.id_seq_b")
     seq_strat_a = db.relationship("SeqStrat", backref="scheda_strat_a", foreign_keys="SeqStrat.id_seq_a")
     seq_strat_b = db.relationship("SeqStrat", backref="scheda_strat_b", foreign_keys="SeqStrat.id_seq_b")
 
+class PiantaUS(db.Model):
+    __tablename__ = "pianta_us"
 
-class Pianta(db.Model):
-    __tablename__ = "pianta"
+    id = db.Column(db.Integer, primary_key=True)
+    id_mod_scheda_us = db.Column(db.Integer, db.ForeignKey("mod_scheda_us.id"), nullable=False)
+    path_pianta = db.Column(db.String(255), nullable=False)
+
+class FotoUS(db.Model):
+    __tablename__ = "foto_us"
 
     id = db.Column(db.Integer, primary_key=True)
     id_mod_scheda_us = db.Column(db.Integer, db.ForeignKey("mod_scheda_us.id"), nullable=False)
     path_foto = db.Column(db.String(255), nullable=False)
 
+class OrtofotoUS(db.Model):
+    __tablename__ = "ortifoto_us"
+
+    id = db.Column(db.Integer, primary_key=True)
+    id_mod_scheda_us = db.Column(db.Integer, db.ForeignKey("mod_scheda_us.id"), nullable=False)
+    path_ortofoto = db.Column(db.String(255), nullable=False)
 
 class SeqFisica(db.Model):
     __tablename__ = "seq_fisica"

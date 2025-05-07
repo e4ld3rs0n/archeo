@@ -184,7 +184,7 @@ def sequenza_stratigrafica():
 
 
 @bp.route("/create-dummy-data")
-def create_dummy_data():
+def create_dummy_data():    
     try:
         
         # Clear existing data if needed
@@ -205,12 +205,32 @@ def create_dummy_data():
         loc2 = Localita(denom="Museo Nazionale", via="Corso Italia 22", citta="Milano", provincia="MI", cap="20100")
         loc3 = Localita(denom="Parco Storico", via="Via Garibaldi 10", citta="Torino", provincia="TO", cap="10100")
         loc4 = Localita(denom="Area Scavi", via="Piazza Dante 5", citta="Napoli", provincia="NA", cap="80100")
+        loc5 = Localita(denom="Villa Romana", via="Via Appia Antica 15", citta="Roma", provincia="RM", cap="00179")
+        loc6 = Localita(denom="Castello Medievale", via="Via Castello 3", citta="Firenze", provincia="FI", cap="50100")
+        loc7 = Localita(denom="Necropoli Etrusca", via="Via degli Etruschi 8", citta="Tarquinia", provincia="VT", cap="01016")
+        loc8 = Localita(denom="Museo Archeologico", via="Via Archeologia 12", citta="Bologna", provincia="BO", cap="40100")
+        loc9 = Localita(denom="Teatro Greco", via="Via Teatro 9", citta="Siracusa", provincia="SR", cap="96100")
+        loc10 = Localita(denom="Fortezza Antica", via="Via delle Mura 7", citta="Verona", provincia="VR", cap="37100")
+        loc11 = Localita(denom="Antico Mercato", via="Piazza del Mercato 1", citta="Genova", provincia="GE", cap="16100")
+        loc12 = Localita(denom="Tempio Romano", via="Via dei Templi 4", citta="Agrigento", provincia="AG", cap="92100")
+
 
         # Create dummy ente
         ente1 = Ente(nome="Soprintendenza Archeologia Roma", tel="0654321987", email="info@ente1.it", localita=loc1)
         ente2 = Ente(nome="Soprintendenza Archeologia Parma", tel="4589321987", email="info@ente2.it", localita=loc2)
+        ente3 = Ente(nome="Museo Storico Nazionale", tel="0276543210", email="info@ente3.it", localita=loc3)
+        ente4 = Ente(nome="Parco Archeologico Napoli", tel="0812345678", email="info@ente4.it", localita=loc4)
+        ente5 = Ente(nome="Villa Romana Management", tel="0611122233", email="info@ente5.it", localita=loc5)
+        ente6 = Ente(nome="Castello Fiorentino", tel="0559988776", email="info@ente6.it", localita=loc6)
+        ente7 = Ente(nome="Soprintendenza Etrusca", tel="0766842301", email="info@ente7.it", localita=loc7)
+        ente8 = Ente(nome="Teatro Greco Authority", tel="0931678902", email="info@ente8.it", localita=loc9)
 
-        db.session.add_all([person1, person2, person3, person4, person5, loc1, loc2, loc3, loc4, ente1, ente2])
+
+        db.session.add_all([
+            person1, person2, person3, person4, person5,
+            loc1, loc2, loc3, loc4, loc5, loc6, loc7, loc8, loc9, loc10, loc11, loc12,
+            ente1, ente2, ente3, ente4, ente5, ente6, ente7, ente8
+        ])
         db.session.commit()
 
         # Create dummy dataset
@@ -238,9 +258,7 @@ def create_dummy_data():
                 setacciatura="2mm",
                 affidabilita_strat="Buona",
                 modo_formazione="Deposizione antropica",
-                elem_datanti="Ceramica",
-                path_foto=f"foto{i}.jpg",
-                path_ortofoto=f"ortofoto{i}.jpg"
+                elem_datanti="Ceramica"
             )
             schede.append(scheda)
 
