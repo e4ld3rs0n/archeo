@@ -1,14 +1,14 @@
 /* Root Variables */
 :root {
-    --primary: #764e30;
-    --background: #f9f5f1;
-    --surface: #ffffff;
-    --bodytext: #30251b;
-    --secondary-text: #3c3c3c;
-    --light-text: #efeaea;
-    --disabledtext: #8c8882;
-    --border: #d5c4b1;
-    --hover: #785037;
+    --primary: #8a6e56;         /* Rich earthy brown */
+    --background: #f0eae2;      /* Softer, warmer light background */
+    --surface: #ffffff;         /* Keep surface clean and neutral */
+    --bodytext: #3e2f23;        /* Slightly deeper brown for readability */
+    --secondary-text: #5f564f;  /* Muted but distinguishable from bodytext */
+    --light-text: #f5f0ec;      /* Slightly warmer light text */
+    --disabledtext: #a89e94;    /* Muted grey-brown for disabled elements */
+    --border: #d6c6b4;          /* Light earthy border */
+    --hover: #a26945;           /* Warmer and clearer brown for interaction */
 }
 
 /* Global Styles */
@@ -180,6 +180,23 @@ button, input[type="submit"] {
 }
 
 button:hover, input[type="submit"]:hover {
+    background-color: var(--hover);
+}
+
+a.button-link {
+    display: inline-block;
+    background-color: var(--primary);
+    color: #fff;
+    border: none;
+    padding: 10px 16px;
+    cursor: pointer;
+    font-weight: 500;
+    border-radius: 0;
+    text-decoration: none;
+    transition: background-color 0.2s;
+}
+
+a.button-link:hover {
     background-color: var(--hover);
 }
 

@@ -191,3 +191,92 @@ def nuova_scheda_us():
         localita=localita,
         schede=schede
     )
+
+@bp.route("/seq_fisica", methods=["GET", "POST"])
+def nuova_sequenza_fisica():
+
+    if request.method == "POST":
+        try:
+            seq_a = request.form.get("id_seq_a")
+            seq_b = request.form.get("id_seq_b")
+            
+            # Check if seq_a is equal to seq_b
+            if seq_a == seq_b:
+                flash(f"Errore: la sequenza A non può essere uguale alla sequenza B!", "error")
+                return redirect(url_for("create.nuova_sequenza_fisica"))
+            
+            # Check if the sequence already exists
+            existing_seq = SeqFisica.query.filter_by(id_seq_a=seq_a, id_seq_b=seq_b).first()
+            if existing_seq:
+                flash(f"Errore: questa sequenza fisica esiste già!", "error")
+                return redirect(url_for("create.nuova_sequenza_fisica"))
+
+            # Proceed with adding the new sequence
+            new_seq_fisica = SeqFisica(
+                id_seq_a = seq_a,
+                id_seq_b = seq_b,
+                sequenza = request.form.get("sequenza")
+            )
+
+            db.session.add(new_seq_fisica)
+            db.session.commit()
+            flash("Sequenza fisica creata!", "success")
+        except Exception as e:
+            db.session.rollback()
+            flash(f"Errore nella creazione: {str(e)}", "error")
+        return redirect(url_for("create.nuova_sequenza_fisica"))
+
+    # Fetch existing data for the form
+    schede = ModSchedaUs.query.all()
+
+    return render_template(
+        "create/sequenza_fisica.html",
+        schede=schede
+    )
+
+@bp.route("/seq_stratigrafica", methods=["GET", "POST"])
+def nuova_sequenza_stratigrafica():
+
+    if request.method == "POST":
+        try:
+            
+            seq = request.form.get("sequenza")
+            if seq == "posteriore_a":
+                seq_a = request.form.get("id_seq_a")
+                seq_b = request.form.get("id_seq_b")
+            else:
+                seq_a = request.form.get("id_seq_b")
+                seq_b = request.form.get("id_seq_a")
+            
+            # Check if seq_a is equal to seq_b
+            if seq_a == seq_b:
+                flash(f"Errore: la sequenza A non può essere uguale alla sequenza B!", "error")
+                return redirect(url_for("create.nuova_sequenza_stratigrafica"))
+            
+            # Check if the sequence already exists
+            existing_seq = SeqStrat.query.filter_by(id_seq_a=seq_a, id_seq_b=seq_b).first()
+            if existing_seq:
+                flash(f"Errore: questa sequenza stratigrafica esiste già!", "error")
+                return redirect(url_for("create.nuova_sequenza_stratigrafica"))
+
+            # Proceed with adding the new sequence
+            new_seq_strat = SeqStrat(
+                id_seq_a = seq_a,
+                id_seq_b = seq_b,
+            )
+
+            db.session.add(new_seq_strat)
+            db.session.commit()
+            flash("Sequenza stratigrafica creata!", "success")
+        except Exception as e:
+            db.session.rollback()
+            flash(f"Errore nella creazione: {str(e)}", "error")
+        return redirect(url_for("create.nuova_sequenza_stratigrafica"))
+
+    # Fetch existing data for the form
+    schede = ModSchedaUs.query.all()
+
+    return render_template(
+        "create/sequenza_stratigrafica.html",
+        schede=schede
+    )

@@ -83,106 +83,6 @@ def ente():
     
     return render_template("ente.html", lista_localita=lista_localita)
 
-@bp.route("/sequenza_fisica", methods=["GET", "POST"])
-def sequenza_fisica():
-    print("HIT /sequenza_fisica")
-
-    if request.method == "POST":
-        try:
-            seq_a = request.form.get("id_seq_a")
-            seq_b = request.form.get("id_seq_b")
-            
-            # Check if seq_a is equal to seq_b
-            if seq_a == seq_b:
-                flash(f"Errore: la sequenza A non può essere uguale alla sequenza B!", "error")
-                return redirect(url_for("main.sequenza_fisica"))
-            
-            # Check if the sequence already exists
-            existing_seq = SeqFisica.query.filter_by(id_seq_a=seq_a, id_seq_b=seq_b).first()
-            if existing_seq:
-                flash(f"Errore: questa sequenza fisica esiste già!", "error")
-                return redirect(url_for("main.sequenza_fisica"))
-
-            # Proceed with adding the new sequence
-            new_seq_fisica = SeqFisica(
-                id_seq_a = seq_a,
-                id_seq_b = seq_b,
-                sequenza = request.form.get("sequenza")
-            )
-
-            db.session.add(new_seq_fisica)
-            db.session.commit()
-            flash("Sequenza fisica creata!", "success")
-        except Exception as e:
-            db.session.rollback()
-            flash(f"Errore nella creazione: {str(e)}", "error")
-        return redirect(url_for("main.sequenza_fisica"))
-
-    # Fetch existing data for the form
-    schede = ModSchedaUs.query.all()
-
-    return render_template(
-        "sequenza_fisica.html",
-        schede=schede
-    )
-
-@bp.route("/sequenza_stratigrafica", methods=["GET", "POST"])
-def sequenza_stratigrafica():
-    print("HIT /sequenza_stratigrafica")
-
-    if request.method == "POST":
-        try:
-            
-            seq = request.form.get("sequenza")
-            if seq == "posteriore_a":
-                seq_a = request.form.get("id_seq_a")
-                seq_b = request.form.get("id_seq_b")
-            else:
-                seq_a = request.form.get("id_seq_b")
-                seq_b = request.form.get("id_seq_a")
-            
-            # Check if seq_a is equal to seq_b
-            if seq_a == seq_b:
-                flash(f"Errore: la sequenza A non può essere uguale alla sequenza B!", "error")
-                return redirect(url_for("main.sequenza_fisica"))
-            
-            # Check if the sequence already exists
-            existing_seq = SeqStrat.query.filter_by(id_seq_a=seq_a, id_seq_b=seq_b).first()
-            if existing_seq:
-                flash(f"Errore: questa sequenza stratigrafica esiste già!", "error")
-                return redirect(url_for("main.sequenza_stratigrafica"))
-
-            # Proceed with adding the new sequence
-            new_seq_strat = SeqStrat(
-                id_seq_a = seq_a,
-                id_seq_b = seq_b,
-            )
-
-            db.session.add(new_seq_strat)
-            db.session.commit()
-            flash("Sequenza stratigrafica creata!", "success")
-        except Exception as e:
-            db.session.rollback()
-            flash(f"Errore nella creazione: {str(e)}", "error")
-        return redirect(url_for("main.sequenza_stratigrafica"))
-
-    # Fetch existing data for the form
-    schede = ModSchedaUs.query.all()
-
-    return render_template(
-        "sequenza_stratigrafica.html",
-        schede=schede
-    )
-
-
-
-
-
-
-
-
-
-
 @bp.route("/create-dummy-data")
 def create_dummy_data():    
     try:
@@ -237,10 +137,10 @@ def create_dummy_data():
         schede = []
         for i in range(1, 12):
             scheda = ModSchedaUs(
-                num_us=str(i*100),
+                num_us=str(i*15),
                 id_responsabile=person1.id,
                 id_res_scientifico=person2.id,
-                descrizione=f"Descrizione della scheda {i}",
+                descrizione=f"Descrizione della scheda per l'unità stratigrafica {i*15}",
                 id_ente_resp=ente1.id,
                 id_localita=loc1.id,
                 data=datetime.utcnow(),
@@ -265,7 +165,9 @@ def create_dummy_data():
         db.session.add_all(schede)
         db.session.commit()
 
-        return f"{len(schede)} schede create con successo."
+        flash(f"{len(schede)} schede create con successo", "success")
+        return redirect(url_for("main.index"))
     except Exception as e:
         db.session.rollback()
-        return f"Errore durante la creazione dei dati: {str(e)}"
+        flash(f"Errore durante la creazione dei dati: {str(e)}", "error")
+        return redirect(url_for("main.index"))

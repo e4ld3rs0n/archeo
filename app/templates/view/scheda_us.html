@@ -92,10 +92,6 @@
               </tr>
             </tbody></table>
 
-        <!--
-        <p><strong>Path foto:</strong> {{ scheda.path_foto }}</p>
-        <p><strong>Path ortofoto:</strong> {{ scheda.path_ortofoto }}</p>
-        -->
         <h2>Relazioni di Sequenza</h2>
         
         <h3>Sequenze fisiche</h3>
@@ -106,17 +102,17 @@
                     {% for rel_p in rel_partenza %}
                         <li>
                             {% if rel_p.sequenza == "copre" %}
-                                Copre {{ rel_p.id_seq_b }}
+                                Copre US {{ rel_p.scheda_b.num_us}} - {{ rel_p.scheda_b.descrizione }} - <a href="{{ url_for('view.scheda', id=rel_p.id_seq_b) }}">Vedi scheda</a>
                             {% elif rel_p.sequenza == "taglia" %}
-                                Taglia {{ rel_p.id_seq_b }}
+                                Taglia US {{ rel_p.scheda_b.num_us}} - {{ rel_p.scheda_b.descrizione }} - <a href="{{ url_for('view.scheda', id=rel_p.id_seq_b) }}">Vedi scheda</a>
                             {% elif rel_p.sequenza == "riempie" %}
-                                Riempie {{ rel_p.id_seq_b }}
+                                Riempie US {{ rel_p.scheda_b.num_us}} - {{ rel_p.scheda_b.descrizione }} - <a href="{{ url_for('view.scheda', id=rel_p.id_seq_b) }}">Vedi scheda</a>
                             {% elif rel_p.sequenza == "si_appoggia_a" %}
-                                Si appoggia a {{ rel_p.id_seq_b }}
+                                Si appoggia a US {{ rel_p.scheda_b.num_us}} - {{ rel_p.scheda_b.descrizione }} - <a href="{{ url_for('view.scheda', id=rel_p.id_seq_b) }}">Vedi scheda</a>
                             {% elif rel_p.sequenza == "uguale_a" %}
-                                Uguale a {{ rel_p.id_seq_b }}
+                                Uguale a US {{ rel_p.scheda_b.num_us}} - {{ rel_p.scheda_b.descrizione }} - <a href="{{ url_for('view.scheda', id=rel_p.id_seq_b) }}">Vedi scheda</a>
                             {% elif rel_p.sequenza == "si_lega_a" %}
-                                Si lega a {{ rel_p.id_seq_b }}
+                                Si lega a US {{ rel_p.scheda_b.num_us}} - {{ rel_p.scheda_b.descrizione }} - <a href="{{ url_for('view.scheda', id=rel_p.id_seq_b) }}">Vedi scheda</a>
                             {% endif %}
                         </li>
                     {% endfor %}
@@ -126,25 +122,25 @@
                     {% for rel_a in rel_arrivo %}
                         <li>
                             {% if rel_a.sequenza == "copre" %}
-                                Coperta da {{ rel_a.id_seq_a }}
+                                Coperta da US {{ rel_a.scheda_a.num_us }} - {{ rel_a.scheda_a.descrizione }} - <a href="{{ url_for('view.scheda', id=rel_a.id_seq_a) }}">Vedi scheda</a>
                             {% elif rel_a.sequenza == "taglia" %}
-                                Tagliata da {{ rel_a.id_seq_a }}
+                                Tagliata da US {{ rel_a.scheda_a.num_us }} - {{ rel_a.scheda_a.descrizione }} - <a href="{{ url_for('view.scheda', id=rel_a.id_seq_a) }}">Vedi scheda</a>
                             {% elif rel_a.sequenza == "riempie" %}
-                                Riempita da {{ rel_a.id_seq_a }}
+                                Riempita da US {{ rel_a.scheda_a.num_us }} - {{ rel_a.scheda_a.descrizione }} - <a href="{{ url_for('view.scheda', id=rel_a.id_seq_a) }}">Vedi scheda</a>
                             {% elif rel_a.sequenza == "si_appoggia_a" %}
-                                Gli si appoggia {{ rel_a.id_seq_a }}
+                                Gli si appoggia US {{ rel_a.scheda_a.num_us }} - {{ rel_a.scheda_a.descrizione }} - <a href="{{ url_for('view.scheda', id=rel_a.id_seq_a) }}">Vedi scheda</a>
                             {% elif rel_a.sequenza == "uguale_a" %}
-                                Uguale a {{ rel_a.id_seq_a }}
+                                Uguale a US {{ rel_a.scheda_a.num_us }} - {{ rel_a.scheda_a.descrizione }} - <a href="{{ url_for('view.scheda', id=rel_a.id_seq_a) }}">Vedi scheda</a>
                             {% elif rel_a.sequenza == "si_lega_a" %}
-                                Si lega a {{ rel_a.id_seq_a }}
+                                Si lega a US {{ rel_a.scheda_a.num_us }} - {{ rel_a.scheda_a.descrizione }} - <a href="{{ url_for('view.scheda', id=rel_a.id_seq_a) }}">Vedi scheda</a>
                             {% endif %}
                         </li>
                     {% endfor %}
                 {% endif %}
             </ul>
-        {% else %}
-            <p>Nessuna sequenza fisica trovata.</p>
         {% endif %}
+
+        <a href="{{ url_for('create.nuova_sequenza_fisica') }}" class="button-link">Aggiungi seguenza fisica</a>
         
         <h3>Sequenze stratigrafiche</h3>
 
@@ -155,7 +151,7 @@
             {% if rel_strat_partenza %}
                 {% for rel in rel_strat_partenza %}
                     <li>
-                        Posteriore a {{ rel.id_seq_b }}
+                        Posteriore a US {{ rel.scheda_strat_b.num_us }} - {{ rel.scheda_strat_b.descrizione }} - <a href="{{ url_for('view.scheda', id=rel.id_seq_b) }}">Vedi scheda</a>
                     </li>
                 {% endfor %}
             {% endif %}
@@ -163,16 +159,16 @@
             {% if rel_strat_arrivo %}
                 {% for rel in rel_strat_arrivo %}
                     <li>
-                        Anteriore a {{ rel.id_seq_a }}
+                        Anteriore a US {{ rel.scheda_strat_a.num_us }} - {{ rel.scheda_strat_a.descrizione }} - <a href="{{ url_for('view.scheda', id=rel.id_seq_a) }}">Vedi scheda</a>
                     </li>
                 {% endfor %}
             {% endif %}
             
             </ul>
-        {% else %}
-            <p>Nessuna sequenza stratigrafica trovata.</p>
         {% endif %}
         
+        <a href="{{ url_for('create.nuova_sequenza_stratigrafica') }}" class="button-link">Aggiungi seguenza stratigrafica</a>
+
         <h3>Fotografie:</h3>
 
         {% if foto %}
@@ -191,9 +187,12 @@
             <p>Nessuna fotografia trovata.</p>
         {% endif %}
 
-        {% if piante %}
-        <h3>Piante:</h3>
+        <a href="#" class="button-link">Carica altre foto</a>
 
+        <h3>Pianta:</h3>
+
+        {% if piante %}
+        
         <ul>
             {% for p in piante %}
                 <li>
@@ -202,12 +201,13 @@
             {% endfor %}
         </ul>
         {% else %}
-            <p>Nessuna pianta trovata.</p>
+            <a href="#" class="button-link">Carica pianta</a>
         {% endif %}
         
-        {% if ortofoto %}
         <h3>Ortofoto:</h3>
 
+        {% if ortofoto %}
+        
         <ul>
             {% for o in ortofoto %}
                 <li>
@@ -216,10 +216,11 @@
             {% endfor %}
         </ul>
         {% else %}
-            <p>Nessuna ortofoto trovata.</p>
+            <a href="#" class="button-link">Carica ortofoto</a>
         {% endif %}
 
-        <a href="{{ url_for('view.visualizza_schede') }}">Torna alla lista</a>
+        <br><br>
+        <a href="{{ url_for('view.visualizza_schede') }}" class="button-link">Torna alla lista</a>
         
     </div>
 

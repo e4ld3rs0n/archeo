@@ -89,7 +89,7 @@ class FotoUS(db.Model):
     filename = db.Column(db.String(255), nullable=False)
 
 class OrtofotoUS(db.Model):
-    __tablename__ = "ortifoto_us"
+    __tablename__ = "ortofoto_us"
 
     id = db.Column(db.Integer, primary_key=True)
     id_mod_scheda_us = db.Column(db.Integer, db.ForeignKey("mod_scheda_us.id"), nullable=False)

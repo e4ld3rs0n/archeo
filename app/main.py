@@ -2,7 +2,7 @@ import os
 from flask import Flask
 from db import init_app
 from models import *
-from rt import bp
+from utils import bp
 from routes.view import bp as view_bp
 from routes.create import bp as create_bp
 from routes.delete import bp as delete_bp
