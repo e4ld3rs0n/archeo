@@ -10,6 +10,8 @@
 
 <body>
     <div class="container">
+        {% include 'notifications.html' %}
+
         <h1>Unità stratigrafica {{ scheda.num_us }}</h1>
         
         <table class="scheda-us" style="undefined;table-layout: fixed; width: 100%"><colgroup>
@@ -169,6 +171,52 @@
             </ul>
         {% else %}
             <p>Nessuna sequenza stratigrafica trovata.</p>
+        {% endif %}
+        
+        <h3>Fotografie:</h3>
+
+        {% if foto %}
+        
+        <div class="gallery">
+            {% for f in foto %}
+                <div class="gallery-item">
+                    <a href="{{ url_for('view.photo', filename=f.filename) }}" target="_blank">
+                        <img src="{{ url_for('view.photo', filename=f.filename) }}">
+                        <p>{{ f.filename }}</p>
+                    </a>
+                </div>
+            {% endfor %}
+            </div>
+        {% else %}
+            <p>Nessuna fotografia trovata.</p>
+        {% endif %}
+
+        {% if piante %}
+        <h3>Piante:</h3>
+
+        <ul>
+            {% for p in piante %}
+                <li>
+                    <a href="{{ '/' ~ p.path_piante }}">{{ p.path_piante }}</a>
+                </li>
+            {% endfor %}
+        </ul>
+        {% else %}
+            <p>Nessuna pianta trovata.</p>
+        {% endif %}
+        
+        {% if ortofoto %}
+        <h3>Ortofoto:</h3>
+
+        <ul>
+            {% for o in ortofoto %}
+                <li>
+                    <a href="{{ '/' ~ o.path_ortofoto }}">{{ o.path_ortofoto }}</a>
+                </li>
+            {% endfor %}
+        </ul>
+        {% else %}
+            <p>Nessuna ortofoto trovata.</p>
         {% endif %}
 
         <a href="{{ url_for('view.visualizza_schede') }}">Torna alla lista</a>

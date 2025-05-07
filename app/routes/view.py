@@ -1,4 +1,13 @@
-from flask import Blueprint, render_template, flash, redirect, url_for
+import os
+from flask import (
+    Blueprint, 
+    render_template, 
+    flash, 
+    redirect, 
+    url_for, 
+    send_from_directory, 
+    current_app as app
+)
 from sqlalchemy import *
 from flask_sqlalchemy import SQLAlchemy
 from models import *
@@ -45,11 +54,23 @@ def scheda(id):
     rel_strat_partenza = SeqStrat.query.filter(SeqStrat.id_seq_a == id).all()
     rel_strat_arrivo = SeqStrat.query.filter(SeqStrat.id_seq_b == id).all()
 
+    foto = FotoUS.query.filter_by(id_mod_scheda_us=id).all()
+    piante = PiantaUS.query.filter_by(id_mod_scheda_us=id).all()
+    ortofoto = OrtofotoUS.query.filter_by(id_mod_scheda_us=id).all()
+
     return render_template(
         "view/scheda_us.html", 
         scheda=scheda, 
         rel_partenza=rel_partenza, 
         rel_arrivo=rel_arrivo,
         rel_strat_partenza=rel_strat_partenza,
-        rel_strat_arrivo=rel_strat_arrivo
+        rel_strat_arrivo=rel_strat_arrivo,
+        foto=foto,
+        piante=piante,
+        ortofoto=ortofoto
     )
+
+@bp.route("/photo/<path:filename>")
+def photo(filename):
+    photo_dir = app.config["UPLOAD_FOLDER"]
+    return send_from_directory(photo_dir, filename)

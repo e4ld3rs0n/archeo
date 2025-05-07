@@ -4,6 +4,7 @@
     --background: #f9f5f1;
     --surface: #ffffff;
     --bodytext: #30251b;
+    --secondary-text: #3c3c3c;
     --light-text: #efeaea;
     --disabledtext: #8c8882;
     --border: #d5c4b1;
@@ -363,4 +364,30 @@ footer a:hover {
 /* Table - Aligning Content */
 table td {
     vertical-align: top;
+}
+
+/* Photo gallery */
+.gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 16px;
+    padding: 20px;
+}
+.gallery-item {
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    overflow: hidden;
+    background: #f9f9f9;
+    box-shadow: 2px 2px 5px rgba(0,0,0,0.1);
+}
+.gallery-item img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+.gallery-item p {
+    text-align: center;
+    margin: 4px;
+    font-size: 0.7rem;
+    color: var(--secondary-text);
 }

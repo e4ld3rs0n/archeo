@@ -1,6 +1,16 @@
-from flask import Blueprint, request, jsonify, abort, render_template, redirect, url_for, flash, render_template_string
-from sqlalchemy import *
+import os, uuid
 from datetime import datetime
+from flask import (
+    Blueprint, 
+    request,
+    render_template, 
+    redirect, 
+    url_for, 
+    flash,  
+    current_app as app
+)
+from werkzeug.utils import secure_filename
+from sqlalchemy import *
 from flask_sqlalchemy import SQLAlchemy
 from db import db
 from models import *
@@ -96,6 +106,7 @@ def nuova_localita():
 @bp.route("/crea/us", methods=["GET", "POST"])
 def nuova_scheda_us():
     if request.method == "POST":
+        # Create the US model
         try:
             unique_num_us = request.form.get("num_us")
             # Ensure num_us is unique
@@ -103,7 +114,7 @@ def nuova_scheda_us():
             if test: 
                 flash(f"Errore: il numero US {unique_num_us} esiste già!", "error")
                 return redirect(url_for("main.scheda"))
-
+            
             new_scheda = ModSchedaUs(
                 num_us = unique_num_us,
                 id_responsabile = request.form.get("id_responsabile"),
@@ -127,8 +138,6 @@ def nuova_scheda_us():
                 affidabilita_strat = request.form.get("affidabilita_strat"),
                 modo_formazione = request.form.get("modo_formazione"),
                 elem_datanti = request.form.get("elem_datanti"),
-                path_foto = request.form.get("path_foto"),
-                path_ortofoto = request.form.get("path_ortofoto")
             )
 
             db.session.add(new_scheda)
@@ -138,7 +147,37 @@ def nuova_scheda_us():
             db.session.rollback()
             flash(f"Errore nella creazione: {str(e)}", "error")
 
-        return redirect(url_for("create.nuova_scheda_us"))
+            # If the creation fails, redirect to the previous page without processing the photos
+            return redirect(url_for("create.nuova_scheda_us"))
+
+        # Handle photo upload
+        try:
+            # Obtain uploaded files
+            foto = request.files.getlist("foto")
+            piante = request.files.getlist("pianta")
+            ortofoto = request.files.getlist("ortofoto")
+
+            # Process each file
+            for file in foto:
+                if file and file.filename:
+                    file_name = secure_filename(f"{uuid.uuid4().hex}{os.path.splitext(file.filename)[1]}")
+                    file_path = os.path.join(app.config["UPLOAD_FOLDER"], file_name)
+                    file.save(file_path)
+
+                    new_foto = FotoUS(
+                        id_mod_scheda_us=new_scheda.id,
+                        filename=file_name
+                    )
+
+                    db.session.add(new_foto)
+                    db.session.commit()
+                    flash(f"Foto {file_name} caricata!", "success")
+
+        except Exception as e:
+            db.session.rollback()
+            flash(f"Errore nel caricamento dei file: {str(e)}", "error")
+
+        return redirect(url_for("view.scheda", id=new_scheda.id))
 
     anagrafica = Anagrafica.query.all()
     enti = Ente.query.all()
