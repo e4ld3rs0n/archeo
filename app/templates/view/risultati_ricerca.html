@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <title>Risultati ricerca</title>
+</head>
+
+{% include 'header.html' %}
+
+<body>
+    <div class="container">
+        {% include 'notifications.html' %}
+        
+        <h1>Risultati ricerca per: {{ query }}</h1>
+                
+        {% if anagrafiche %}
+            <h2>Anagrafiche:</h2>
+            
+            <ul>
+                {% for a in anagrafiche %}
+                    <li><a href="#">{{ a.nome }} {{ a.cognome }} - {{ a.email }} - {{ a.tel }}</a></li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+        
+        {% if localita %}
+            <h2>Località</h2>
+
+            <ul>
+                {% for l in località %}
+                    <li><a href="#">{{ l.denom }} - {{ l.via }} ({{ l.cap }}) {{ l.citta }} {{ l.provincia }}</a></li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+        
+        {% if enti %}
+            <h2>Enti</h2>
+            <ul>
+                {% for e in enti %}
+                    <li><a href="#">{{ e.nome }} - {{ e.tel }} - {{ e.email }}</a></li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+        
+        {% if schede %}
+            <h2>Schede US</h2>
+
+            <ul>
+                {% for s in schede %}
+                    <li><a href="#">US {{ s.num_us }} - {{ s.descrizione }} - {{ s.data.strftime('%d/%m/%Y') }}</a></li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+        
+        {% if reperti %}
+            <h2>Reperti notevoli</h2>
+
+            <ul>
+                {% for r in reperti %}
+                    <li><a href="#">RR {{ r.id }} - {{ r.numero_cassa }} - {{ r.sito }} - {{ r.data.strftime('%d/%m/%Y') }}</a></li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    </div>
+
+    {% include 'footer.html' %}
+
+</body>
+</html>
