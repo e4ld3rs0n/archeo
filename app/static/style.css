@@ -390,18 +390,34 @@ table td {
     gap: 16px;
     padding: 20px;
 }
+
 .gallery-item {
+    aspect-ratio: 1 / 1;
     border: 1px solid #ccc;
     border-radius: 8px;
     overflow: hidden;
+    position: relative;
+    object-fit: cover;
     background: #f9f9f9;
     box-shadow: 2px 2px 5px rgba(0,0,0,0.1);
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s ease-in-out;
 }
+
+.gallery-item:hover {
+    transform: translateY(-5px);  /* Lift effect on hover */
+}
+
 .gallery-item img {
+    position: absolute;
+    top: 0;
+    left: 0;
     width: 100%;
-    height: auto;
-    display: block;
+    height: 100%;
+    object-fit: cover; /* ensures image fills container without stretching */
 }
+
 .gallery-item p {
     text-align: center;
     margin: 4px;

@@ -14,11 +14,13 @@
 
         <h1>Nuova Scheda US</h1>
 
+        <p>I campi contrassegnati con * sono obbligatori.</p>
+
         <form method="POST" enctype="multipart/form-data">
             <div class="form-widget-group">            
-                <label>Numero US: <input type="text" name="num_us" required></label><br>
+                <label>Numero US*: <input type="text" name="num_us" required></label><br>
 
-                <label>Responsabile:
+                <label>Responsabile*:
                     <select name="id_responsabile" required>
                         {% for person in anagrafica %}
                         <option value="{{ person.id }}">{{ person.nome }} {{ person.cognome }}</option>
@@ -26,7 +28,7 @@
                     </select>
                 </label>
 
-                <label>Responsabile scientifico:
+                <label>Responsabile scientifico*:
                     <select name="id_res_scientifico" required>
                         {% for person in anagrafica %}
                         <option value="{{ person.id }}">{{ person.nome }} {{ person.cognome }}</option>
@@ -35,19 +37,19 @@
                 </label>
             </div><!-- form-widget-group -->
 
-            <label>Descrizione: <textarea name="descrizione" required></textarea></label><br>
+            <label>Descrizione*: <textarea name="descrizione" required></textarea></label><br>
             
             <div class="form-widget-group">
-                <label>Località:
-                    <select name="id_localita">
+                <label>Località*:
+                    <select name="id_localita" required>
                         {% for loc in localita %}
                         <option value="{{ loc.id }}">{{ loc.denom }}</option>
                         {% endfor %}
                     </select>
                 </label>
 
-                <label>Ente responsabile:
-                    <select name="id_ente_resp">
+                <label>Ente responsabile*:
+                    <select name="id_ente_resp" required>
                         {% for ente in enti %}
                         <option value="{{ ente.id }}">{{ ente.nome }}</option>
                         {% endfor %}
@@ -56,14 +58,15 @@
             </div><!-- form-widget-group -->
 
             <div class="form-widget-group">
-                <label>Data: <input type="date" name="data" required></label>
-                <label>Quadrato: <input type="text" name="quadrato" required></label>
+                <label>Data*: <input type="date" name="data" required></label>
+                <label>Quadrato*: <input type="text" name="quadrato" required></label>
+                <label>Settore*: <input type="text" name="settore"></label>
             </div><!-- form-widget-group -->
 
             <div class="form-widget-group">
-                <label>Colore:<input type="text" name="colore" required></label>
-                <label>Composizione: <input type="text" name="composizione" required></label>
-                <label>Consistenza: <input type="text" name="consistenza" required></label>
+                <label>Colore:<input type="text" name="colore"></label>
+                <label>Composizione: <input type="text" name="composizione"></label>
+                <label>Consistenza*: <input type="text" name="consistenza" required></label>
             </div><!-- form-widget-group --> 
 
             <div class="form-widget-group">
@@ -72,32 +75,45 @@
             </div><!-- form-widget-group -->
 
             <div class="form-widget-group">
-                <label>Interpretazione: <input type="text" name="interpretazione" required></label>
+                <label>Interpretazione: <input type="text" name="interpretazione"></label>
             </div><!-- form-widget-group -->
             
             <div class="form-widget-group">
-                <label>Misure: <input type="text" name="misure" required></label>
+                <label>Misure: <input type="text" name="misure"></label>
             </div><!-- form-widget-group -->
             
             <label>Note: <textarea name="note"></textarea></label><br>
 
-            <label>Campionature:
+            <label>Campionature*:
                 <select name="campionature" required>
                     <option value="true">Sì</option>
                     <option value="false">No</option>
                 </select>
             </label><br>
 
-            <label>Flottazione:
+            <label>Flottazione*:
                 <select name="flottazione" required>
-                    <option value="true">Sì</option>
-                    <option value="false">No</option>
+                    <option value="no">No</option>
+                    <option value="si">Sì</option>
+                    <option value="integrale">Integrale</option>
+                    <option value="a_campione">A campione</option>
                 </select>
             </label><br>
 
-            <label>Setacciatura: <input type="text" name="setacciatura"></label><br>
+            <label>Setacciatura*:
+                <select name="setacciatura" required>
+                    <option value="no">No</option>
+                    <option value="si">Sì</option>
+                    <option value="integrale">Integrale</option>
+                    <option value="a_campione">A campione</option>
+                </select>
+            </label><br>
+
             <label>Affidabilità stratigrafica: <input type="text" name="affidabilita_strat"></label><br>
             <label>Modo di formazione: <input type="text" name="modo_formazione"></label><br>
+            <label>Stato di conservazione: <input type="text" name="stato_conservazine"></label><br>
+            <label>Criteri di distinzione*: <input type="text" name="criteri_distinzione" required></label><br>
+            <label>Definizione e posizione: <input type="text" name="def_e_pos"></label><br>
             <label>Elementi datanti: <input type="text" name="elem_datanti"></label><br>
             
             <div class="form-widget-group">
@@ -106,12 +122,12 @@
             </div><!-- form-widget-group -->
 
             <div class="form-widget-group">
-                <label>Pianta: <input type="file" name="pianta" multiple></label>
+                <label>Pianta: <input type="file" name="pianta"></label>
                 <button class="form-button" type="button" onclick="clearFiles('pianta')">X</button>
             </div><!-- form-widget-group -->
 
             <div class="form-widget-group">
-                <label>Ortofoto: <input type="file" name="ortofoto" multiple></label>
+                <label>Ortofoto: <input type="file" name="ortofoto"></label>
                 <button class="form-button" type="button" onclick="clearFiles('ortofoto')">X</button>
             </div><!-- form-widget-group -->
 
@@ -121,11 +137,6 @@
 
     {% include 'footer.html' %}
 
-    <script>
-        function clearFiles(inputName) {
-            const input = document.querySelector(`input[type="file"][name="${inputName}"]`);
-            if (input) input.value = '';
-        }
-    </script>
+    <script src="{{ url_for('static', filename='scripts.js') }}"></script>
 </body>
 </html>

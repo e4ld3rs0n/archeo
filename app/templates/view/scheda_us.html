@@ -37,8 +37,9 @@
                 <td><strong>Data</strong><br>{{ scheda.data.strftime('%d/%m/%Y') }}</td>
               </tr>            
               <tr>
-                <td colspan="5"><strong>Località</strong><br>{{ scheda.localita.denom }}<br>{{ scheda.localita.via }}, {{ scheda.localita.cap }} - {{ scheda.localita.citta }} ({{ scheda.localita.provincia }})</td>
+                <td colspan="4"><strong>Località</strong><br>{{ scheda.localita.denom }}<br>{{ scheda.localita.via }}, {{ scheda.localita.cap }} - {{ scheda.localita.citta }} ({{ scheda.localita.provincia }})</td>
                 <td colspan="1"><strong>Quadrato:</strong><br>{{ scheda.quadrato }}</td>
+                <td colspan="1"><strong>Settore:</strong><br>{{ scheda.settore }}</td>
             </tr>
               <tr>
                 <td colspan="6">
@@ -75,10 +76,18 @@
                     <strong>Campionature:</strong><br>{{ 'Sì' if scheda.campionature else 'No' }}
                 </td>
                 <td colspan="2">
-                    <strong>Flottazione:</strong><br>{{ 'Sì' if scheda.flottazione else 'No' }}
+                    <strong>Flottazione:</strong><br>
+                    {% set value_map = {
+                        'si': 'Sì',
+                        'no': 'No',
+                        'a_campione': 'A campione',
+                        'integrale': 'Integrale'
+                    } %}
+                    {{ value_map.get(scheda.flottazione, 'Valore sconosciuto') }}
                 </td>
                 <td colspan="2">
-                    <strong>Setacciatura:</strong><br>{{ scheda.setacciatura }}
+                    <strong>Setacciatura:</strong><br>
+                    {{ value_map.get(scheda.setacciatura, 'Valore sconosciuto') }}
                 </td>
               </tr>
               <tr>
@@ -178,7 +187,7 @@
                 <div class="gallery-item">
                     <a href="{{ url_for('view.photo', filename=f.filename) }}" target="_blank">
                         <img src="{{ url_for('view.photo', filename=f.filename) }}">
-                        <p>{{ f.filename }}</p>
+                        <!-- <p>{{ f.filename }}</p> -->
                     </a>
                 </div>
             {% endfor %}
@@ -187,7 +196,7 @@
             <p>Nessuna fotografia trovata.</p>
         {% endif %}
 
-        <a href="#" class="button-link">Carica altre foto</a>
+        <a href="{{ url_for('modify.upload_photos', id=scheda.id) }}" class="button-link">Carica altre foto</a>
 
         <h3>Pianta:</h3>
 

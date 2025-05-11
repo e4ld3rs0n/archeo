@@ -9,8 +9,8 @@ class Anagrafica(db.Model):
     email = db.Column(db.String(255), nullable=False)
     tel = db.Column(db.String(255), nullable=False)
 
-    schede_responsabile = db.relationship("ModSchedaUs", backref="responsabile", foreign_keys="ModSchedaUs.id_responsabile")
-    schede_scientifico = db.relationship("ModSchedaUs", backref="responsabile_scientifico", foreign_keys="ModSchedaUs.id_res_scientifico")
+    schede_responsabile = db.relationship("SchedaUS", backref="responsabile", foreign_keys="SchedaUS.id_responsabile")
+    schede_scientifico = db.relationship("SchedaUS", backref="responsabile_scientifico", foreign_keys="SchedaUS.id_res_scientifico")
 
 
 class Localita(db.Model):
@@ -24,7 +24,7 @@ class Localita(db.Model):
     cap = db.Column(db.String(6), nullable=False)
 
     enti = db.relationship("Ente", backref="localita")
-    schede = db.relationship("ModSchedaUs", backref="localita")
+    schede = db.relationship("SchedaUS", backref="localita")
 
 
 class Ente(db.Model):
@@ -36,11 +36,11 @@ class Ente(db.Model):
     tel = db.Column(db.String(255))
     email = db.Column(db.String(255))
 
-    scheda_responsabile = db.relationship("ModSchedaUs", backref="ente_responsabile", uselist=False, foreign_keys="ModSchedaUs.id_ente_resp")
+    scheda_responsabile = db.relationship("SchedaUS", backref="ente_responsabile", uselist=False, foreign_keys="SchedaUS.id_ente_resp")
 
 
-class ModSchedaUs(db.Model):
-    __tablename__ = "mod_scheda_us"
+class SchedaUS(db.Model):
+    __tablename__ = "scheda_us"
 
     id = db.Column(db.Integer, primary_key=True)
     num_us = db.Column(db.String(16), nullable=False, unique=True)
@@ -51,19 +51,23 @@ class ModSchedaUs(db.Model):
     id_localita = db.Column(db.Integer, db.ForeignKey("localita.id"), nullable=False)
     data = db.Column(db.DateTime, nullable=False)
     quadrato = db.Column(db.String(255), nullable=False)
-    colore = db.Column(db.String(255), nullable=False)
-    composizione = db.Column(db.String(255), nullable=False)
+    settore = db.Column(db.String(128))                             ### Nuovo, Settore
+    colore = db.Column(db.String(255))
+    composizione = db.Column(db.String(255))
     consistenza = db.Column(db.String(255), nullable=False)
     comp_organici = db.Column(db.String(255))
     comp_inorganici = db.Column(db.String(255))
-    interpretazione = db.Column(db.String(255), nullable=False)
-    misure = db.Column(db.String(255), nullable=False)
-    note = db.Column(db.String(255), nullable=True)
+    interpretazione = db.Column(db.String(255))
+    misure = db.Column(db.String(255))
+    note = db.Column(db.String(2000), nullable=True)
     campionature = db.Column(db.Boolean, nullable=False)
-    flottazione = db.Column(db.Boolean, nullable=False)
-    setacciatura = db.Column(db.String(255))
+    flottazione = db.Column(db.String(16), nullable=False)          ### Non è più un booleano
+    setacciatura = db.Column(db.String(16), nullable=False)         ### Non è più un booleano
     affidabilita_strat = db.Column(db.String(255))
     modo_formazione = db.Column(db.String(255))
+    stato_conservazione = db.Column(db.String(255))                 ### Nuovo, Stato di conservazione
+    criteri_distinzione = db.Column(db.String(255), nullable=False) ### Nuovo, Criteri di distinzione
+    def_e_pos = db.Column(db.String(255))                           ### Nuovo, definizione e posizione
     elem_datanti = db.Column(db.String(255))
 
     piante = db.relationship("PiantaUS", backref="pianta_us", cascade="all, delete-orphan")
@@ -78,29 +82,29 @@ class PiantaUS(db.Model):
     __tablename__ = "pianta_us"
 
     id = db.Column(db.Integer, primary_key=True)
-    id_mod_scheda_us = db.Column(db.Integer, db.ForeignKey("mod_scheda_us.id"), nullable=False)
+    id_scheda_us = db.Column(db.Integer, db.ForeignKey("scheda_us.id"), nullable=False)
     path_pianta = db.Column(db.String(255), nullable=False)
 
 class FotoUS(db.Model):
     __tablename__ = "foto_us"
 
     id = db.Column(db.Integer, primary_key=True)
-    id_mod_scheda_us = db.Column(db.Integer, db.ForeignKey("mod_scheda_us.id"), nullable=False)
+    id_scheda_us = db.Column(db.Integer, db.ForeignKey("scheda_us.id"), nullable=False)
     filename = db.Column(db.String(255), nullable=False)
 
 class OrtofotoUS(db.Model):
     __tablename__ = "ortofoto_us"
 
     id = db.Column(db.Integer, primary_key=True)
-    id_mod_scheda_us = db.Column(db.Integer, db.ForeignKey("mod_scheda_us.id"), nullable=False)
+    id_scheda_us = db.Column(db.Integer, db.ForeignKey("scheda_us.id"), nullable=False)
     path_ortofoto = db.Column(db.String(255), nullable=False)
 
 class SeqFisica(db.Model):
     __tablename__ = "seq_fisica"
 
     id = db.Column(db.Integer, primary_key=True)
-    id_seq_a = db.Column(db.Integer, db.ForeignKey("mod_scheda_us.id"), nullable=False)
-    id_seq_b = db.Column(db.Integer, db.ForeignKey("mod_scheda_us.id"), nullable=False)
+    id_seq_a = db.Column(db.Integer, db.ForeignKey("scheda_us.id"), nullable=False)
+    id_seq_b = db.Column(db.Integer, db.ForeignKey("scheda_us.id"), nullable=False)
     sequenza = db.Column(db.String(255), nullable=False)
 
 
@@ -108,5 +112,5 @@ class SeqStrat(db.Model):
     __tablename__ = "seq_strat"
 
     id = db.Column(db.Integer, primary_key=True)
-    id_seq_a = db.Column(db.Integer, db.ForeignKey("mod_scheda_us.id"), nullable=False)
-    id_seq_b = db.Column(db.Integer, db.ForeignKey("mod_scheda_us.id"), nullable=False)
+    id_seq_a = db.Column(db.Integer, db.ForeignKey("scheda_us.id"), nullable=False)
+    id_seq_b = db.Column(db.Integer, db.ForeignKey("scheda_us.id"), nullable=False)

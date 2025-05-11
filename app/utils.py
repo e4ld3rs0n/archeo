@@ -1,6 +1,6 @@
 from flask import Blueprint, request, jsonify, abort, render_template, redirect, url_for, flash, render_template_string
 from sqlalchemy import *
-from datetime import datetime
+from datetime import datetime, timezone
 from flask_sqlalchemy import SQLAlchemy
 from db import db
 from models import *
@@ -52,43 +52,12 @@ def dumpdb():
 
     return render_template_string(output)
 
-@bp.route("/ente", methods=["GET", "POST"])
-def ente():
-    print ("HIT /ente")
-
-    if request.method == "POST":
-        nome = request.form.get("nome")
-        if not nome:
-            flash("Il nome dell'ente è obbligatorio!", "error")
-            return redirect(url_for("main.ente"))
-
-        tel = request.form.get("tel")
-        email = request.form.get("email")
-        id_loc = request.form.get("id_loc")
-
-        new_ente = Ente(
-            id_loc = id_loc,
-            nome = nome,
-            tel = tel,
-            email = email
-        )
-
-        db.session.add(new_ente)
-        db.session.commit()
-
-        flash(f"Ente creato!", "success")
-        return redirect(url_for("main.ente"))
-    
-    lista_localita=Localita.query.all()
-    
-    return render_template("ente.html", lista_localita=lista_localita)
-
 @bp.route("/create-dummy-data")
 def create_dummy_data():    
     try:
         
         # Clear existing data if needed
-        # db.session.query(ModSchedaUs).delete()
+        # db.session.query(SchedaUS).delete()
         # db.session.query(Ente).delete()
         # db.session.query(Localita).delete()
         # db.session.query(Anagrafica).delete()
@@ -136,14 +105,14 @@ def create_dummy_data():
         # Create dummy dataset
         schede = []
         for i in range(1, 12):
-            scheda = ModSchedaUs(
-                num_us=str(i*15),
+            scheda = SchedaUS(
+                num_us=str(i*10),
                 id_responsabile=person1.id,
                 id_res_scientifico=person2.id,
-                descrizione=f"Descrizione della scheda per l'unità stratigrafica {i*15}",
+                descrizione=f"Descrizione della scheda per l'unità stratigrafica",
                 id_ente_resp=ente1.id,
                 id_localita=loc1.id,
-                data=datetime.utcnow(),
+                data=datetime.now(timezone.utc),
                 quadrato=f"B{i}",
                 colore="Marrone",
                 composizione="Terra",
@@ -154,11 +123,15 @@ def create_dummy_data():
                 misure="1x1m",
                 note="Nessuna nota rilevante",
                 campionature=True if i % 2 == 0 else False,
-                flottazione=False,
-                setacciatura="2mm",
+                flottazione="si",
+                setacciatura="a_campione",
                 affidabilita_strat="Buona",
                 modo_formazione="Deposizione antropica",
-                elem_datanti="Ceramica"
+                elem_datanti="Ceramica",
+                settore="Settore A",
+                stato_conservazione="Buono",
+                criteri_distinzione="Stratificazione",
+                def_e_pos="Buca di palo",
             )
             schede.append(scheda)
 

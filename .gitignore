@@ -1,6 +1,8 @@
 # Development stuff
 dbdata/
 uploads/
+cleanup.sh
+*.sqlite3
 
 # Editor-related stuff
 .vscode/

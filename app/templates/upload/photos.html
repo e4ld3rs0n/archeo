@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <title>US REPLACEME - Aggiungi foto</title>
+</head>
+
+{% include 'header.html' %}
+
+<body>
+    <div class="container">
+        <h1>Aggiungi altre foto a US REPLACEME</h1>
+
+        {% include 'notifications.html' %}
+
+        <form method="POST" enctype="multipart/form-data">
+            
+            <div class="form-widget-group">
+                <label>Fotografie: <input type="file" name="foto" multiple></label>
+                <button class="form-button" type="button" onclick="clearFiles('foto')">X</button>
+            </div><!-- form-widget-group -->
+
+            <button type="submit">Carica</button>
+        </form>
+
+        <br>
+        <a href="{{ url_for('view.scheda', id=id) }}">Torna alla scheda</a>
+    </div>
+
+    {% include 'footer.html' %}
+
+    <script src="{{ url_for('static', filename='scripts.js') }}"></script>
+
+</body>
+</html>

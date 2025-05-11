@@ -103,6 +103,37 @@ def nuova_localita():
     
     return render_template("localita.html")
 
+@bp.route("/crea/ente", methods=["GET", "POST"])
+def nuovo_ente():
+    print ("HIT /ente")
+
+    if request.method == "POST":
+        nome = request.form.get("nome")
+        if not nome:
+            flash("Il nome dell'ente è obbligatorio!", "error")
+            return redirect(url_for("main.ente"))
+
+        tel = request.form.get("tel")
+        email = request.form.get("email")
+        id_loc = request.form.get("id_loc")
+
+        new_ente = Ente(
+            id_loc = id_loc,
+            nome = nome,
+            tel = tel,
+            email = email
+        )
+
+        db.session.add(new_ente)
+        db.session.commit()
+
+        flash(f"Ente creato!", "success")
+        return redirect(url_for("view.visualizza_enti"))
+    
+    lista_localita=Localita.query.all()
+    
+    return render_template("ente.html", lista_localita=lista_localita)
+
 @bp.route("/crea/us", methods=["GET", "POST"])
 def nuova_scheda_us():
     if request.method == "POST":
@@ -110,12 +141,12 @@ def nuova_scheda_us():
         try:
             unique_num_us = request.form.get("num_us")
             # Ensure num_us is unique
-            test = ModSchedaUs.query.filter_by(num_us=unique_num_us).first()
+            test = SchedaUS.query.filter_by(num_us=unique_num_us).first()
             if test: 
                 flash(f"Errore: il numero US {unique_num_us} esiste già!", "error")
                 return redirect(url_for("main.scheda"))
             
-            new_scheda = ModSchedaUs(
+            new_scheda = SchedaUS(
                 num_us = unique_num_us,
                 id_responsabile = request.form.get("id_responsabile"),
                 id_res_scientifico = request.form.get("id_res_scientifico"),
@@ -133,22 +164,27 @@ def nuova_scheda_us():
                 misure = request.form.get("misure"),
                 note = request.form.get("note"),
                 campionature = bool(request.form.get("campionature")),
-                flottazione = bool(request.form.get("flottazione")),
+                flottazione = request.form.get("flottazione"),
                 setacciatura = request.form.get("setacciatura"),
                 affidabilita_strat = request.form.get("affidabilita_strat"),
                 modo_formazione = request.form.get("modo_formazione"),
                 elem_datanti = request.form.get("elem_datanti"),
+                settore = request.form.get("settore"),
+                stato_conservazione = request.form.get("stato_conservazione"),
+                def_e_pos = request.form.get("def_e_pos"),
+                criteri_distinzione = request.form.get("criteri_distinzione")
             )
 
             db.session.add(new_scheda)
-            db.session.commit()
-            flash("Scheda US creata!", "success")
         except Exception as e:
             db.session.rollback()
             flash(f"Errore nella creazione: {str(e)}", "error")
 
             # If the creation fails, redirect to the previous page without processing the photos
             return redirect(url_for("create.nuova_scheda_us"))
+
+        db.session.commit()
+        flash("Scheda US creata!", "success")
 
         # Handle photo upload
         try:
@@ -170,19 +206,18 @@ def nuova_scheda_us():
                     )
 
                     db.session.add(new_foto)
-                    db.session.commit()
-                    flash(f"Foto {file_name} caricata!", "success")
 
         except Exception as e:
             db.session.rollback()
             flash(f"Errore nel caricamento dei file: {str(e)}", "error")
 
+        db.session.commit()
         return redirect(url_for("view.scheda", id=new_scheda.id))
 
     anagrafica = Anagrafica.query.all()
     enti = Ente.query.all()
     localita = Localita.query.all()
-    schede = ModSchedaUs.query.order_by(ModSchedaUs.id.desc()).all()
+    schede = SchedaUS.query.order_by(SchedaUS.id.desc()).all()
 
     return render_template(
         "create/nuova_scheda.html",
@@ -227,7 +262,7 @@ def nuova_sequenza_fisica():
         return redirect(url_for("create.nuova_sequenza_fisica"))
 
     # Fetch existing data for the form
-    schede = ModSchedaUs.query.all()
+    schede = SchedaUS.query.all()
 
     return render_template(
         "create/sequenza_fisica.html",
@@ -274,7 +309,7 @@ def nuova_sequenza_stratigrafica():
         return redirect(url_for("create.nuova_sequenza_stratigrafica"))
 
     # Fetch existing data for the form
-    schede = ModSchedaUs.query.all()
+    schede = SchedaUS.query.all()
 
     return render_template(
         "create/sequenza_stratigrafica.html",
