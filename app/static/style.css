@@ -69,7 +69,7 @@ header nav ul li .dropbtn {
     font-weight: 500;
     border: none;
     border-radius: 0;
-    transition: background-color 0.2s;
+    transition: background-color 0.4s;
 }
 
 header nav ul li a:hover,
@@ -109,14 +109,23 @@ header nav ul li .dropdown-content li a:hover {
 ul.card-container {
     display: flex;
     flex-wrap: wrap;
-    gap: 20px;
+    gap: 15px;
     padding: 0;
     list-style: none;
+}
+
+ul > li.card-info {
+    font-size: 0.8rem;
+    font-weight: 700;
 }
 
 ul > li.card {
     flex: 1 1 calc(50% - 20px); /* Two columns with gap accounted */
     box-sizing: border-box;
+}
+
+ul > li.search-card {
+    flex: 1 1 100% !important; /* Single column */
 }
 
 @media (max-width: 768px) {
@@ -225,7 +234,7 @@ button, input[type="submit"] {
     cursor: pointer;
     font-weight: 500;
     border-radius: 0;
-    transition: background-color 0.2s;
+    transition: background-color 0.4s;
 }
 
 button:hover, input[type="submit"]:hover {
@@ -242,7 +251,7 @@ a.button-link {
     font-weight: 500;
     border-radius: 0;
     text-decoration: none;
-    transition: background-color 0.2s;
+    transition: background-color 0.4s;
 }
 
 a.button-link:hover {
@@ -383,8 +392,8 @@ footer a:hover {
     margin: 10px 0;
     border: 1px solid #ddd;
     border-radius: 2px;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
-    transition: transform 0.2s ease-in-out;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.4s ease-in-out;
 }
 
 .card--flex {
@@ -451,7 +460,7 @@ table td {
     box-shadow: 2px 2px 5px rgba(0,0,0,0.1);
     align-items: center;
     justify-content: center;
-    transition: transform 0.2s ease-in-out;
+    transition: transform 0.4s ease-in-out;
 }
 
 .gallery-item:hover {

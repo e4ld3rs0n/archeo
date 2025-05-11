@@ -86,4 +86,5 @@ def search():
                                enti=enti, 
                                schede=schede,
                                reperti=reperti)
+    
     return render_template('view/risultati_ricerca.html', query=None)
