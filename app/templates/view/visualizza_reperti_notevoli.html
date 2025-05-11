@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <title>Reperti notevoli</title>
+</head>
+
+{% include 'header.html' %}
+
+<body>
+    <div class="wide-container">
+        {% include 'notifications.html' %}
+
+        <h1>Inventario reperti notevoli</h1>
+
+        {% if reperti_notevoli %}
+        <div style="overflow-x: auto;">
+            <table class="scheda-us" style="table-layout: fixed; width: 150%">
+                <colgroup>
+                    <col style="width: 4%"> <!-- ID -->
+                    <col style="width: 4%"> <!-- US -->
+                    <col style="width: 6%"> <!-- Num. cassa -->
+                    <col style="width: 8%"> <!-- Sito -->
+                    <col style="width: 5%"> <!-- Data -->
+                    <col style="width: 4%"> <!-- Quadrato -->
+                    <col style="width: 8%"> <!-- Materiale -->
+                    <col style="width: 10%"> <!-- Descr -->
+                    <col style="width: 4%"> <!-- Qta -->
+                    <col style="width: 4%"> <!-- Lavato -->
+                    <col style="width: 4%"> <!-- Siglato -->
+                    <col style="width: 6%"> <!-- Punto staz -->
+                    <col style="width: 12%"> <!-- Coordinate -->
+                    <col style="width: 21%"> <!-- Note -->
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>US</th>
+                        <th>Numero cassa</th>
+                        <th>Sito</th>
+                        <th>Data</th>
+                        <th>Quadrato</th>
+                        <th>Materiale</th>
+                        <th>Descrizione</th>
+                        <th>Quantità</th>
+                        <th>Lavato</th>
+                        <th>Siglato</th>
+                        <th>Punto stazione totale</th>
+                        <th>Coordinate</th>
+                        <th>Note</th>
+                    </tr>
+                </thead>           
+                <tbody>
+                    {% for reperto in reperti_notevoli %}
+                        <tr>
+                            <td>{{ reperto.id }}</td>
+                            <td>{{ reperto.scheda_us.num_us }}</td>
+                            <td>{{ reperto.numero_cassa }}</td>
+                            <td>{{ reperto.sito }}</td>
+                            <td>{{ reperto.data.strftime('%d/%m/%Y') }}</td>
+                            <td>{{ reperto.quadrato }}</td>
+                            <td>{{ reperto.materiale }}</td>
+                            <td>{{ reperto.descrizione }}</td>
+                            <td>{{ reperto.quantita }}</td>
+                            <td>{{ reperto.lavato }}</td>
+                            <td>{{ reperto.siglato }}</td>
+                            <td>{{ reperto.punto_stazione_totale }}</td>
+                            <td>
+                                    {% if reperto.coord_x and reperto.coord_y and reperto.coord_z %}
+                                        {{ reperto.coord_x }}, {{ reperto.coord_y }}, {{ reperto.coord_z }}
+                                    {% else %}
+                                        Non presenti
+                                    {% endif %}
+                            </td>
+                            <td>{{ reperto.note }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+            <p>Nessun reperto notevole presente.</p>
+        {% endif %}
+    </div>
+
+    {% include 'footer.html' %}
+</body>
+</html>

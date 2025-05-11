@@ -102,9 +102,11 @@ def create_dummy_data():
         ])
         db.session.commit()
 
+        dataset_max = 14
+
         # Create dummy dataset
         schede = []
-        for i in range(1, 12):
+        for i in range(1, dataset_max):
             scheda = SchedaUS(
                 num_us=str(i*10),
                 id_responsabile=person1.id,
@@ -134,8 +136,30 @@ def create_dummy_data():
                 def_e_pos="Buca di palo",
             )
             schede.append(scheda)
-
         db.session.add_all(schede)
+
+        reperti = []
+        for i in range(1, dataset_max):
+            for j in range(1, 3):
+                reperto = RepertoNotevoleUS(
+                    id_scheda_us=i,
+                    numero_cassa = f"{i*10}{j*10}-RR",
+                    sito = "PVG22MUR",
+                    data = datetime.now(timezone.utc),
+                    materiale = "Ceramica",
+                    descrizione = "Vaso",
+                    quantita = "1",
+                    lavato = True if i % 2 == 0 else False,
+                    siglato = False if i % 2 == 0 else True,
+                    punto_stazione_totale = "Post",
+                    coord_y = f'{i*10}',
+                    coord_x = f'{i*10}',
+                    coord_z = f'{i*10}',
+                    note="Nessuna nota rilevante"
+                )
+                reperti.append(reperto)
+        db.session.add_all(reperti)
+
         db.session.commit()
 
         flash(f"{len(schede)} schede create con successo", "success")

@@ -12,7 +12,6 @@ class Anagrafica(db.Model):
     schede_responsabile = db.relationship("SchedaUS", backref="responsabile", foreign_keys="SchedaUS.id_responsabile")
     schede_scientifico = db.relationship("SchedaUS", backref="responsabile_scientifico", foreign_keys="SchedaUS.id_res_scientifico")
 
-
 class Localita(db.Model):
     __tablename__ = "localita"
 
@@ -26,7 +25,6 @@ class Localita(db.Model):
     enti = db.relationship("Ente", backref="localita")
     schede = db.relationship("SchedaUS", backref="localita")
 
-
 class Ente(db.Model):
     __tablename__ = "ente"
 
@@ -37,7 +35,6 @@ class Ente(db.Model):
     email = db.Column(db.String(255))
 
     scheda_responsabile = db.relationship("SchedaUS", backref="ente_responsabile", uselist=False, foreign_keys="SchedaUS.id_ente_resp")
-
 
 class SchedaUS(db.Model):
     __tablename__ = "scheda_us"
@@ -77,6 +74,7 @@ class SchedaUS(db.Model):
     seq_fisiche_b = db.relationship("SeqFisica", backref="scheda_b", foreign_keys="SeqFisica.id_seq_b")
     seq_strat_a = db.relationship("SeqStrat", backref="scheda_strat_a", foreign_keys="SeqStrat.id_seq_a")
     seq_strat_b = db.relationship("SeqStrat", backref="scheda_strat_b", foreign_keys="SeqStrat.id_seq_b")
+    reperti_notevoli = db.relationship("RepertoNotevoleUS", back_populates="scheda_us", foreign_keys="RepertoNotevoleUS.id_scheda_us", cascade="all, delete-orphan")
 
 class PiantaUS(db.Model):
     __tablename__ = "pianta_us"
@@ -99,6 +97,27 @@ class OrtofotoUS(db.Model):
     id_scheda_us = db.Column(db.Integer, db.ForeignKey("scheda_us.id"), nullable=False)
     path_ortofoto = db.Column(db.String(255), nullable=False)
 
+class RepertoNotevoleUS(db.Model):
+    __tablename__ = "reperto_notevole_us"
+
+    id = db.Column(db.Integer, primary_key=True)
+    id_scheda_us = db.Column(db.Integer, db.ForeignKey("scheda_us.id"), nullable=False)
+    numero_cassa = db.Column(db.String(255), nullable=False)
+    sito = db.Column(db.String(255), nullable=False)
+    data = db.Column(db.DateTime, nullable=False)
+    materiale = db.Column(db.String(255), nullable=False)
+    descrizione = db.Column(db.String(255), nullable=False)
+    quantita = db.Column(db.String(255))
+    lavato = db.Column(db.Boolean, nullable=False)
+    siglato = db.Column(db.Boolean, nullable=False)
+    punto_stazione_totale = db.Column(db.String(255))
+    coord_y = db.Column(db.String(255))
+    coord_x = db.Column(db.String(255))
+    coord_z = db.Column(db.String(255))
+    note = db.Column(db.String(2000), nullable=True)
+
+    scheda_us = db.relationship('SchedaUS', back_populates='reperti_notevoli', lazy=True)
+
 class SeqFisica(db.Model):
     __tablename__ = "seq_fisica"
 
@@ -106,7 +125,6 @@ class SeqFisica(db.Model):
     id_seq_a = db.Column(db.Integer, db.ForeignKey("scheda_us.id"), nullable=False)
     id_seq_b = db.Column(db.Integer, db.ForeignKey("scheda_us.id"), nullable=False)
     sequenza = db.Column(db.String(255), nullable=False)
-
 
 class SeqStrat(db.Model):
     __tablename__ = "seq_strat"

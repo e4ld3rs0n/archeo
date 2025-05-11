@@ -57,6 +57,7 @@ def scheda(id):
     foto = FotoUS.query.filter_by(id_scheda_us=id).all()
     piante = PiantaUS.query.filter_by(id_scheda_us=id).all()
     ortofoto = OrtofotoUS.query.filter_by(id_scheda_us=id).all()
+    reperti_notevoli = RepertoNotevoleUS.query.filter_by(id_scheda_us=id).all()
 
     return render_template(
         "view/scheda_us.html", 
@@ -67,8 +68,14 @@ def scheda(id):
         rel_strat_arrivo=rel_strat_arrivo,
         foto=foto,
         piante=piante,
-        ortofoto=ortofoto
+        ortofoto=ortofoto,
+        reperti_notevoli=reperti_notevoli
     )
+
+@bp.route("/visualizza_reperti_notevoli", methods=["GET"])
+def visualizza_reperti_notevoli():
+    reperti_notevoli = RepertoNotevoleUS.query.order_by(RepertoNotevoleUS.id_scheda_us.asc()).all()
+    return render_template("view/visualizza_reperti_notevoli.html", reperti_notevoli=reperti_notevoli)
 
 @bp.route("/get/<path:filename>")
 def photo(filename):

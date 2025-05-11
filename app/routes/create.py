@@ -315,3 +315,42 @@ def nuova_sequenza_stratigrafica():
         "create/sequenza_stratigrafica.html",
         schede=schede
     )
+
+@bp.route("/reperto_notevole", methods=["GET", "POST"])
+def nuovo_reperto_notevole():
+
+    if request.method == "POST":
+        try:
+            new_reperto = RepertoNotevoleUS(
+                id_scheda_us = request.form.get("id_scheda"),
+                numero_cassa = request.form.get("numero_cassa"),
+                sito = request.form.get("sito"),
+                data = datetime.strptime(request.form.get("data"), "%Y-%m-%d"),
+                materiale = request.form.get("materiale"),
+                descrizione = request.form.get("descrizione"),
+                quantita = request.form.get("quantita"),
+                lavato = bool(request.form.get("lavato")),
+                siglato = bool(request.form.get("siglato")),
+                punto_stazione_totale = request.form.get("punto_stazione_totale"),
+                coord_y = request.form.get("coord_y"),
+                coord_x = request.form.get("coord_x"),
+                coord_z = request.form.get("coord_z"),
+                note = request.form.get("note")
+            )
+        
+            db.session.add(new_reperto)
+        except Exception as e:
+            db.session.rollback()
+            flash(f"Errore nella creazione: {str(e)}", "error")
+            return redirect(url_for("create.nuovo_reperto_notevole"))
+
+        db.session.commit()
+        flash("Reperto notevole creato!", "success")
+
+    # Fetch existing data for the form
+    schede = SchedaUS.query.all()
+
+    return render_template(
+        "create/nuovo_reperto_notevole.html",
+        schede=schede
+    )

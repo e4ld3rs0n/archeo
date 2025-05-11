@@ -35,6 +35,11 @@ header {
     border-bottom: none;
 }
 
+header nav ul li.separator {
+    border-top: 1px solid #ccc;
+    margin: 5px 0;
+}
+
 header nav ul {
     display: flex;
     flex-wrap: wrap;
@@ -122,7 +127,17 @@ ul > li.card {
 
 /* Container */
 .container {
-    max-width: 70%;
+    max-width: 80%;
+    margin: 80px auto;
+    padding: 40px;
+    background-color: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 0;
+    box-shadow: none;
+}
+
+.wide-container {
+    max-width: 90%;
     margin: 80px auto;
     padding: 40px;
     background-color: var(--surface);
@@ -148,12 +163,14 @@ table th, table td {
     padding: 10px 14px;
     border: 1px solid var(--border);
     text-align: left;
+    font-size: 0.85rem;
 }
 
 table th {
     background-color: #f0eae5;
     color: var(--bodytext);
     font-weight: 600;
+    font-size: 0.9rem;
 }
 
 /* Links */

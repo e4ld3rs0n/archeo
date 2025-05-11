@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <title>Nuovo reperto notevole</title>
+</head>
+
+{% include 'header.html' %}
+
+<body>
+    <div class="container">
+        <h1>Nuovo reperto notevole</h1>
+
+        {% include 'notifications.html' %}
+
+        <form method="POST">
+            <label for="id_scheda">Unità stratigrafica:</label>
+            <select name="id_scheda" id="id_scheda" required>
+                {% for scheda in schede %}
+                    <option value="{{ scheda.id }}">{{ scheda.num_us }} - {{ scheda.descrizione }}</option>
+                {% endfor %}
+            </select><br><br>
+
+            <label>Numero cassa*: <input type="text" name="numero_cassa" required></label><br>
+            <label>Sito*: <input type="text" name="sito" required></label><br>
+            <label>Data*: <input type="date" name="data" required></label><br>
+            <label>Materiale*: <input type="text" name="materiale" required></label><br>
+            <label>Descrizione*: <input type="text" name="descrizione"></label><br>
+            <label>Quantità: <input type="text" name="quantita"></label><br>
+
+            <label>Lavato*:
+                <select name="lavato" required>
+                    <option value="true">Sì</option>
+                    <option value="false">No</option>
+                </select>
+            </label><br>
+
+            <label>Siglato*:
+                <select name="siglato" required>
+                    <option value="true">Sì</option>
+                    <option value="false">No</option>
+                </select>
+            </label><br>
+
+            <label>Punto stazione totale: <input type="text" name="punto_stazione_totale"></label><br>
+
+            <div class="form-widget-group">
+                <label>Coordinata X:<input type="text" name="coord_x"></label>
+                <label>Coordinata Y:<input type="text" name="coord_y"></label>
+                <label>Coordinata Z:<input type="text" name="coord_z"></label>
+            </div><!-- form-widget-group -->
+
+            <label>Note: <textarea name="note"></textarea></label><br>
+
+            <button type="submit">Salva</button>
+        </form>
+    </div>
+</body>
+</html>

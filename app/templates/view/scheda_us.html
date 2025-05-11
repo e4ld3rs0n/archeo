@@ -14,7 +14,7 @@
 
         <h1>Unità stratigrafica {{ scheda.num_us }}</h1>
         
-        <table class="scheda-us" style="undefined;table-layout: fixed; width: 100%"><colgroup>
+        <table class="scheda-us" style="table-layout: fixed; width: 100%"><colgroup>
             <col style="width: 16,6%">
             <col style="width: 16,6%">
             <col style="width: 16,6%">
@@ -177,6 +177,22 @@
         {% endif %}
         
         <a href="{{ url_for('create.nuova_sequenza_stratigrafica') }}" class="button-link">Aggiungi seguenza stratigrafica</a>
+        
+        <h2>Reperti</h2>
+
+        {% if reperti_notevoli %}
+            <ul>
+                {% for r in reperti_notevoli %}
+                    <li>
+                        <strong>Reperto {{ r.id }}</strong> - {{ r.descrizione }} - <a href="#">Vedi reperto</a>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>Nessun reperto notevole trovato.</p>
+        {% endif %}
+
+        <h2>Allegati</h2>
 
         <h3>Fotografie:</h3>
 
