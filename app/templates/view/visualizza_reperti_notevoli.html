@@ -9,7 +9,7 @@
 {% include 'header.html' %}
 
 <body>
-    <div class="wide-container">
+    <div class="container">
         {% include 'notifications.html' %}
 
         <h1>Inventario reperti notevoli</h1>
@@ -54,8 +54,8 @@
                 <tbody>
                     {% for reperto in reperti_notevoli %}
                         <tr>
-                            <td>{{ reperto.id }}</td>
-                            <td>{{ reperto.scheda_us.num_us }}</td>
+                            <td><a href="{{ url_for('view.reperto_notevole', id=reperto.id) }}">{{ reperto.id }}</a></td>
+                            <td><a href="{{ url_for('view.scheda', id=reperto.scheda_us.id) }}">{{ reperto.scheda_us.num_us }}</a></td>
                             <td>{{ reperto.numero_cassa }}</td>
                             <td>{{ reperto.sito }}</td>
                             <td>{{ reperto.data.strftime('%d/%m/%Y') }}</td>

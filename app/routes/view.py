@@ -77,6 +77,20 @@ def visualizza_reperti_notevoli():
     reperti_notevoli = RepertoNotevoleUS.query.order_by(RepertoNotevoleUS.id_scheda_us.asc()).all()
     return render_template("view/visualizza_reperti_notevoli.html", reperti_notevoli=reperti_notevoli)
 
+@bp.route("/reperto_notevole/<int:id>")
+def reperto_notevole(id):
+    # Fetch the scheda by ID
+    reperto = RepertoNotevoleUS.query.get(id)
+    
+    if reperto is None:
+        flash("Reperto non trovato", "error")
+        return redirect(url_for("view.visualizza_reperti_notevoli"))
+
+    return render_template(
+        "view/reperto_notevole.html", 
+        reperto=reperto
+    )
+
 @bp.route("/get/<path:filename>")
 def photo(filename):
     photo_dir = app.config["UPLOAD_FOLDER"]

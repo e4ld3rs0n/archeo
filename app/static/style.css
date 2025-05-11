@@ -136,16 +136,6 @@ ul > li.card {
     box-shadow: none;
 }
 
-.wide-container {
-    max-width: 90%;
-    margin: 80px auto;
-    padding: 40px;
-    background-color: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 0;
-    box-shadow: none;
-}
-
 /* Typography */
 h1, h2, h3 {
     color: var(--primary);

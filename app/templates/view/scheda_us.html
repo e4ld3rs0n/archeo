@@ -184,7 +184,7 @@
             <ul>
                 {% for r in reperti_notevoli %}
                     <li>
-                        <strong>Reperto {{ r.id }}</strong> - {{ r.descrizione }} - <a href="#">Vedi reperto</a>
+                        <strong>Reperto {{ r.id }}</strong> - {{ r.descrizione }} - <a href="{{ url_for('view.reperto_notevole', id=r.id) }}">Vedi reperto</a>
                     </li>
                 {% endfor %}
             </ul>

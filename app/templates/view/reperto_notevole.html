@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <title>Reperto {{ reperto.id }}</title>
+</head>
+
+{% include 'header.html' %}
+
+<body>
+    <div class="container">
+        {% include 'notifications.html' %}
+
+        <h1>Reperto notevole {{ reperto.id }}</h1>
+        
+        <ul>
+            <li><strong>Numero US</strong>: {{ reperto.scheda_us.num_us }} - <a href="{{ url_for('view.scheda', id=reperto.scheda_us.id) }}">Vedi scheda</a></li>
+            <li><strong>Numero cassa</strong>: {{ reperto.numero_cassa }}</li>
+            <li><strong>Sito</strong>: {{ reperto.sito }}</li>
+            <li><strong>Data</strong>: {{ reperto.data.strftime('%d/%m/%Y') }}</li>
+            <li><strong>Materiale</strong>: {{ reperto.materiale }}</li>
+            <li><strong>Descrizione</strong>: {{ reperto.descrizione }}</li>
+            <li><strong>Quantità</strong>: {{ reperto.quantita }}</li>
+            <li><strong>Lavato</strong>: {{ 'Sì' if reperto.lavato else 'No' }}</li>
+            <li><strong>Siglato</strong>: {{ 'Sì' if reperto.siglato else 'No' }}</li>
+            <li><strong>Punto stazione totale</strong>: {{ reperto.punto_stazione_totale }}</li>
+            <li><strong>Coordinate (X, Y, Z)</strong>: {{ reperto.coord_x }}, {{ reperto.coord_y }}, {{ reperto.coord_z }}</li>
+            <li><strong>Note</strong>: {{ reperto.note }}</li>
+        </ul>
+    </div>
+        
+    {% include 'footer.html' %}
+</body>
+</html>
