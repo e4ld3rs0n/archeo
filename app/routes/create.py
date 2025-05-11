@@ -1,5 +1,5 @@
 import os, uuid
-from datetime import datetime
+from datetime import datetime, date
 from flask import (
     Blueprint, 
     request,
@@ -218,9 +218,11 @@ def nuova_scheda_us():
     enti = Ente.query.all()
     localita = Localita.query.all()
     schede = SchedaUS.query.order_by(SchedaUS.id.desc()).all()
+    today_date = date.today().strftime('%Y-%m-%d')
 
     return render_template(
         "create/nuova_scheda.html",
+        today_date=today_date,
         anagrafica=anagrafica,
         enti=enti,
         localita=localita,
@@ -349,8 +351,10 @@ def nuovo_reperto_notevole():
 
     # Fetch existing data for the form
     schede = SchedaUS.query.all()
+    today_date = date.today().strftime('%Y-%m-%d')
 
     return render_template(
         "create/nuovo_reperto_notevole.html",
+        today_date=today_date,
         schede=schede
     )

@@ -4,6 +4,7 @@ from datetime import datetime, timezone
 from flask_sqlalchemy import SQLAlchemy
 from db import db
 from models import *
+import random
 
 bp = Blueprint("main", __name__)
 
@@ -146,15 +147,15 @@ def create_dummy_data():
                     numero_cassa = f"{i*10}{j*10}-RR",
                     sito = "PVG22MUR",
                     data = datetime.now(timezone.utc),
-                    materiale = "Ceramica",
-                    descrizione = "Vaso",
-                    quantita = "1",
+                    materiale = "Ceramica" if i % 2 == 0 else "Terracotta",
+                    descrizione = "Vaso" if i % 3 == 0 else "Piatto",
+                    quantita = "3" if i % 2 == 0 else "1",
                     lavato = True if i % 2 == 0 else False,
                     siglato = False if i % 2 == 0 else True,
                     punto_stazione_totale = "Post",
-                    coord_y = f'{i*10}',
-                    coord_x = f'{i*10}',
-                    coord_z = f'{i*10}',
+                    coord_y = f'{random.uniform(-10.0, 10.0)}',
+                    coord_x = f'{random.uniform(-10.0, 10.0)}',
+                    coord_z = f'{random.uniform(-10.0, 10.0)}',
                     note="Nessuna nota rilevante"
                 )
                 reperti.append(reperto)

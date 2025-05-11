@@ -75,7 +75,7 @@
                 {% for s in schede %}
                     <li class="card search-card">
                         <div class="card-info">
-                            <h3><a href="#">US {{ s.num_us }}</a></h3>
+                            <h3><a href="{{ url_for('view.scheda', id=s.id) }}">US {{ s.num_us }}</a></h3>
                             {{ s.descrizione }} ({{ s.data.strftime('%d/%m/%Y') }})<br>
                             {{ s.ente_responsabile.nome}}
                         </div>
@@ -90,7 +90,7 @@
             <ul class="card-container">
                 {% for r in reperti %}
                     <li class="card search-card">
-                        <h3><a href="#">RR {{ r.id }}</a></h3>
+                        <h3><a href="{{ url_for('view.reperto_notevole', id=r.id) }}">RR {{ r.id }}</a></h3>
                         Cassa {{ r.numero_cassa }}
                         Sito {{ r.sito }}
                         {{ r.data.strftime('%d/%m/%Y') }}

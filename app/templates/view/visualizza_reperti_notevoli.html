@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="it">
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
@@ -38,8 +38,8 @@
                 <tbody>
                     {% for reperto in reperti_notevoli %}
                         <tr>
-                            <td><a href="{{ url_for('view.reperto_notevole', id=reperto.id) }}">{{ reperto.id }}</a></td>
-                            <td><a href="{{ url_for('view.scheda', id=reperto.scheda_us.id) }}">{{ reperto.scheda_us.num_us }}</a></td>
+                            <td><a href="{{ url_for('view.reperto_notevole', id=reperto.id) }}">Reperto №{{ reperto.id }}</a></td>
+                            <td><a href="{{ url_for('view.scheda', id=reperto.scheda_us.id) }}">US {{ reperto.scheda_us.num_us }}</a></td>
                             <td>{{ reperto.numero_cassa }}</td>
                             <td>{{ reperto.sito }}</td>
                             <td>{{ reperto.data.strftime('%d/%m/%Y') }}</td>
@@ -47,8 +47,8 @@
                             <td>{{ reperto.materiale }}</td>
                             <td>{{ reperto.descrizione }}</td>
                             <td>{{ reperto.quantita }}</td>
-                            <td>{{ reperto.lavato }}</td>
-                            <td>{{ reperto.siglato }}</td>
+                            <td>{% if reperto.lavato %}&#10004;{% endif %}</td>
+                            <td>{% if reperto.siglato %}&#10004;{% endif %}</td>
                             <td>{{ reperto.punto_stazione_totale }}</td>
                             <td>
                                     {% if reperto.coord_x and reperto.coord_y and reperto.coord_z %}

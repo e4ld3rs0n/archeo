@@ -12,7 +12,7 @@
     <div class="container">
         {% include 'notifications.html' %}
 
-        <h1>Reperto notevole {{ reperto.id }}</h1>
+        <h1>Reperto №{{ reperto.id }}</h1>
         
         <ul>
             <li><strong>Numero US</strong>: {{ reperto.scheda_us.num_us }} - <a href="{{ url_for('view.scheda', id=reperto.scheda_us.id) }}">Vedi scheda</a></li>
