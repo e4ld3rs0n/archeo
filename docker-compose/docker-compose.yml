@@ -1,14 +1,13 @@
----
 services:
   app:
-    build: .
+    image: ghcr.io/e4ld3rs0n/archeo:latest
     container_name: archeo-app
     ports:
-      - "8000:8000"
+      - "8678:8000"
     env_file:
-      - .env
+      - stack.env
     volumes:
-      - ./uploads:/app/static/uploads
+      - /docker/archeo/uploads:/app/static/uploads
     depends_on:
       - db
     command: ["dockerize", "-wait", "tcp://db:5432", "-timeout", "30s", "gunicorn", "-w", "4", "-b", "0.0.0.0:8000", "--timeout", "120", "main:app"]
@@ -17,9 +16,8 @@ services:
     image: postgres:16
     container_name: archeo-db
     environment:
-      POSTGRES_DB: ${DB_NAME}
-      POSTGRES_USER: ${DB_USER}
-      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}             
+      POSTGRES_USER: ${DB_USER}         
+      POSTGRES_PASSWORD: ${DB_PASSWORD} 
     volumes:
-      - ./dbdata:/var/lib/postgresql/data
-      - ./uploads:/app/static/uploads
+      - /docker/archeo/dbdata:/var/lib/postgresql/data

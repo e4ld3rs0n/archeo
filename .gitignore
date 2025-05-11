@@ -4,6 +4,12 @@ uploads/
 cleanup.sh
 *.sqlite3
 
+# Ignore the development docker-compose.yml in the root
+/docker-compose.yml
+
+# Include the production docker-compose.yml directory
+!/docker-compose/docker-compose.yml
+
 # Editor-related stuff
 .vscode/
 .idea/
