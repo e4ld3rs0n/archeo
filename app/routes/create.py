@@ -140,12 +140,33 @@ def nuova_scheda_us():
         # Create the US model
         try:
             unique_num_us = request.form.get("num_us")
-            # Ensure num_us is unique
-            test = SchedaUS.query.filter_by(num_us=unique_num_us).first()
-            if test: 
-                flash(f"Errore: il numero US {unique_num_us} esiste già!", "error")
-                return redirect(url_for("main.scheda"))
             
+            # Ensure num_us is unique in the database
+            test_us = SchedaUS.query.filter_by(num_us=unique_num_us).first()
+            if test_us: 
+                flash(f"Errore: il numero US {unique_num_us} esiste già!", "error")
+                return redirect(url_for("create.nuova_scheda_us"))
+            
+            pianta = request.files.get("pianta")
+            pianta_filename = secure_filename(f"{uuid.uuid4().hex}{os.path.splitext(pianta.filename)[1]}")
+            pianta_path = os.path.join(app.config["UPLOAD_FOLDER"], pianta_filename)
+            
+            try:
+                file.save(pianta_path)
+            except Exception as e:
+                flash(f"Errore nel caricamento della pianta: {str(e)}", "error")
+                pianta_filename = None
+
+            ortofoto = request.files.get("ortofoto")
+            ortofoto_filename = secure_filename(f"{uuid.uuid4().hex}{os.path.splitext(ortofoto.filename)[1]}")
+            ortofoto_path = os.path.join(app.config["UPLOAD_FOLDER"], ortofoto_filename)
+
+            try:
+                file.save(ortofoto_path)
+            except Exception as e:
+                flash(f"Errore nel caricamento dell'ortofoto': {str(e)}", "error")
+                ortofoto_filename = None
+
             new_scheda = SchedaUS(
                 num_us = unique_num_us,
                 id_responsabile = request.form.get("id_responsabile"),
@@ -172,7 +193,9 @@ def nuova_scheda_us():
                 settore = request.form.get("settore"),
                 stato_conservazione = request.form.get("stato_conservazione"),
                 def_e_pos = request.form.get("def_e_pos"),
-                criteri_distinzione = request.form.get("criteri_distinzione")
+                criteri_distinzione = request.form.get("criteri_distinzione"),
+                pianta_filename = pianta_filename,
+                ortofoto_filename = ortofoto_filename
             )
 
             db.session.add(new_scheda)
@@ -184,16 +207,14 @@ def nuova_scheda_us():
             return redirect(url_for("create.nuova_scheda_us"))
 
         db.session.commit()
-        flash("Scheda US creata!", "success")
+        flash("Scheda US creata", "success")
 
         # Handle photo upload
         try:
-            # Obtain uploaded files
+            # Obtain uploaded photos
             foto = request.files.getlist("foto")
-            piante = request.files.getlist("pianta")
-            ortofoto = request.files.getlist("ortofoto")
-
-            # Process each file
+            
+            # Process each photo
             for file in foto:
                 if file and file.filename:
                     file_name = secure_filename(f"{uuid.uuid4().hex}{os.path.splitext(file.filename)[1]}")

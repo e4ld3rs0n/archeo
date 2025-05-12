@@ -3,6 +3,7 @@ dbdata/
 uploads/
 cleanup.sh
 *.sqlite3
+CHANGELOG.md
 
 # Ignore the development docker-compose.yml in the root
 /docker-compose.yml

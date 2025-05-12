@@ -67,21 +67,15 @@ class SchedaUS(db.Model):
     def_e_pos = db.Column(db.String(255))                           ### Nuovo, definizione e posizione
     elem_datanti = db.Column(db.String(255))
 
-    piante = db.relationship("PiantaUS", backref="pianta_us", cascade="all, delete-orphan")
+    pianta_filename = db.Column(db.String(255))
+    ortofoto_filename = db.Column(db.String(255))
+
     foto = db.relationship("FotoUS", backref="foto_us", cascade="all, delete-orphan")
-    ortofoto = db.relationship("OrtofotoUS", backref="ortofoto_us", cascade="all, delete-orphan")
     seq_fisiche_a = db.relationship("SeqFisica", backref="scheda_a", foreign_keys="SeqFisica.id_seq_a")
     seq_fisiche_b = db.relationship("SeqFisica", backref="scheda_b", foreign_keys="SeqFisica.id_seq_b")
     seq_strat_a = db.relationship("SeqStrat", backref="scheda_strat_a", foreign_keys="SeqStrat.id_seq_a")
     seq_strat_b = db.relationship("SeqStrat", backref="scheda_strat_b", foreign_keys="SeqStrat.id_seq_b")
     reperti_notevoli = db.relationship("RepertoNotevoleUS", back_populates="scheda_us", foreign_keys="RepertoNotevoleUS.id_scheda_us", cascade="all, delete-orphan")
-
-class PiantaUS(db.Model):
-    __tablename__ = "pianta_us"
-
-    id = db.Column(db.Integer, primary_key=True)
-    id_scheda_us = db.Column(db.Integer, db.ForeignKey("scheda_us.id"), nullable=False)
-    path_pianta = db.Column(db.String(255), nullable=False)
 
 class FotoUS(db.Model):
     __tablename__ = "foto_us"
@@ -89,13 +83,6 @@ class FotoUS(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     id_scheda_us = db.Column(db.Integer, db.ForeignKey("scheda_us.id"), nullable=False)
     filename = db.Column(db.String(255), nullable=False)
-
-class OrtofotoUS(db.Model):
-    __tablename__ = "ortofoto_us"
-
-    id = db.Column(db.Integer, primary_key=True)
-    id_scheda_us = db.Column(db.Integer, db.ForeignKey("scheda_us.id"), nullable=False)
-    path_ortofoto = db.Column(db.String(255), nullable=False)
 
 class RepertoNotevoleUS(db.Model):
     __tablename__ = "reperto_notevole_us"
