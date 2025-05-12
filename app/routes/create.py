@@ -152,7 +152,7 @@ def nuova_scheda_us():
             pianta_path = os.path.join(app.config["UPLOAD_FOLDER"], pianta_filename)
             
             try:
-                file.save(pianta_path)
+                pianta.save(pianta_path)
             except Exception as e:
                 flash(f"Errore nel caricamento della pianta: {str(e)}", "error")
                 pianta_filename = None
@@ -162,9 +162,9 @@ def nuova_scheda_us():
             ortofoto_path = os.path.join(app.config["UPLOAD_FOLDER"], ortofoto_filename)
 
             try:
-                file.save(ortofoto_path)
+                ortofoto.save(ortofoto_path)
             except Exception as e:
-                flash(f"Errore nel caricamento dell'ortofoto': {str(e)}", "error")
+                flash(f"Errore nel caricamento dell'ortofoto: {str(e)}", "error")
                 ortofoto_filename = None
 
             new_scheda = SchedaUS(
@@ -222,7 +222,7 @@ def nuova_scheda_us():
                     file.save(file_path)
 
                     new_foto = FotoUS(
-                        id_mod_scheda_us=new_scheda.id,
+                        id_scheda_us=new_scheda.id,
                         filename=file_name
                     )
 
