@@ -222,30 +222,34 @@
 
         <h3>Pianta:</h3>
 
-        {% if piante %}
+        {% if scheda.pianta_filename %}
         
-        <ul>
-            {% for p in piante %}
-                <li>
-                    <a href="{{ '/' ~ p.path_piante }}">{{ p.path_piante }}</a>
-                </li>
-            {% endfor %}
-        </ul>
+        <div class="gallery">
+            <div class="gallery-item">
+                <a href="{{ url_for('view.photo', filename=scheda.pianta_filename) }}" target="_blank">
+                    <img src="{{ url_for('view.photo', filename=scheda.pianta_filename) }}">
+                    <!-- <p>{{ scheda.pianta_filename }}</p> -->
+                </a>
+            </div>
+        </div>
+
         {% else %}
             <a href="#" class="button-link">Carica pianta</a>
         {% endif %}
         
         <h3>Ortofoto:</h3>
 
-        {% if ortofoto %}
+        {% if scheda.ortofoto_filename %}
         
-        <ul>
-            {% for o in ortofoto %}
-                <li>
-                    <a href="{{ '/' ~ o.path_ortofoto }}">{{ o.path_ortofoto }}</a>
-                </li>
-            {% endfor %}
-        </ul>
+        <div class="gallery">
+            <div class="gallery-item">
+                <a href="{{ url_for('view.photo', filename=scheda.ortofoto_filename) }}" target="_blank">
+                    <img src="{{ url_for('view.photo', filename=scheda.ortofoto_filename) }}">
+                    <!-- <p>{{ scheda.ortofoto_filename }}</p> -->
+                </a>
+            </div>
+        </div>
+        
         {% else %}
             <a href="#" class="button-link">Carica ortofoto</a>
         {% endif %}

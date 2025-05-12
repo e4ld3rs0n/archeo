@@ -19,8 +19,6 @@ bp = Blueprint("modify", __name__)
 
 @bp.route("/upload/photos/<int:id>", methods=["GET", "POST"])
 def upload_photos(id):
-    scheda = SchedaUS.query.get(id)
-
     if request.method == "POST":
             try:
                 foto = request.files.getlist("foto")
@@ -46,5 +44,4 @@ def upload_photos(id):
             flash(f"Foto caricate con successo!", "success")
             return redirect(url_for("view.scheda", id=id))
             
-
     return render_template("upload/photos.html", id=id)

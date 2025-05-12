@@ -55,8 +55,6 @@ def scheda(id):
     rel_strat_arrivo = SeqStrat.query.filter(SeqStrat.id_seq_b == id).all()
 
     foto = FotoUS.query.filter_by(id_scheda_us=id).all()
-    piante = PiantaUS.query.filter_by(id_scheda_us=id).all()
-    ortofoto = OrtofotoUS.query.filter_by(id_scheda_us=id).all()
     reperti_notevoli = RepertoNotevoleUS.query.filter_by(id_scheda_us=id).all()
 
     return render_template(
@@ -67,8 +65,6 @@ def scheda(id):
         rel_strat_partenza=rel_strat_partenza,
         rel_strat_arrivo=rel_strat_arrivo,
         foto=foto,
-        piante=piante,
-        ortofoto=ortofoto,
         reperti_notevoli=reperti_notevoli
     )
 
