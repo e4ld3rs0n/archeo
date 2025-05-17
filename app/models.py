@@ -68,8 +68,9 @@ class SchedaUS(db.Model):
     elem_datanti = db.Column(db.String(255))
 
     pianta_filename = db.Column(db.String(255))
-    ortofoto_filename = db.Column(db.String(255))
+    id_ortofoto = db.Column(db.Integer, db.ForeignKey("ortofoto.id"))
 
+    ortofoto = db.relationship("Ortofoto", backref="schede_us")
     foto = db.relationship("FotoUS", backref="foto_us", cascade="all, delete-orphan")
     seq_fisiche_a = db.relationship("SeqFisica", backref="scheda_a", foreign_keys="SeqFisica.id_seq_a")
     seq_fisiche_b = db.relationship("SeqFisica", backref="scheda_b", foreign_keys="SeqFisica.id_seq_b")
@@ -119,3 +120,17 @@ class SeqStrat(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     id_seq_a = db.Column(db.Integer, db.ForeignKey("scheda_us.id"), nullable=False)
     id_seq_b = db.Column(db.Integer, db.ForeignKey("scheda_us.id"), nullable=False)
+
+class Ortofoto(db.Model):
+    __tablename__ = "ortofoto"
+
+    id = db.Column(db.Integer, primary_key=True)
+    id_operatore = db.Column(db.Integer, db.ForeignKey("anagrafica.id"), nullable=False)
+    descrizione = db.Column(db.String(255), nullable=False)
+    data = db.Column(db.DateTime, nullable=False)
+    target = db.Column(db.String(255))
+    note = db.Column(db.String(255))
+    path_ortofoto = db.Column(db.String(255), nullable=False)
+    completato = db.Column(db.Boolean, nullable=False)
+
+    operatore = db.relationship("Anagrafica", backref="ortofoto")
