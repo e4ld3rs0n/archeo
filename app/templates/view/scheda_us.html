@@ -234,7 +234,7 @@
         </div>
 
         {% else %}
-            <a href="#" class="button-link">Carica pianta</a>
+            <a href="{{ url_for('modify.upload_plan', id=scheda.id) }}" class="button-link">Carica pianta</a>
         {% endif %}
         
         <br><br>

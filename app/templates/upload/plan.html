@@ -3,21 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    <title>Aggiungi foto a US {{ num_us }}</title>
+    <title>Aggiungi pianta a US {{ num_us }}</title>
 </head>
 
 {% include 'header.html' %}
 
 <body>
     <div class="container">
-        <h1>Aggiungi altre foto a US {{ num_us }}</h1>
+        <h1>Aggiungi pianta a US {{ num_us }}</h1>
 
         {% include 'notifications.html' %}
 
         <form method="POST" enctype="multipart/form-data">
             
             <div class="form-widget-group">
-                <label>Fotografie*: <input type="file" name="foto" multiple required></label>
+                <label>Pianta*: <input type="file" name="pianta" required></label>
                 <button class="form-button" type="button" onclick="clearFiles('foto')">X</button>
             </div><!-- form-widget-group -->
 

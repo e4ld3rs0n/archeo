@@ -390,14 +390,15 @@ def nuova_ortofoto():
             schede_us_associate = list(set(request.form.getlist('schede_us')))
             
             for scheda_id in schede_us_associate:
-                scheda = SchedaUS.query.get(int(scheda_id))
-                if scheda:
-                    if scheda.id_ortofoto is None:
-                        scheda.id_ortofoto = new_ortofoto.id
+                if scheda_id != "null":
+                    scheda = SchedaUS.query.get(int(scheda_id))
+                    if scheda:
+                        if scheda.id_ortofoto is None:
+                            scheda.id_ortofoto = new_ortofoto.id
+                        else:
+                            flash(f"La scheda US {scheda.num_us} ha già una ortofoto associata", "warning")
                     else:
-                        flash(f"La scheda US {scheda.num_us} ha già una ortofoto associata", "warning")
-                else:
-                    flash(f"La scheda selezionata con ID {scheda_id} non esiste nel database", "warning")
+                        flash(f"La scheda selezionata con ID {scheda_id} non esiste nel database", "warning")
 
         except Exception as e:
             db.rollback()
