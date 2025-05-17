@@ -157,16 +157,6 @@ def nuova_scheda_us():
                 flash(f"Errore nel caricamento della pianta: {str(e)}", "error")
                 pianta_filename = None
 
-            ortofoto = request.files.get("ortofoto")
-            ortofoto_filename = secure_filename(f"{uuid.uuid4().hex}{os.path.splitext(ortofoto.filename)[1]}")
-            ortofoto_path = os.path.join(app.config["UPLOAD_FOLDER"], ortofoto_filename)
-
-            try:
-                ortofoto.save(ortofoto_path)
-            except Exception as e:
-                flash(f"Errore nel caricamento dell'ortofoto: {str(e)}", "error")
-                ortofoto_filename = None
-
             new_scheda = SchedaUS(
                 num_us = unique_num_us,
                 id_responsabile = request.form.get("id_responsabile"),
@@ -194,8 +184,7 @@ def nuova_scheda_us():
                 stato_conservazione = request.form.get("stato_conservazione"),
                 def_e_pos = request.form.get("def_e_pos"),
                 criteri_distinzione = request.form.get("criteri_distinzione"),
-                pianta_filename = pianta_filename,
-                ortofoto_filename = ortofoto_filename
+                pianta_filename = pianta_filename
             )
 
             db.session.add(new_scheda)

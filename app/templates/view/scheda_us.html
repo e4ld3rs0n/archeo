@@ -237,23 +237,6 @@
             <a href="#" class="button-link">Carica pianta</a>
         {% endif %}
         
-        <h3>Ortofoto:</h3>
-
-        {% if scheda.ortofoto_filename %}
-        
-        <div class="gallery">
-            <div class="gallery-item">
-                <a href="{{ url_for('view.photo', filename=scheda.ortofoto_filename) }}" target="_blank">
-                    <img src="{{ url_for('view.photo', filename=scheda.ortofoto_filename) }}">
-                    <!-- <p>{{ scheda.ortofoto_filename }}</p> -->
-                </a>
-            </div>
-        </div>
-        
-        {% else %}
-            <a href="#" class="button-link">Carica ortofoto</a>
-        {% endif %}
-
         <br><br>
         <a href="{{ url_for('view.visualizza_schede') }}" class="button-link">Torna alla lista</a>
         
