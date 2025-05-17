@@ -3,7 +3,7 @@ services:
     image: ghcr.io/e4ld3rs0n/archeo:latest
     container_name: archeo-app
     ports:
-      - "8678:8000"
+      - "8000:8000"
     env_file:
       - stack.env
     volumes:

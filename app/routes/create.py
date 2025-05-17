@@ -330,7 +330,6 @@ def nuova_sequenza_stratigrafica():
 
 @bp.route("/reperto_notevole", methods=["GET", "POST"])
 def nuovo_reperto_notevole():
-
     if request.method == "POST":
         try:
             new_reperto = RepertoNotevoleUS(
@@ -366,5 +365,55 @@ def nuovo_reperto_notevole():
     return render_template(
         "create/nuovo_reperto_notevole.html",
         today_date=today_date,
+        schede=schede
+    )
+
+@bp.route("/nuova_ortofoto", methods=["GET", "POST"])
+def nuova_ortofoto():
+    if request.method == "POST":
+        try:
+            # Crea il record per l'ortofoto nel database
+            new_ortofoto = Ortofoto(
+                id_operatore=request.form.get("id_operatore"),
+                descrizione=request.form.get("descrizione"),
+                data = datetime.strptime(request.form.get("data"), "%Y-%m-%d"),
+                target=request.form.get("target"),
+                note=request.form.get("note"),
+                path_ortofoto=request.form.get("path_ortofoto"),
+                completato = True if request.form.get("completato") == "si" else False
+            )
+
+            db.session.add(new_ortofoto)
+            db.session.flush()  # Assigns new_ortofoto.id without committing
+
+            # Associa l'ortofoto alle US indicate rimuovendo i duplicati
+            schede_us_associate = list(set(request.form.getlist('schede_us')))
+            
+            for scheda_id in schede_us_associate:
+                scheda = SchedaUS.query.get(int(scheda_id))
+                if scheda:
+                    if scheda.id_ortofoto is None:
+                        scheda.id_ortofoto = new_ortofoto.id
+                    else:
+                        flash(f"La scheda US {scheda.num_us} ha già una ortofoto associata", "warning")
+                else:
+                    flash(f"La scheda selezionata con ID {scheda_id} non esiste nel database", "warning")
+
+        except Exception as e:
+            db.rollback()
+            flash(f"Errore: {str(e)}", "error")
+            return redirect(url_for("create.nuova_ortofoto"))
+        
+        db.session.commit()
+        flash("Ortofoto creata", "success")
+
+    schede = SchedaUS.query.all()
+    anagrafiche = Anagrafica.query.all()
+    today_date = date.today().strftime('%Y-%m-%d')
+
+    return render_template(
+        "create/nuova_ortofoto.html",
+        today_date=today_date,
+        anagrafiche=anagrafiche,
         schede=schede
     )

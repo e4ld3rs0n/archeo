@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <title>Crea ortofoto</title>
+</head>
+
+{% include 'header.html' %}
+
+<body>
+    <div class="container">
+        <h1>Crea ortofoto</h1>
+
+        {% include 'notifications.html' %}
+
+        <form method="POST">
+            
+            <label>Descrizione*: <input type="text" name="descrizione" required></label><br>
+            <label>Data*: <input type="date" name="data" value="{{ today_date }}" required></label><br>
+            <label>Percorso*: <input type="text" name="path_ortofoto" value="demo" required></label><br>
+            <label>Target: <input type="text" name="target"></label><br>
+            <label>Note: <textarea name="note"></textarea></label><br>
+
+            <label for="completato">Completato:</label>
+            <select name="completato" id="completato" required>
+                    <option value="si">Si</option>
+                    <option value="no">No</option>
+            </select><br><br>
+
+            <label for="id_operatore">Operatore:</label>
+            <select name="id_operatore" id="id_operatore" required>
+                {% for op in anagrafiche %}
+                    <option value="{{ op.id }}">{{ op.nome }} {{ op.cognome }}</option>
+                {% endfor %}
+            </select><br><br>
+
+            <label for="id_scheda">Associa a US:</label>
+            <div id="dynamic-dropdown">
+                <select name="schede_us" onchange="append_dropdown(this)">
+                    <option value="null">Nessuna</option>
+                    {% for scheda in schede %}
+                        <option value="{{ scheda.id }}">{{ scheda.num_us }} - {{ scheda.descrizione }}</option>
+                    {% endfor %}
+                </select><br>
+            </div>
+            
+            <br>
+            <button type="submit">Salva</button>
+        </form>
+    </div>
+
+    {% include 'footer.html' %}
+</body>
+</html>
