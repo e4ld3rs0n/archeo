@@ -101,11 +101,13 @@ def create_dummy_data():
         ente7 = Ente(nome="Soprintendenza Etrusca", tel="0766842301", email="info@ente7.it", localita=loc7)
         ente8 = Ente(nome="Teatro Greco Authority", tel="0931678902", email="info@ente8.it", localita=loc8)
 
-        db.session.add_all([
+        elements = [
             person1, person2, person3, person4, person5,
             loc1, loc2, loc3, loc4, loc5, loc6, loc7, loc8,
             ente1, ente2, ente3, ente4, ente5, ente6, ente7, ente8
-        ])
+        ]
+
+        db.session.add_all(elements)
         db.session.commit()
 
         dataset_max = 16
@@ -124,8 +126,8 @@ def create_dummy_data():
         for i in range(1, dataset_max):
             scheda = SchedaUS(
                 num_us=str(random.randint(100, 900)),
-                id_responsabile=random.choice([person1.id, person2.id, person3.id, person4.id, person5.id]),
-                id_res_scientifico=random.choice([person1.id, person2.id, person3.id, person4.id, person5.id]),
+                responsabile=random.choice([person1, person2, person3, person4, person5]),
+                responsabile_scientifico=random.choice([person1, person2, person3, person4, person5]),
                 descrizione=faker.sentence(nb_words=6),
                 id_ente_resp=random.choice([ente1.id, ente2.id, ente3.id, ente4.id, ente5.id, ente6.id, ente7.id, ente8.id]),
                 id_localita=random.choice([loc1.id, loc2.id, loc3.id, loc4.id, loc5.id, loc6.id, loc7.id, loc8.id]),
@@ -175,7 +177,19 @@ def create_dummy_data():
                     note=faker.text(max_nb_chars=100)
                 )
                 reperti.append(reperto)
+        
         db.session.add_all(reperti)
+
+        db.session.flush()
+        # Forza aggiornamento degli indici di ricerca
+        for scheda in schede:
+            scheda.update_search_vector()
+        
+        for e in elements:
+            e.update_search_vector()
+
+        for r in reperti:
+            r.update_search_vector()
 
         db.session.commit()
 
