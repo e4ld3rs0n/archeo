@@ -18,7 +18,7 @@
             <label for="id_scheda">Unità stratigrafica:</label>
             <select name="id_scheda" id="id_scheda" required>
                 {% for scheda in schede %}
-                    <option value="{{ scheda.id }}">{{ scheda.num_us }} - {{ scheda.descrizione }}</option>
+                    <option value="US {{ scheda.id }}">{{ scheda.num_us }} - {{ scheda.descrizione }}</option>
                 {% endfor %}
             </select><br><br>
 

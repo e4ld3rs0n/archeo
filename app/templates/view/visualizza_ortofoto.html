@@ -15,46 +15,46 @@
         <h1>Inventario ortofoto</h1>
 
         {% if ortofoto %}
-        <div style="overflow-x: auto;">
-            <table class="wide-table" style="table-layout: auto;">
-                <thead>
-                    <tr>
-                        <th>Descrizione</th>
-                        <th>URL</th>
-                        <th>US associati</th>
-                        <th>Operatore</th>
-                        <th>Data</th>
-                        <th>Completato</th>
-                        <th>Target</th>
-                        <th>Note</th>
-                    </tr>
-                </thead>           
-                <tbody>
-                    {% for o in ortofoto %}
+            <div style="overflow-x: auto;">
+                <table class="wide-table" style="table-layout: auto;">
+                    <thead>
                         <tr>
-                            <td>{{ o.descrizione }}</a></td>
-                            <td><a href="{{ o.path_ortofoto }}" target="_blank">URL ortofoto</a></td>
-                            <td>
-                                {% if o.schede_us %}
-                                    {% for us in o.schede_us %}
-                                        <a href="{{ url_for('view.scheda', id=us.id) }}">{{ us.num_us }}</a>{% if not loop.last %}, {% endif %}
-                                    {% endfor %}
-                                {% else %}
-                                    -
-                                {% endif %}
-                            </td>
-                            <td>{{ o.operatore.nome }} {{ o.operatore.cognome }}</td>
-                            <td>{{ o.data.strftime('%d/%m/%Y') }}</td>
-                            <td>{% if o.completato %}&#10004;{% endif %}</td>
-                            <td>{{ o.target }}</td>
-                            <td>{{ o.note }}</td>
+                            <th>Descrizione</th>
+                            <th>URL</th>
+                            <th>US associati</th>
+                            <th>Operatore</th>
+                            <th>Data</th>
+                            <th>Completato</th>
+                            <th>Target</th>
+                            <th>Note</th>
                         </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
+                    </thead>           
+                    <tbody>
+                        {% for o in ortofoto %}
+                            <tr>
+                                <td>{{ o.descrizione }}</a></td>
+                                <td><a href="{{ o.path_ortofoto }}" target="_blank">URL ortofoto</a></td>
+                                <td>
+                                    {% if o.schede_us %}
+                                        {% for us in o.schede_us %}
+                                            <a href="{{ url_for('view.scheda', id=us.id) }}">{{ us.num_us }}</a>{% if not loop.last %}, {% endif %}
+                                        {% endfor %}
+                                    {% else %}
+                                        -
+                                    {% endif %}
+                                </td>
+                                <td>{{ o.operatore.nome }} {{ o.operatore.cognome }}</td>
+                                <td>{{ o.data.strftime('%d/%m/%Y') }}</td>
+                                <td>{% if o.completato %}&#10004;{% endif %}</td>
+                                <td>{{ o.target }}</td>
+                                <td>{{ o.note }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
         {% else %}
-            <li>Nessun record presente.</li>
+            <p>Nessun record presente.</p>
         {% endif %}
     </div>
 

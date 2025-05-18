@@ -14,6 +14,7 @@
 
         <h1>Enti</h1>
 
+        {% if records %}
         <ul class="card-container">
             {% for ente in records %}
                 <li class="card">
@@ -30,10 +31,11 @@
                         </form>
                     </p>
                 </li>
-            {% else %}
-                <li>Nessun record presente.</li>
             {% endfor %}
-        </ul>
+            </ul>
+        {% else %}
+            <p>Nessun record presente.</p>
+        {% endif %}
     </div>
 
     {% include 'footer.html' %}

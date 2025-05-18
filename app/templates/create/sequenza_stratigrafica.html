@@ -15,29 +15,36 @@
         {% include 'notifications.html' %}
 
         <h2>Definizione nuova sequenza</h2>
-        <form method="POST">
-            <label for="id_seq_a">Unità Strat. A:</label>
-            <select name="id_seq_a" id="id_seq_a" required>
-                {% for scheda in schede %}
-                    <option value="{{ scheda.id }}">US {{ scheda.num_us }} - {{ scheda.descrizione }}</option>
-                {% endfor %}
-            </select><br><br>
+        {% if schede | length > 1 %}
+            <form method="POST">
+                <label for="id_seq_a">Unità Strat. A:</label>
+                <select name="id_seq_a" id="id_seq_a" required>
+                    {% for scheda in schede %}
+                        <option value="{{ scheda.id }}">US {{ scheda.num_us }} - {{ scheda.descrizione }}</option>
+                    {% endfor %}
+                </select><br><br>
 
-            <label for="sequenza">Relazione fisica:</label>
-            <select name="sequenza" id="sequenza" required>
-                <option value="posteriore_a">Posteriore a</option>
-                <option value="anteriore_a">Anteriore a</option>
-            </select><br><br>
+                <label for="sequenza">Relazione fisica:</label>
+                <select name="sequenza" id="sequenza" required>
+                    <option value="posteriore_a">Posteriore a</option>
+                    <option value="anteriore_a">Anteriore a</option>
+                </select><br><br>
 
-            <label for="id_seq_b">Unità Strat. B:</label>
-            <select name="id_seq_b" id="id_seq_b" required>
-                {% for scheda in schede %}
-                    <option value="{{ scheda.id }}">US {{ scheda.num_us }} - {{ scheda.descrizione }}</option>
-                {% endfor %}
-            </select><br><br>
+                <label for="id_seq_b">Unità Strat. B:</label>
+                <select name="id_seq_b" id="id_seq_b" required>
+                    {% for scheda in schede %}
+                        <option value="{{ scheda.id }}">US {{ scheda.num_us }} - {{ scheda.descrizione }}</option>
+                    {% endfor %}
+                </select><br><br>
 
-            <button type="submit">Salva sequenza</button>
-        </form>
+                <button type="submit">Salva sequenza</button>
+            </form>
+        {% else %}
+            <p>
+                Per definire le relazioni tra le unità stratigrafiche servono almeno due schede US.
+                Al momento non ce ne sono abbastanza. <a href="{{ url_for('create.nuova_scheda_us') }}">Aggiungine altre</a> per continuare.
+            </p>
+        {% endif %}
     </div>
 
     {% include 'footer.html' %}

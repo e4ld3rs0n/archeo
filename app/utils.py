@@ -55,14 +55,22 @@ def dumpdb():
     return render_template_string(output)
 
 @bp.route("/create-dummy-data")
-def create_dummy_data():    
+def create_dummy_data():
     try:
         
         # Clear existing data if needed
-        # db.session.query(SchedaUS).delete()
-        # db.session.query(Ente).delete()
-        # db.session.query(Localita).delete()
-        # db.session.query(Anagrafica).delete()
+        try:
+            db.session.query(RepertoNotevoleUS).delete()
+            db.session.query(SchedaUS).delete()
+            db.session.query(Ente).delete()
+            db.session.query(Localita).delete()
+            db.session.query(Anagrafica).delete()
+        except Exception as e:
+            db.session.rollback()
+            flash(f"Errore durante l'eliminazione dei dati: {str(e)}", "error")
+            return redirect(url_for("main.index"))
+
+        db.session.commit()
 
         faker = Faker('it_IT')
 
@@ -82,11 +90,7 @@ def create_dummy_data():
         loc6 = Localita(denom="Castello Medievale", via="Via Castello 3", citta="Firenze", provincia="FI", cap="50100")
         loc7 = Localita(denom="Necropoli Etrusca", via="Via degli Etruschi 8", citta="Tarquinia", provincia="VT", cap="01016")
         loc8 = Localita(denom="Museo Archeologico", via="Via Archeologia 12", citta="Bologna", provincia="BO", cap="40100")
-        loc9 = Localita(denom="Teatro Greco", via="Via Teatro 9", citta="Siracusa", provincia="SR", cap="96100")
-        loc10 = Localita(denom="Fortezza Antica", via="Via delle Mura 7", citta="Verona", provincia="VR", cap="37100")
-        loc11 = Localita(denom="Antico Mercato", via="Piazza del Mercato 1", citta="Genova", provincia="GE", cap="16100")
-        loc12 = Localita(denom="Tempio Romano", via="Via dei Templi 4", citta="Agrigento", provincia="AG", cap="92100")
-
+        
         # Create dummy ente
         ente1 = Ente(nome="Soprintendenza Archeologia Roma", tel="0654321987", email="info@ente1.it", localita=loc1)
         ente2 = Ente(nome="Soprintendenza Archeologia Parma", tel="4589321987", email="info@ente2.it", localita=loc2)
@@ -95,11 +99,11 @@ def create_dummy_data():
         ente5 = Ente(nome="Villa Romana Management", tel="0611122233", email="info@ente5.it", localita=loc5)
         ente6 = Ente(nome="Castello Fiorentino", tel="0559988776", email="info@ente6.it", localita=loc6)
         ente7 = Ente(nome="Soprintendenza Etrusca", tel="0766842301", email="info@ente7.it", localita=loc7)
-        ente8 = Ente(nome="Teatro Greco Authority", tel="0931678902", email="info@ente8.it", localita=loc9)
+        ente8 = Ente(nome="Teatro Greco Authority", tel="0931678902", email="info@ente8.it", localita=loc8)
 
         db.session.add_all([
             person1, person2, person3, person4, person5,
-            loc1, loc2, loc3, loc4, loc5, loc6, loc7, loc8, loc9, loc10, loc11, loc12,
+            loc1, loc2, loc3, loc4, loc5, loc6, loc7, loc8,
             ente1, ente2, ente3, ente4, ente5, ente6, ente7, ente8
         ])
         db.session.commit()
@@ -119,14 +123,14 @@ def create_dummy_data():
         schede = []
         for i in range(1, dataset_max):
             scheda = SchedaUS(
-                num_us=str(i*10),
-                id_responsabile=person1.id,
-                id_res_scientifico=person2.id,
+                num_us=str(random.randint(100, 900)),
+                id_responsabile=random.choice([person1.id, person2.id, person3.id, person4.id, person5.id]),
+                id_res_scientifico=random.choice([person1.id, person2.id, person3.id, person4.id, person5.id]),
                 descrizione=faker.sentence(nb_words=6),
-                id_ente_resp=ente1.id,
-                id_localita=loc1.id,
+                id_ente_resp=random.choice([ente1.id, ente2.id, ente3.id, ente4.id, ente5.id, ente6.id, ente7.id, ente8.id]),
+                id_localita=random.choice([loc1.id, loc2.id, loc3.id, loc4.id, loc5.id, loc6.id, loc7.id, loc8.id]),
                 data=datetime.now(timezone.utc) - timedelta(days=random.randint(0, 365)),
-                quadrato=f"{random.choice(['A', 'B', 'C'])}{random.randint(1,10)}",
+                quadrato=f"{random.choice(['A', 'B', 'C', 'C'])}{random.randint(1,10)}",
                 colore=random.choice(colori),
                 composizione=random.choice(composizioni),
                 consistenza=random.choice(consistenze),
@@ -147,26 +151,28 @@ def create_dummy_data():
                 def_e_pos=random.choice(["Buca di palo", "Struttura muraria", "Fossa", "Taglio"]),
             )
             schede.append(scheda)
+
         db.session.add_all(schede)
+        db.session.flush()
 
         reperti = []
         for i in range(1, dataset_max):
             for j in range(1, 3):
                 reperto = RepertoNotevoleUS(
-                    id_scheda_us=i,
+                    id_scheda_us=random.choice(schede).id,
                     numero_cassa = f"{i*10}{j*10}-RR",
-                    sito = "PVG22MUR",
-                    data = datetime.now(timezone.utc),
-                    materiale = "Ceramica" if i % 2 == 0 else "Terracotta",
-                    descrizione = "Vaso" if i % 3 == 0 else "Piatto",
-                    quantita = "3" if i % 2 == 0 else "1",
+                    sito = random.choice(["PVG22-MUR", "PVG24-MUR", "PVG20-MUR"]),
+                    data = datetime.now(timezone.utc) - timedelta(days=random.randint(0, 365)),
+                    materiale = random.choice(["Ceramica", "Terracotta", "Metallo", "Ossa", "Vetro"]),
+                    descrizione = random.choice(["Vaso", "Piatto", "Anfora", "Coppa", "Ciotola"]),
+                    quantita = random.choice(["1", "2", "3", "4", "5"]),
                     lavato = True if i % 2 == 0 else False,
                     siglato = False if i % 2 == 0 else True,
                     punto_stazione_totale = "Post",
                     coord_y = f'{random.uniform(-10.0, 10.0)}',
                     coord_x = f'{random.uniform(-10.0, 10.0)}',
                     coord_z = f'{random.uniform(-10.0, 10.0)}',
-                    note="Nessuna nota rilevante"
+                    note=faker.text(max_nb_chars=100)
                 )
                 reperti.append(reperto)
         db.session.add_all(reperti)

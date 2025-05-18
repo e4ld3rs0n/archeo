@@ -411,10 +411,12 @@ def nuova_ortofoto():
     schede = SchedaUS.query.order_by(SchedaUS.id).all()
     anagrafiche = Anagrafica.query.all()
     today_date = date.today().strftime('%Y-%m-%d')
+    from_id = request.args.get("from_id", type=int)
 
     return render_template(
         "create/nuova_ortofoto.html",
         today_date=today_date,
         anagrafiche=anagrafiche,
-        schede=schede
+        schede=schede,
+        from_id=from_id
     )

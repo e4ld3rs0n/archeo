@@ -14,30 +14,31 @@
 
         {% include 'notifications.html' %}
 
+        {% if records %}
         <ul class="card-container">
-            {% for loc in records %}
-                <li class="card">
-                    {% if loc.denom %}
-                        <h3>{{ loc.denom }}</h3>
-                        {{ loc.via }}<br>
-                        {{ loc.cap }} {{ loc.citta }} ({{ loc.provincia }})<br>
-                    {% else %}
-                        <h3>{{ loc.via }}</h3>
-                        {{ loc.cap }} {{ loc.citta }} ({{ loc.provincia }})<br>
-                    {% endif %}
-                    
-                    <br>
-                    <form method="POST" action="{{ url_for('delete.elimina_localita', id_localita=loc.id) }}" onsubmit="return confirm('Sei sicuro di voler eliminare questa località?');">
-                        <button type="submit">Elimina</button>
-                    </form>
-                </li>
+                {% for loc in records %}
+                    <li class="card">
+                        {% if loc.denom %}
+                            <h3>{{ loc.denom }}</h3>
+                            {{ loc.via }}<br>
+                            {{ loc.cap }} {{ loc.citta }} ({{ loc.provincia }})<br>
+                        {% else %}
+                            <h3>{{ loc.via }}</h3>
+                            {{ loc.cap }} {{ loc.citta }} ({{ loc.provincia }})<br>
+                        {% endif %}
+                        
+                        <br>
+                        <form method="POST" action="{{ url_for('delete.elimina_localita', id_localita=loc.id) }}" onsubmit="return confirm('Sei sicuro di voler eliminare questa località?');">
+                            <button type="submit">Elimina</button>
+                        </form>
+                    </li>
+                {% endfor %}
+                </ul>
             {% else %}
-                <li>Nessun record presente.</li>
-            {% endfor %}
-        </ul>
+                <p>Nessun record presente.</p>
+            {% endif %}
     </div>
 
     {% include 'footer.html' %}
-
 </body>
 </html>

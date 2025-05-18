@@ -15,6 +15,15 @@
         {% include 'notifications.html' %}
 
         <form method="POST">
+            <label for="id_scheda">Associa a US:</label>
+            <div id="dynamic-dropdown">
+                <select name="schede_us" onchange="append_dropdown(this)">
+                    <option value="null">Nessuna</option>
+                    {% for scheda in schede %}
+                        <option value="{{ scheda.id }}"{% if from_id == scheda.id %} selected{% endif %}>{{ scheda.num_us }} - {{ scheda.descrizione }}</option>
+                    {% endfor %}
+                </select><br>
+            </div>
             
             <label>Descrizione*: <input type="text" name="descrizione" required></label><br>
             <label>Data*: <input type="date" name="data" value="{{ today_date }}" required></label><br>
@@ -40,16 +49,6 @@
                     <option value="{{ op.id }}">{{ op.nome }} {{ op.cognome }}</option>
                 {% endfor %}
             </select><br><br>
-
-            <label for="id_scheda">Associa a US:</label>
-            <div id="dynamic-dropdown">
-                <select name="schede_us" onchange="append_dropdown(this)">
-                    <option value="null">Nessuna</option>
-                    {% for scheda in schede %}
-                        <option value="{{ scheda.id }}">{{ scheda.num_us }} - {{ scheda.descrizione }}</option>
-                    {% endfor %}
-                </select><br>
-            </div>
             
             <br>
             <button type="submit">Salva</button>

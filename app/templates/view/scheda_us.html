@@ -242,7 +242,7 @@
         {% if scheda.id_ortofoto %}
 
         {% else %}
-            <a href="{{ url_for('create.nuova_ortofoto') }}" class="button-link">Crea ortofoto</a>
+            <a href="{{ url_for('create.nuova_ortofoto', from_id=scheda.id) }}" class="button-link">Crea ortofoto</a>
         {% endif %}
 
         <br><br>
