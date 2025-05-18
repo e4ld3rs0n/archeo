@@ -4,16 +4,24 @@
     <div class="container">
         {% include 'notifications.html' %}
 
-        <h1>Harris Matrix</h1>
+        <h1>Harris matrix</h1>
         
+        
+        {% if grafo_svg %}
         <p>
             Il seguente grafo mostra visivamente le seguenze stratigrafiche presenti nel database.
             Sono visualizzate soltanto le US che compaiono in almeno una sequenza stratigrafica.
         </p>
-
         <div class="svg-graph">
             {{ grafo_svg | safe }}
         </div>
+        {% else %}
+            <p>
+                In questa sezione è possibile visualizzare un grafo che mostra visivamente le seguenze 
+                stratigrafiche presenti nel database.<br>
+                Al momento non sono presenti sequenze stratigrafiche.
+            </p>
+        {% endif %}
     </div>
         
     {% include 'footer.html' %}

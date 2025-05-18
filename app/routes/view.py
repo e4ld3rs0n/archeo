@@ -180,6 +180,14 @@ def genera_grafo():
 def visualizza_grafo():
     page_title = "Grafo stratigrafico"
 
+    rels = SeqStrat.query.all()
+    if not rels:
+        return render_template(
+            "view/grafo_stratigrafico.html", 
+            title=page_title,
+            grafo_svg=None
+        )
+
     svg = genera_grafo().get_data(as_text=True)
     return render_template(
         "view/grafo_stratigrafico.html", 
