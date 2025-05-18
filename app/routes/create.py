@@ -274,7 +274,7 @@ def nuova_sequenza_fisica():
         return redirect(url_for("create.nuova_sequenza_fisica"))
 
     # Fetch existing data for the form
-    schede = SchedaUS.query.all()
+    schede = SchedaUS.query.order_by(SchedaUS.id).all()
 
     return render_template(
         "create/sequenza_fisica.html",
@@ -321,7 +321,7 @@ def nuova_sequenza_stratigrafica():
         return redirect(url_for("create.nuova_sequenza_stratigrafica"))
 
     # Fetch existing data for the form
-    schede = SchedaUS.query.all()
+    schede = SchedaUS.query.order_by(SchedaUS.id).all()
 
     return render_template(
         "create/sequenza_stratigrafica.html",
@@ -359,7 +359,7 @@ def nuovo_reperto_notevole():
         flash("Reperto notevole creato!", "success")
 
     # Fetch existing data for the form
-    schede = SchedaUS.query.all()
+    schede = SchedaUS.query.order_by(SchedaUS.id).all()
     today_date = date.today().strftime('%Y-%m-%d')
 
     return render_template(
@@ -408,7 +408,7 @@ def nuova_ortofoto():
         db.session.commit()
         flash("Ortofoto creata", "success")
 
-    schede = SchedaUS.query.all()
+    schede = SchedaUS.query.order_by(SchedaUS.id).all()
     anagrafiche = Anagrafica.query.all()
     today_date = date.today().strftime('%Y-%m-%d')
 

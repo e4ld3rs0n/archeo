@@ -23,18 +23,15 @@ def visualizza_anagrafiche():
     records = Anagrafica.query.order_by(Anagrafica.cognome.asc()).all()
     return render_template("view/visualizza_anagrafiche.html", records=records)
 
-
 @bp.route("/visualizza_localita", methods=["GET"])
 def visualizza_localita():
     records = Localita.query.all()
     return render_template("view/visualizza_localita.html", records=records)
 
-
 @bp.route("/visualizza_enti", methods=["GET"])
 def visualizza_enti():
     records = Ente.query.order_by(Ente.nome.asc()).all()
     return render_template("view/visualizza_enti.html", records=records)
-
 
 @bp.route("/visualizza_schede", methods=["GET"])
 def visualizza_schede():
@@ -91,3 +88,8 @@ def reperto_notevole(id):
 def photo(filename):
     photo_dir = app.config["UPLOAD_FOLDER"]
     return send_from_directory(photo_dir, filename)
+
+@bp.route("/visualizza_ortofoto", methods=["GET"])
+def visualizza_ortofoto():
+    ortofoto = Ortofoto.query.order_by(Ortofoto.id.asc()).all()
+    return render_template("view/visualizza_ortofoto.html", ortofoto=ortofoto)

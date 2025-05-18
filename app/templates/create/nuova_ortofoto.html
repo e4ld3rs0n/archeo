@@ -18,7 +18,13 @@
             
             <label>Descrizione*: <input type="text" name="descrizione" required></label><br>
             <label>Data*: <input type="date" name="data" value="{{ today_date }}" required></label><br>
-            <label>Percorso*: <input type="text" name="path_ortofoto" value="demo" required></label><br>
+            <label>URL ortofoto*: <input type="text" name="path_ortofoto" value="https://demo.com/ortofoto" required></label>
+
+            <p>
+                <strong>Nota:</strong> attualmente Archeo non supporta l'upload di file di grandi dimensioni.
+                Usare il campo "URL Ortofoto" per memorizzare un collegamento web per poter accedere all'ortofoto.
+            </p><br>
+
             <label>Target: <input type="text" name="target"></label><br>
             <label>Note: <textarea name="note"></textarea></label><br>
 

@@ -1,10 +1,11 @@
 from flask import Blueprint, render_template, redirect, url_for, flash, render_template_string
 from sqlalchemy import *
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from flask_sqlalchemy import SQLAlchemy
 from db import db
 from models import *
 import random
+from faker import Faker
 
 bp = Blueprint("main", __name__)
 
@@ -15,7 +16,7 @@ def index():
 
     if not tables:
         # No tables exist — needs initialization
-        flash("Attenzione: il database è vuoto. Prima di continuare è necessario inizializzarlo.", "warning")
+        flash("Attenzione: il database è vuoto. Prima di continuare è necessario inizializzarlo.", "info")
         return render_template("setup/setup.html")
 
     return render_template("index.html")
@@ -63,6 +64,8 @@ def create_dummy_data():
         # db.session.query(Localita).delete()
         # db.session.query(Anagrafica).delete()
 
+        faker = Faker('it_IT')
+
         # Create dummy people
         person1 = Anagrafica(nome="Mario", cognome="Rossi", email="mario.rossi@example.com", tel="1234567890")
         person2 = Anagrafica(nome="Luigi", cognome="Verdi", email="luigi.verdi@example.com", tel="0987654321")
@@ -84,7 +87,6 @@ def create_dummy_data():
         loc11 = Localita(denom="Antico Mercato", via="Piazza del Mercato 1", citta="Genova", provincia="GE", cap="16100")
         loc12 = Localita(denom="Tempio Romano", via="Via dei Templi 4", citta="Agrigento", provincia="AG", cap="92100")
 
-
         # Create dummy ente
         ente1 = Ente(nome="Soprintendenza Archeologia Roma", tel="0654321987", email="info@ente1.it", localita=loc1)
         ente2 = Ente(nome="Soprintendenza Archeologia Parma", tel="4589321987", email="info@ente2.it", localita=loc2)
@@ -95,7 +97,6 @@ def create_dummy_data():
         ente7 = Ente(nome="Soprintendenza Etrusca", tel="0766842301", email="info@ente7.it", localita=loc7)
         ente8 = Ente(nome="Teatro Greco Authority", tel="0931678902", email="info@ente8.it", localita=loc9)
 
-
         db.session.add_all([
             person1, person2, person3, person4, person5,
             loc1, loc2, loc3, loc4, loc5, loc6, loc7, loc8, loc9, loc10, loc11, loc12,
@@ -103,7 +104,16 @@ def create_dummy_data():
         ])
         db.session.commit()
 
-        dataset_max = 14
+        dataset_max = 16
+
+        composizioni = ["Terra", "Sabbia", "Argilla", "Ghiaia"]
+        colori = ["Marrone", "Grigio", "Nero", "Rosso", "Giallo"]
+        consistenze = ["Soffice", "Media", "Dura"]
+        org = ["Carboni", "Semi", "Legno"]
+        inorg = ["Mattoni", "Ceramica", "Pietre"]
+        interpretazioni = ["Strato abitativo", "Rinterro", "Uso agricolo", "Struttura"]
+        modi_formazione = ["Deposizione antropica", "Deposizione naturale", "Disturbo moderno"]
+        elem = ["Ceramica", "Metallo", "Ossa", "Carboni"]
 
         # Create dummy dataset
         schede = []
@@ -112,29 +122,29 @@ def create_dummy_data():
                 num_us=str(i*10),
                 id_responsabile=person1.id,
                 id_res_scientifico=person2.id,
-                descrizione=f"Descrizione della scheda per l'unità stratigrafica",
+                descrizione=faker.sentence(nb_words=6),
                 id_ente_resp=ente1.id,
                 id_localita=loc1.id,
-                data=datetime.now(timezone.utc),
-                quadrato=f"B{i}",
-                colore="Marrone",
-                composizione="Terra",
-                consistenza="Media",
-                comp_organici="Carboni",
-                comp_inorganici="Mattoni",
-                interpretazione="Strato abitativo",
-                misure="1x1m",
-                note="Nessuna nota rilevante",
-                campionature=True if i % 2 == 0 else False,
-                flottazione="si",
-                setacciatura="a_campione",
-                affidabilita_strat="Buona",
-                modo_formazione="Deposizione antropica",
-                elem_datanti="Ceramica",
-                settore="Settore A",
-                stato_conservazione="Buono",
+                data=datetime.now(timezone.utc) - timedelta(days=random.randint(0, 365)),
+                quadrato=f"{random.choice(['A', 'B', 'C'])}{random.randint(1,10)}",
+                colore=random.choice(colori),
+                composizione=random.choice(composizioni),
+                consistenza=random.choice(consistenze),
+                comp_organici=random.choice(org),
+                comp_inorganici=random.choice(inorg),
+                interpretazione=random.choice(interpretazioni),
+                misure=random.choice(["1x1m", "1.5x1.5m", "2x2m"]),
+                note=faker.text(max_nb_chars=100),
+                campionature=random.choice([True, False]),
+                flottazione=random.choice(["si", "no", "a_campione", "integrale"]),
+                setacciatura=random.choice(["si", "no", "a_campione", "integrale"]),
+                affidabilita_strat=random.choice(["Buona", "Media", "Scarsa"]),
+                modo_formazione=random.choice(modi_formazione),
+                elem_datanti=random.choice(elem),
+                settore=random.choice(["Settore A", "Settore B", "Settore C"]),
+                stato_conservazione=random.choice(["Buono", "Discreto", "Pessimo"]),
                 criteri_distinzione="Stratificazione",
-                def_e_pos="Buca di palo",
+                def_e_pos=random.choice(["Buca di palo", "Struttura muraria", "Fossa", "Taglio"]),
             )
             schede.append(scheda)
         db.session.add_all(schede)

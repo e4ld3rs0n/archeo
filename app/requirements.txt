@@ -4,4 +4,4 @@ SQLAlchemy-Searchable
 SQLAlchemy-Utils
 psycopg2-binary
 gunicorn
-
+faker

@@ -21,7 +21,7 @@ def elimina_anagrafica(id_anagrafica):
         flash(f"Anagrafica per {nome} {cognome} eliminata con successo.", "success")
     except IntegrityError as e:
         db.session.rollback()
-        flash(f"Errore {e.orig.pgcode}: impossibile eliminare questa anagrafica perché è ancora collegata ad altri record (ad esempio in enti, località o altri riferimenti). Rimuovi prima i collegamenti.", "error")
+        flash(f"Errore {e.orig.pgcode}: impossibile eliminare questa anagrafica perché è ancora collegata ad altri record (ad esempio enti, località o altri riferimenti). Rimuovi prima i collegamenti.", "error")
     except Exception as e:
         db.session.rollback()
         flash(f"Errore durante l'eliminazione dell'anagrafica: {str(e)}", "error")
@@ -43,7 +43,7 @@ def elimina_localita(id_localita):
         flash(f"Località {desc} eliminata con successo.", "success")
     except IntegrityError as e:
         db.session.rollback()
-        flash(f"Errore {e.orig.pgcode}: impossibile eliminare questa località perché è ancora collegata ad altri record (ad esempio in enti). Rimuovi prima i collegamenti.", "error")
+        flash(f"Errore {e.orig.pgcode}: impossibile eliminare questa località perché è ancora collegata ad altri record (ad esempio enti). Rimuovi prima i collegamenti.", "error")
     except Exception as e:
         db.session.rollback()
         flash(f"Errore durante l'eliminazione della località: {str(e)}", "error")
@@ -62,7 +62,7 @@ def elimina_ente(id_ente):
         flash(f"Ente {desc} eliminato con successo.", "success")
     except IntegrityError as e:
         db.session.rollback()
-        flash(f"Errore {e.orig.pgcode}: impossibile eliminare questo ente perché è ancora collegato ad altri record. Rimuovi prima i collegamenti.", "error")
+        flash(f"Errore {e.orig.pgcode}: impossibile eliminare questo ente perché è ancora collegato ad altri record (ad esempio schede US). Rimuovi prima i collegamenti.", "error")
     except Exception as e:
         db.session.rollback()
         flash(f"Errore durante l'eliminazione dell'ente: {str(e)}", "error")

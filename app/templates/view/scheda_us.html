@@ -190,7 +190,7 @@
             <ul>
                 {% for r in reperti_notevoli %}
                     <li>
-                        <strong>Reperto {{ r.id }}</strong> - {{ r.descrizione }} - <a href="{{ url_for('view.reperto_notevole', id=r.id) }}">Vedi reperto</a>
+                        <strong>Reperto №{{ r.id }}</strong> - {{ r.descrizione }} - <a href="{{ url_for('view.reperto_notevole', id=r.id) }}">Vedi reperto</a>
                     </li>
                 {% endfor %}
             </ul>
@@ -237,6 +237,14 @@
             <a href="{{ url_for('modify.upload_plan', id=scheda.id) }}" class="button-link">Carica pianta</a>
         {% endif %}
         
+        <h3>Ortofoto:</h3>
+
+        {% if scheda.id_ortofoto %}
+
+        {% else %}
+            <a href="{{ url_for('create.nuova_ortofoto') }}" class="button-link">Crea ortofoto</a>
+        {% endif %}
+
         <br><br>
         <a href="{{ url_for('view.visualizza_schede') }}" class="button-link">Torna alla lista</a>
         
