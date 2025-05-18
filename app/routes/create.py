@@ -19,48 +19,61 @@ bp = Blueprint("create", __name__)
 
 @bp.route("/crea/anagrafica", methods=["GET", "POST"])
 def nuova_anagrafica():
-        if request.method == "POST":
-            try:
-                nome = request.form.get("nome")
-                if not nome:
-                    flash("Il nome è obbligatorio!", "error")
-                    return redirect(url_for("create.nuova_anagrafica"))
+    page_title = "Nuova anagrafica"
 
-                cognome = request.form.get("cognome")
-                if not cognome:
-                    flash("Il cognome è obbligatorio!", "error")
-                    return redirect(url_for("create.nuova_anagrafica"))
-                
-                email = request.form.get("email")
-                if not email:
-                    flash("L'indirizzo e-mail è obbligatorio!", "error")
-                    return redirect(url_for("create.nuova_anagrafica"))
-
-                tel = request.form.get("tel")
-                if not tel:
-                    flash("Il telefono è obbligatorio!", "error")
-                    return redirect(url_for("create.nuova_anagrafica"))
-
-                new_anagrafica = Anagrafica(
-                    nome=nome,
-                    cognome=cognome,
-                    email=email,
-                    tel=tel
-                )
-
-                db.session.add(new_anagrafica)
-                db.session.commit()
-
-                flash(f"Anagrafica per {nome} {cognome} creata!", "success")
+    if request.method == "POST":
+        try:
+            nome = request.form.get("nome")
+            if not nome:
+                flash("Il nome è obbligatorio!", "error")
                 return redirect(url_for("create.nuova_anagrafica"))
-            except Exception as e:
-                db.session.rollback()
-                flash(f"Errore nella creazione: {str(e)}", "error")
-    
-        return render_template("anagrafica.html")
+
+            cognome = request.form.get("cognome")
+            if not cognome:
+                flash("Il cognome è obbligatorio!", "error")
+                return redirect(url_for("create.nuova_anagrafica"))
+            
+            email = request.form.get("email")
+            if not email:
+                flash("L'indirizzo e-mail è obbligatorio!", "error")
+                return redirect(url_for("create.nuova_anagrafica"))
+
+            tel = request.form.get("tel")
+            if not tel:
+                flash("Il telefono è obbligatorio!", "error")
+                return redirect(url_for("create.nuova_anagrafica"))
+
+            new_anagrafica = Anagrafica(
+                nome=nome,
+                cognome=cognome,
+                email=email,
+                tel=tel
+            )
+
+            db.session.add(new_anagrafica)
+
+            # Aggiorna il vettore di ricerca
+            db.session.flush()
+            new_anagrafica.update_search_vector()
+
+            # Applica i cambiamenti al database
+            db.session.commit()
+
+            flash(f"Anagrafica per {nome} {cognome} creata!", "success")
+            return redirect(url_for("create.nuova_anagrafica", title=page_title))
+        except Exception as e:
+            db.session.rollback()
+            flash(f"Errore nella creazione: {str(e)}", "error")
+
+    return render_template(
+        "anagrafica.html",
+        title=page_title
+        )
 
 @bp.route("/crea/localita", methods=["GET", "POST"])
 def nuova_localita():
+    page_title = "Nuova località"
+
     if request.method == "POST":
         try:
             denominazione = request.form.get("denominazione")
@@ -93,25 +106,34 @@ def nuova_localita():
             )
 
             db.session.add(new_localita)
+
+            # Aggiorna il vettore di ricerca
+            db.session.flush()
+            new_localita.update_search_vector()
+
+            # Applica i cambiamenti al database
             db.session.commit()
 
             flash(f"Nuova località in {via} {citta} ({provincia}) creata!", "success")
-            return redirect(url_for("create.nuova_localita"))
+            return redirect(url_for("create.nuova_localita", title=page_title))
         except Exception as e:
             db.session.rollback()
             flash(f"Errore nella creazione: {str(e)}", "error")
     
-    return render_template("localita.html")
+    return render_template(
+        "localita.html",
+        title=page_title
+        )
 
 @bp.route("/crea/ente", methods=["GET", "POST"])
 def nuovo_ente():
-    print ("HIT /ente")
+    page_title = "Nuovo ente"
 
     if request.method == "POST":
         nome = request.form.get("nome")
         if not nome:
             flash("Il nome dell'ente è obbligatorio!", "error")
-            return redirect(url_for("main.ente"))
+            return redirect(url_for("main.ente"), title=page_title)
 
         tel = request.form.get("tel")
         email = request.form.get("email")
@@ -125,6 +147,12 @@ def nuovo_ente():
         )
 
         db.session.add(new_ente)
+
+        # Aggiorna il vettore di ricerca
+        db.session.flush()
+        new_ente.update_search_vector()
+
+        # Applica i cambiamenti al database
         db.session.commit()
 
         flash(f"Ente creato!", "success")
@@ -132,31 +160,42 @@ def nuovo_ente():
     
     lista_localita=Localita.query.all()
     
-    return render_template("ente.html", lista_localita=lista_localita)
+    return render_template(
+        "ente.html", 
+        lista_localita=lista_localita,
+        title=page_title
+        )
 
 @bp.route("/crea/us", methods=["GET", "POST"])
 def nuova_scheda_us():
+    page_title = "Nuova scheda US"
+
     if request.method == "POST":
         # Create the US model
         try:
             unique_num_us = request.form.get("num_us")
             
-            # Ensure num_us is unique in the database
+            # Assicurati che il numero US sia unico
             test_us = SchedaUS.query.filter_by(num_us=unique_num_us).first()
             if test_us: 
                 flash(f"Errore: il numero US {unique_num_us} esiste già!", "error")
-                return redirect(url_for("create.nuova_scheda_us"))
+                return redirect(url_for("create.nuova_scheda_us", title=page_title))
             
+            # Carica l'eventuale pianta
             pianta = request.files.get("pianta")
-            pianta_filename = secure_filename(f"{uuid.uuid4().hex}{os.path.splitext(pianta.filename)[1]}")
-            pianta_path = os.path.join(app.config["UPLOAD_FOLDER"], pianta_filename)
+            pianta_filename = None
             
-            try:
-                pianta.save(pianta_path)
-            except Exception as e:
-                flash(f"Errore nel caricamento della pianta: {str(e)}", "error")
-                pianta_filename = None
+            if pianta:
+                pianta_filename = secure_filename(f"{uuid.uuid4().hex}{os.path.splitext(pianta.filename)[1]}")
+                pianta_path = os.path.join(app.config["UPLOAD_FOLDER"], pianta_filename)
+            
+                try:
+                    pianta.save(pianta_path)
+                except Exception as e:
+                    flash(f"Errore nel caricamento della pianta: {str(e)}", "error")
+                    pianta_filename = None
 
+            # Crea scheda US
             new_scheda = SchedaUS(
                 num_us = unique_num_us,
                 id_responsabile = request.form.get("id_responsabile"),
@@ -193,8 +232,13 @@ def nuova_scheda_us():
             flash(f"Errore nella creazione: {str(e)}", "error")
 
             # If the creation fails, redirect to the previous page without processing the photos
-            return redirect(url_for("create.nuova_scheda_us"))
+            return redirect(url_for("create.nuova_scheda_us", title=page_title))
 
+        # Aggiorna il vettore di ricerca
+        db.session.flush()
+        new_scheda.update_search_vector()
+
+        # Applica i cambiamenti al database
         db.session.commit()
         flash("Scheda US creata", "success")
 
@@ -222,7 +266,7 @@ def nuova_scheda_us():
             flash(f"Errore nel caricamento dei file: {str(e)}", "error")
 
         db.session.commit()
-        return redirect(url_for("view.scheda", id=new_scheda.id))
+        return redirect(url_for("view.scheda", id=new_scheda.id, title=page_title))
 
     anagrafica = Anagrafica.query.all()
     enti = Ente.query.all()
@@ -236,11 +280,13 @@ def nuova_scheda_us():
         anagrafica=anagrafica,
         enti=enti,
         localita=localita,
-        schede=schede
+        schede=schede,
+        title=page_title
     )
 
 @bp.route("/seq_fisica", methods=["GET", "POST"])
 def nuova_sequenza_fisica():
+    page_title = "Nuova seq. fisica"
 
     if request.method == "POST":
         try:
@@ -250,13 +296,13 @@ def nuova_sequenza_fisica():
             # Check if seq_a is equal to seq_b
             if seq_a == seq_b:
                 flash(f"Errore: la sequenza A non può essere uguale alla sequenza B!", "error")
-                return redirect(url_for("create.nuova_sequenza_fisica"))
+                return redirect(url_for("create.nuova_sequenza_fisica", title=page_title))
             
             # Check if the sequence already exists
             existing_seq = SeqFisica.query.filter_by(id_seq_a=seq_a, id_seq_b=seq_b).first()
             if existing_seq:
                 flash(f"Errore: questa sequenza fisica esiste già!", "error")
-                return redirect(url_for("create.nuova_sequenza_fisica"))
+                return redirect(url_for("create.nuova_sequenza_fisica", title=page_title))
 
             # Proceed with adding the new sequence
             new_seq_fisica = SeqFisica(
@@ -271,18 +317,20 @@ def nuova_sequenza_fisica():
         except Exception as e:
             db.session.rollback()
             flash(f"Errore nella creazione: {str(e)}", "error")
-        return redirect(url_for("create.nuova_sequenza_fisica"))
+        return redirect(url_for("create.nuova_sequenza_fisica", title=page_title))
 
     # Fetch existing data for the form
     schede = SchedaUS.query.order_by(SchedaUS.id).all()
 
     return render_template(
         "create/sequenza_fisica.html",
-        schede=schede
+        schede=schede,
+        title=page_title
     )
 
 @bp.route("/seq_stratigrafica", methods=["GET", "POST"])
 def nuova_sequenza_stratigrafica():
+    page_title = "Nuova seq. strat."
 
     if request.method == "POST":
         try:
@@ -298,13 +346,13 @@ def nuova_sequenza_stratigrafica():
             # Check if seq_a is equal to seq_b
             if seq_a == seq_b:
                 flash(f"Errore: la sequenza A non può essere uguale alla sequenza B!", "error")
-                return redirect(url_for("create.nuova_sequenza_stratigrafica"))
+                return redirect(url_for("create.nuova_sequenza_stratigrafica", title=page_title))
             
             # Check if the sequence already exists
             existing_seq = SeqStrat.query.filter_by(id_seq_a=seq_a, id_seq_b=seq_b).first()
             if existing_seq:
                 flash(f"Errore: questa sequenza stratigrafica esiste già!", "error")
-                return redirect(url_for("create.nuova_sequenza_stratigrafica"))
+                return redirect(url_for("create.nuova_sequenza_stratigrafica", title=page_title))
 
             # Proceed with adding the new sequence
             new_seq_strat = SeqStrat(
@@ -318,18 +366,21 @@ def nuova_sequenza_stratigrafica():
         except Exception as e:
             db.session.rollback()
             flash(f"Errore nella creazione: {str(e)}", "error")
-        return redirect(url_for("create.nuova_sequenza_stratigrafica"))
+        return redirect(url_for("create.nuova_sequenza_stratigrafica", title=page_title))
 
     # Fetch existing data for the form
     schede = SchedaUS.query.order_by(SchedaUS.id).all()
 
     return render_template(
         "create/sequenza_stratigrafica.html",
-        schede=schede
+        schede=schede,
+        title=page_title
     )
 
 @bp.route("/reperto_notevole", methods=["GET", "POST"])
 def nuovo_reperto_notevole():
+    page_title = "Nuovo reperto notevole"
+
     if request.method == "POST":
         try:
             new_reperto = RepertoNotevoleUS(
@@ -353,9 +404,15 @@ def nuovo_reperto_notevole():
         except Exception as e:
             db.session.rollback()
             flash(f"Errore nella creazione: {str(e)}", "error")
-            return redirect(url_for("create.nuovo_reperto_notevole"))
+            return redirect(url_for("create.nuovo_reperto_notevole", title=page_title))
 
         db.session.commit()
+
+        # Aggiorna il vettore di ricerca
+        db.session.flush()
+        new_reperto.update_search_vector()
+
+        # Applica i cambiamenti al database
         flash("Reperto notevole creato!", "success")
 
     # Fetch existing data for the form
@@ -365,11 +422,14 @@ def nuovo_reperto_notevole():
     return render_template(
         "create/nuovo_reperto_notevole.html",
         today_date=today_date,
-        schede=schede
+        schede=schede,
+        title=page_title
     )
 
 @bp.route("/nuova_ortofoto", methods=["GET", "POST"])
 def nuova_ortofoto():
+    page_title = "Nuova ortofoto"
+
     if request.method == "POST":
         try:
             # Crea il record per l'ortofoto nel database
@@ -403,7 +463,7 @@ def nuova_ortofoto():
         except Exception as e:
             db.rollback()
             flash(f"Errore: {str(e)}", "error")
-            return redirect(url_for("create.nuova_ortofoto"))
+            return redirect(url_for("create.nuova_ortofoto", title=page_title))
         
         db.session.commit()
         flash("Ortofoto creata", "success")
@@ -418,5 +478,6 @@ def nuova_ortofoto():
         today_date=today_date,
         anagrafiche=anagrafiche,
         schede=schede,
-        from_id=from_id
+        from_id=from_id,
+        title=page_title
     )

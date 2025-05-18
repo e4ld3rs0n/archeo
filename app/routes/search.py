@@ -19,12 +19,14 @@ bp = Blueprint("search", __name__)
 
 @bp.route("/search", methods=["GET"])
 def search():
+    page_title = "Ricerca"
+
     start = time.time()
 
     query = request.args.get("q", "").strip()
 
     if not query:
-        return render_template("view/risultati_ricerca.html", query=None, results=[], time=time.time()-start)
+        return render_template("view/risultati_ricerca.html", title=page_title, query=None, results=[], time=time.time()-start)
     
     results = []
 
@@ -59,4 +61,4 @@ def search():
 
     results.sort(key=lambda r: r["score"], reverse=True)
 
-    return render_template("view/risultati_ricerca.html", query=query, results=results, time=time.time()-start)
+    return render_template("view/risultati_ricerca.html", title=f"Risultati per {query}", query=query, results=results, time=time.time()-start)

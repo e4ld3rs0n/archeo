@@ -26,6 +26,7 @@ def index():
 
     return render_template(
         "index.html",
+        title="Dashboard",
         count_anagrafiche=count_anagrafiche,
         count_us=count_us,
         count_enti=count_enti,

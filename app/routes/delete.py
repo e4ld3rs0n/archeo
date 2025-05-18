@@ -10,6 +10,8 @@ bp = Blueprint("delete", __name__)
 
 @bp.route("/elimina/anagrafica/<int:id_anagrafica>", methods=["POST"])
 def elimina_anagrafica(id_anagrafica):
+    page_title = "Anagrafiche"
+
     try:
         anagrafica = Anagrafica.query.get_or_404(id_anagrafica)
         
@@ -26,10 +28,12 @@ def elimina_anagrafica(id_anagrafica):
         db.session.rollback()
         flash(f"Errore durante l'eliminazione dell'anagrafica: {str(e)}", "error")
     
-    return redirect(url_for("view.visualizza_anagrafiche"))
+    return redirect(url_for("view.visualizza_anagrafiche", title=page_title))
 
 @bp.route("/elimina/localita/<int:id_localita>", methods=["POST"])
 def elimina_localita(id_localita):
+    page_title = "Località"
+
     try:
         loc = Localita.query.get_or_404(id_localita)
         
@@ -48,10 +52,12 @@ def elimina_localita(id_localita):
         db.session.rollback()
         flash(f"Errore durante l'eliminazione della località: {str(e)}", "error")
     
-    return redirect(url_for("view.visualizza_localita"))
+    return redirect(url_for("view.visualizza_localita", title=page_title))
 
 @bp.route("/elimina/ente/<int:id_ente>", methods=["POST"])
 def elimina_ente(id_ente):
+    page_title = "Enti"
+
     try:
         ente = Ente.query.get_or_404(id_ente)
         
@@ -67,4 +73,4 @@ def elimina_ente(id_ente):
         db.session.rollback()
         flash(f"Errore durante l'eliminazione dell'ente: {str(e)}", "error")
     
-    return redirect(url_for("view.visualizza_enti"))
+    return redirect(url_for("view.visualizza_enti", title=page_title))

@@ -19,6 +19,8 @@ bp = Blueprint("modify", __name__)
 
 @bp.route("/upload/photos/<int:id>", methods=["GET", "POST"])
 def upload_photos(id):
+    page_title = "Aggiungi foto"
+
     if request.method == "POST":
         try:
             foto = request.files.getlist("foto")
@@ -38,11 +40,11 @@ def upload_photos(id):
         except Exception as e:
             db.session.rollback()
             flash(f"Errore durante il caricamento del file: {str(e)}", "error")
-            return redirect(url_for("modify.upload_photos", id=id))
+            return redirect(url_for("modify.upload_photos", id=id, title=page_title))
         
         db.session.commit()
         flash(f"Foto caricate con successo", "success")
-        return redirect(url_for("view.scheda", id=id))
+        return redirect(url_for("view.scheda", id=id, title=page_title))
 
     scheda = SchedaUS.query.get(id)
     if scheda:
@@ -51,12 +53,14 @@ def upload_photos(id):
     return render_template(
         "upload/photos.html", 
         id=id,
-        num_us=num_us
+        num_us=num_us,
+        title=page_title
         )
 
 @bp.route("/upload/plan/<int:id>", methods=["GET", "POST"])
 def upload_plan(id):
-    
+    page_title = "Aggiungi pianta"
+
     if request.method == "POST":
         try:
             file = request.files.get("pianta")
@@ -78,11 +82,11 @@ def upload_plan(id):
         except Exception as e:
             db.session.rollback()
             flash(f"Errore durante il caricamento del file: {str(e)}", "error")
-            return redirect(url_for("modify.upload_plan", id=id))
+            return redirect(url_for("modify.upload_plan", id=id, title=page_title))
         
         db.session.commit()
         flash(f"Pianta caricata con successo", "success")
-        return redirect(url_for("view.scheda", id=id))
+        return redirect(url_for("view.scheda", id=id, title=page_title))
 
     scheda = SchedaUS.query.get(id)
     if scheda:
@@ -91,5 +95,6 @@ def upload_plan(id):
     return render_template(
         "upload/plan.html", 
         id=id,
-        num_us=num_us
+        num_us=num_us,
+        title=page_title
         )
