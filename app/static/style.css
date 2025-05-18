@@ -86,7 +86,7 @@ header nav ul li .dropdown-content {
     min-width: 180px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     border: 1px solid var(--border);
-    z-index: 1;
+    z-index: 2;
 }
 
 header nav ul li.dropdown:hover .dropdown-content {
