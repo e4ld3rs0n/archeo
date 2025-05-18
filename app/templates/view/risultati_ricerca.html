@@ -13,6 +13,8 @@
         {% include 'notifications.html' %}
         
         <h1>Risultati ricerca per: {{ query }}</h1>
+
+        <pre>Tempo di ricerca: {{ time | round(3) }}s</pre>
         
         {% for r in results %}
             <div class="result-block">

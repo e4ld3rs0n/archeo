@@ -23,6 +23,9 @@ class Anagrafica(db.Model):
     schede_responsabile = db.relationship("SchedaUS", backref="responsabile", foreign_keys="SchedaUS.id_responsabile")
     schede_scientifico = db.relationship("SchedaUS", backref="responsabile_scientifico", foreign_keys="SchedaUS.id_res_scientifico")
 
+    def __str__(self):
+        return f"{self.nome} {self.cognome}"
+
     def update_search_vector(self):
         self.search_vector = " ".join([
             str(p) for p in [
@@ -50,6 +53,12 @@ class Localita(db.Model):
     enti = db.relationship("Ente", backref="localita")
     schede = db.relationship("SchedaUS", backref="localita")
 
+    def __str__(self):
+        if self.denom:
+            return f"{self.denom} {self.localita.via} {self.localita.citta}"
+        else:
+            return f"{self.localita.via} {self.localita.citta}"
+
     def update_search_vector(self):
         self.search_vector = " ".join([
             str(p) for p in [
@@ -75,6 +84,9 @@ class Ente(db.Model):
     search_vector = db.Column(db.Text, index=True) ### Search vector
 
     scheda_responsabile = db.relationship("SchedaUS", backref="ente_responsabile", uselist=False, foreign_keys="SchedaUS.id_ente_resp")
+
+    def __str__(self):
+        return f"{self.nome} {self.localita.via} {self.localita.citta}"
 
     def update_search_vector(self):
         self.search_vector = " ".join([
@@ -134,6 +146,9 @@ class SchedaUS(db.Model):
     seq_strat_b = db.relationship("SeqStrat", backref="scheda_strat_b", foreign_keys="SeqStrat.id_seq_b")
     reperti_notevoli = db.relationship("RepertoNotevoleUS", back_populates="scheda_us", foreign_keys="RepertoNotevoleUS.id_scheda_us", cascade="all, delete-orphan")
 
+    def __str__(self):
+        return f"US {self.num_us} {self.descrizione}"
+
     def update_search_vector(self):
         self.search_vector = " ".join([
             str(p) for p in [
@@ -186,6 +201,9 @@ class RepertoNotevoleUS(db.Model):
     search_vector = db.Column(db.Text, index=True) ### Search vector
 
     scheda_us = db.relationship('SchedaUS', back_populates='reperti_notevoli', lazy=True)
+
+    def __str__(self):
+        return f"Reperto №{self.id} {self.descrizione}"
 
     def update_search_vector(self):
         self.search_vector = " ".join([

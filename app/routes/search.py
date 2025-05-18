@@ -1,4 +1,4 @@
-import os, uuid
+import os, uuid, time
 from datetime import datetime
 from flask import (
     Blueprint, 
@@ -19,10 +19,12 @@ bp = Blueprint("search", __name__)
 
 @bp.route("/search", methods=["GET"])
 def search():
+    start = time.time()
+
     query = request.args.get("q", "").strip()
 
     if not query:
-        return render_template("view/risultati_ricerca.html", query=None, results=[])
+        return render_template("view/risultati_ricerca.html", query=None, results=[], time=time.time()-start)
     
     results = []
 
@@ -37,7 +39,7 @@ def search():
         for obj, relevance_score in matches:
             results.append({
                 "tipo": label,
-                "titolo": getattr(obj, "descrizione", None) or getattr(obj, "nome", None) or "Risultato",
+                "titolo": str(obj),
                 "url": url_func(obj),
                 "snippet": build_snippet(obj.search_vector, query),
                 "score": relevance_score
@@ -47,7 +49,7 @@ def search():
         import re
         pattern = re.compile(re.escape(keyword), re.IGNORECASE)
         snippet = pattern.sub(r"<mark>\g<0></mark>", text)
-        return snippet if len(snippet) < 300 else snippet[:297] + "..."
+        return snippet if len(snippet) < 200 else snippet[:197] + "..."
     
     build_results(SchedaUS, "Scheda US", lambda o: url_for("view.scheda", id=o.id))
     build_results(RepertoNotevoleUS, "Reperto", lambda o: url_for("view.reperto_notevole", id=o.id))
@@ -57,4 +59,4 @@ def search():
 
     results.sort(key=lambda r: r["score"], reverse=True)
 
-    return render_template("view/risultati_ricerca.html", query=query, results=results)
+    return render_template("view/risultati_ricerca.html", query=query, results=results, time=time.time()-start)
