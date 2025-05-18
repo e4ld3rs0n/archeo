@@ -604,3 +604,11 @@ table td {
 .hero-search input:focus {
   outline: none;
 }
+
+/* SVG graph */
+.svg-graph svg {
+  max-width: 100%;    /* non supererà mai la larghezza del contenitore */
+  height: auto;       /* mantiene le proporzioni */
+  display: block;     /* per poter centrare con margin */
+  margin: 0 auto;     /* orizzontalmente centrato */
+}

@@ -5,12 +5,14 @@ from flask import (
     flash, 
     redirect, 
     url_for, 
-    send_from_directory, 
+    send_from_directory,
+    Response, 
     current_app as app
 )
 from sqlalchemy import *
 from flask_sqlalchemy import SQLAlchemy
 from models import *
+from graphviz import Digraph
 
 bp = Blueprint("view", __name__)
 
@@ -114,3 +116,73 @@ def visualizza_ortofoto():
 
     ortofoto = Ortofoto.query.order_by(Ortofoto.id.asc()).all()
     return render_template("view/visualizza_ortofoto.html", ortofoto=ortofoto, title=page_title)
+
+@bp.route("/genera_grafo_stratigrafico", methods=["GET"])
+def genera_grafo():
+    # 1) crea il Digraph top-down
+    dot = Digraph('Stratigrafia', format='svg', engine='dot')
+    dot.graph_attr.update({
+        'rankdir': 'TB',
+        'splines': 'true',
+        'overlap': 'false',
+        'bgcolor': 'transparent',
+    })
+    dot.node_attr.update({
+        'shape': 'box',
+        'style': 'filled,rounded',
+        'fillcolor': '#f9f9f9',
+        'color': '#666666',
+        'fontname': 'Helvetica',
+        'fontsize': '12',
+    })
+    dot.edge_attr.update({
+        'color': '#666666',
+        'arrowsize': '0.8',
+        'penwidth': '1',
+        'fontname': 'Helvetica',
+        'fontsize': '9',
+    })
+
+    # 2) relazioni e ID coinvolti
+    rels = SeqStrat.query.all()
+    coinvolti = {r.id_seq_a for r in rels} | {r.id_seq_b for r in rels}
+
+    # 3) carica solo le SchedaUS coinvolte
+    schede = SchedaUS.query.filter(SchedaUS.id.in_(list(coinvolti))).all()
+    info_map = {s.id: (s.num_us, s.descrizione or "") for s in schede}
+
+    # 4) nodi con link e tooltip
+    for id_us in sorted(coinvolti):
+        num, desc = info_map[id_us]
+        href = url_for('view.scheda', id=id_us)
+        label = f"US {num}"
+        dot.node(
+            str(id_us),
+            label=label,
+            href=href,
+            tooltip=desc,
+            target="_self"   # o "_blank" per aprire in nuova scheda
+        )
+
+    # 5) archi
+    for r in rels:
+        if r.id_seq_a in info_map and r.id_seq_b in info_map:
+            dot.edge(
+                str(r.id_seq_a),
+                str(r.id_seq_b)
+            )
+
+    # 6) esporta SVG
+    svg = dot.pipe().decode('utf-8')
+    return Response(svg, mimetype='image/svg+xml')
+
+@bp.route("/grafo_stratigrafico", methods=["GET"])
+def visualizza_grafo():
+    page_title = "Grafo stratigrafico"
+
+    svg = genera_grafo().get_data(as_text=True)
+    return render_template(
+        "view/grafo_stratigrafico.html", 
+        title=page_title,
+        grafo_svg=svg
+        )
