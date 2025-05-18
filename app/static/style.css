@@ -486,3 +486,49 @@ table td {
     font-size: 0.7rem;
     color: var(--secondary-text);
 }
+
+/* Search Results Styling */
+.result-block {
+    margin-bottom: 24px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--border);
+}
+
+.result-type {
+    font-size: 0.75rem;
+    color: var(--secondary-text);
+    text-transform: uppercase;
+    margin-bottom: 4px;
+    letter-spacing: 0.05em;
+}
+
+.result-title {
+    display: block;
+    font-size: 1.25rem;
+    color: var(--primary);
+    text-decoration: none;
+    margin-bottom: 4px;
+}
+
+.result-title:hover {
+    text-decoration: underline;
+}
+
+.result-url {
+    font-size: 0.85rem;
+    color: #006621;      /* verde “Google” */
+    margin-bottom: 6px;
+}
+
+.result-snippet {
+    font-size: 0.9rem;
+    color: var(--bodytext);
+    line-height: 1.4;
+}
+
+/* Responsive tweak */
+@media (max-width: 768px) {
+    .result-title {
+        font-size: 1.1rem;
+    }
+}

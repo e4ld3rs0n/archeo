@@ -14,90 +14,16 @@
         
         <h1>Risultati ricerca per: {{ query }}</h1>
         
-        {% if anagrafiche %}
-            <h2>Anagrafiche:</h2>
-            
-            <ul class="card-container">
-                {% for a in anagrafiche %}
-                    <li class="card search-card">
-                        <div class="card-info">
-                            <h3><a href="#">{{ a.nome }} {{ a.cognome }}</a></h3>
-                            {{ a.email }}<br>
-                            {{ a.tel }}
-                        </div>
-                    </li>
-                {% endfor %}
-            </ul>
-        {% endif %}
-        
-        {% if localita %}
-            <h2>Località</h2>
-
-            <ul class="card-container">
-                {% for l in localita %}
-                    <li class="card search-card">
-                        <div class="card-info">
-                            {% if l.denom %}
-                                <h3><a href="#">{{ l.denom }}</a></h3>
-                                {{ l.via }}<br>
-                                {{ l.cap }} {{ l.citta }} ({{ l.provincia }})
-                            {% else %}
-                                <h3><a href="#">{{ l.via }}</a></h3>
-                                {{ l.cap }} {{ l.citta }} ({{ l.provincia }})
-                            {% endif %}
-                        </div>
-                        
-                    </li>
-                {% endfor %}
-            </ul>
-        {% endif %}
-        
-        {% if enti %}
-            <h2>Enti</h2>
-
-            <ul class="card-container">
-                {% for e in enti %}
-                    <li class="card search-card">
-                        <div class="card-info">
-                            <h3><a href="#">{{ e.nome }}</a></h3>
-                            {{ e.email }}<br>
-                            {{ e.tel }}
-                        </div>
-                    </li>
-                {% endfor %}
-            </ul>
-        {% endif %}
-        
-        {% if schede %}
-            <h2>Schede US</h2>
-
-            <ul class="card-container">
-                {% for s in schede %}
-                    <li class="card search-card">
-                        <div class="card-info">
-                            <h3><a href="{{ url_for('view.scheda', id=s.id) }}">US {{ s.num_us }}</a></h3>
-                            {{ s.descrizione }} ({{ s.data.strftime('%d/%m/%Y') }})<br>
-                            {{ s.ente_responsabile.nome}}
-                        </div>
-                    </li>
-                {% endfor %}
-            </ul>
-        {% endif %}
-        
-        {% if reperti %}
-            <h2>Reperti notevoli</h2>
-
-            <ul class="card-container">
-                {% for r in reperti %}
-                    <li class="card search-card">
-                        <h3><a href="{{ url_for('view.reperto_notevole', id=r.id) }}">RR {{ r.id }}</a></h3>
-                        Cassa {{ r.numero_cassa }}
-                        Sito {{ r.sito }}
-                        {{ r.data.strftime('%d/%m/%Y') }}
-                    </li>
-                {% endfor %}
-            </ul>
-        {% endif %}
+        {% for r in results %}
+            <div class="result-block">
+                <div class="result-type">{{ r.tipo }}</div>
+                <a href="{{ r.url }}" class="result-title">{{ r.titolo }}</a>
+                <div class="result-url">{{ r.url }}</div>
+                <div class="result-snippet">{{ r.snippet | safe }}</div>
+            </div>
+        {% else %}
+            <p>Nessun risultato trovato.</p>
+        {% endfor %}
     </div>
 
     {% include 'footer.html' %}
