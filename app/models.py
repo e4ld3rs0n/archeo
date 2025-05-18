@@ -55,9 +55,9 @@ class Localita(db.Model):
 
     def __str__(self):
         if self.denom:
-            return f"{self.denom} {self.localita.via} {self.localita.citta}"
+            return f"{self.denom} {self.via} {self.citta}"
         else:
-            return f"{self.localita.via} {self.localita.citta}"
+            return f"{self.via} {self.citta}"
 
     def update_search_vector(self):
         self.search_vector = " ".join([
