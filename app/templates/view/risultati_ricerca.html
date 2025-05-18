@@ -20,7 +20,7 @@
             <div class="result-block">
                 <div class="result-type">{{ r.tipo }}</div>
                 <a href="{{ r.url }}" class="result-title">{{ r.titolo }}</a>
-                <div class="result-url">{{ r.url }}</div>
+                <div class="result-url"><pre>{{ r.url }}</pre></div>
                 <div class="result-snippet">{{ r.snippet | safe }}</div>
             </div>
         {% else %}

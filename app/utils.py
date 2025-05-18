@@ -19,7 +19,18 @@ def index():
         flash("Attenzione: il database è vuoto. Prima di continuare è necessario inizializzarlo.", "info")
         return render_template("setup/setup.html")
 
-    return render_template("index.html")
+    count_anagrafiche = db.session.query(Anagrafica).count()
+    count_enti = db.session.query(Ente).count()
+    count_us = db.session.query(SchedaUS).count()
+    count_reperti = db.session.query(RepertoNotevoleUS).count()
+
+    return render_template(
+        "index.html",
+        count_anagrafiche=count_anagrafiche,
+        count_us=count_us,
+        count_enti=count_enti,
+        count_reperti=count_reperti
+        )
 
 @bp.route("/initdb", methods=["GET"])
 def initdb():

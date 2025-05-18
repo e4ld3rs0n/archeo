@@ -515,7 +515,7 @@ table td {
 }
 
 .result-url {
-    font-size: 0.85rem;
+    font-size: 0.755rem;
     color: #006621;      /* verde “Google” */
     margin-bottom: 6px;
 }
@@ -531,4 +531,76 @@ table td {
     .result-title {
         font-size: 1.1rem;
     }
+}
+
+/* Hero section */
+.hero {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 40vh;
+  min-height: 300px;
+  background-size: cover;
+  background-position: center center;
+  text-align: center;
+}
+
+.hero-overlay {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.hero-content {
+  position: relative;
+  z-index: 1;
+  max-width: 800px;
+  padding: 0 1rem;
+}
+
+.hero-content h1 {
+  color: #fff !important;
+  font-size: 3.8rem;
+  margin-bottom: 0.5rem;
+}
+
+.hero-content p {
+  color: #fff !important;
+  font-size: 1.25rem;
+  margin-bottom: 1.5rem;
+}
+
+.hero-search {
+  display: inline-flex;       /* confermiamo che sia flex container */
+  align-items: center;        /* centra verticalmente */
+}
+
+.hero-search input,
+.hero-search button {
+  box-sizing: border-box;     /* includi padding/border nel calcolo altezza */
+  margin: 0;                  /* rimuove eventuali spazi extra */
+  padding: 0.75rem 1rem;      /* top/bottom identico a 0.75rem */
+  font-size: 0.9rem;
+  line-height: normal;        /* evita line‐height sproporzionate */
+  height: auto;               /* lascia che sia il padding a definire l’altezza */
+  vertical-align: middle;     /* in più per sicurezza su inline-flex */
+}
+
+/* rendi il button un piccolo flex item per centrare l’icona/testo */
+.hero-search button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #fff;     /* sfondo bianco */
+  color: var(--bodytext);
+  border: none;
+}
+
+.hero-search input {
+  width: 400px;
+}
+
+.hero-search input:focus {
+  outline: none;
 }

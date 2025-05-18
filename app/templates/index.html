@@ -9,13 +9,57 @@
 {% include 'header.html' %}
 
 <body>
+    <section class="hero" style="background-image: url('{{ url_for('static', filename='img/hero-bg.jpg') }}');">
+        <div class="hero-overlay"></div>
+            <div class="hero-content">
+                <h1>Archeo</h1>
+                <p>Gestisci e documenta i tuoi scavi archeologici in modo semplice ed intuitivo.</p>
+                <form action="{{ url_for('search.search') }}" method="get" class="hero-search">
+                    <input type="text" name="q" placeholder="Cerca schede, località, descrizione…" />
+                    <button type="submit">🔍</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
     <div class="container">
         {% include 'notifications.html' %}
-        <h1>Benvenuti su Archeo</h1>
-        <p>
-            Archeo è un software per la gestione della documentazione dei siti archeologici.
-        </p>
-        <img src="{{ url_for('static', filename='img/pietro.png') }}" class="banner">            
+        
+        <h2>Panoramica database</h2>
+
+        <ul class="card-container">
+            <li class="card card--flex">
+                <img src="{{ url_for('static', filename='img/person.png') }}" class="card-img">
+                <div class="card-info">
+                    <h3>Anagrafiche</h3>
+                    {{ count_anagrafiche or "N/A" }}
+                </div>
+            </li>
+
+            <li class="card card--flex">
+                <img src="{{ url_for('static', filename='img/building.png') }}" class="card-img">
+                <div class="card-info">
+                    <h3>Enti</h3>
+                    {{ count_enti or "N/A" }}
+                </div>
+            </li>
+
+            <li class="card card--flex">
+                <img src="{{ url_for('static', filename='img/document.png') }}" class="card-img">
+                <div class="card-info">
+                    <h3>Schede US registrate</h3>
+                    {{ count_us or "N/A" }}
+                </div>
+            </li>
+
+            <li class="card card--flex">
+                <img src="{{ url_for('static', filename='img/crate.png') }}" class="card-img">
+                <div class="card-info">
+                    <h3>Reperti registrati</h3>
+                    {{ count_reperti or "N/A" }}
+                </div>
+            </li>
+        </ul>
     </div>
     
     {% include 'footer.html' %}
