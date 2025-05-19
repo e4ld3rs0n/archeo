@@ -1,4 +1,21 @@
 <script src="{{ url_for('static', filename='scripts.js') }}"></script>
+<script src="{{ url_for('static', filename='vanilla-datatables.js') }}"></script>
+
+<script>
+        var myTable = document.querySelector("#interactive-table");
+        var dataTable = new DataTable(myTable, {
+            searchable: true,
+            sortable: true,
+            perPage: 10,
+            perPageSelect: [5, 10, 25, 50],
+            labels: {
+                placeholder: "Filtra...",
+                perPage: "{select} elementi per pagina",
+                noRows: "Nessun record trovato",
+                info: "Mostra {start}–{end} di {rows} record"
+            }
+        });
+</script>
 
 <footer>
 <div>

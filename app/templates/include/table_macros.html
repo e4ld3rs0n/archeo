@@ -1,6 +1,6 @@
 {% macro render_table(headers, rows, col_formats=None, table_class="wide-table") %}
     <div style="overflow-x: auto;">
-        <table class="{{ table_class }}" style="table-layout: auto;">
+        <table class="{{ table_class }}" id="interactive-table" style="table-layout: auto;">
             <thead>
                 <tr>
                     {% for header in headers %}

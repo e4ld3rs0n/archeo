@@ -7,7 +7,7 @@
         <h1>Schede US</h1>
         <a href="{{ url_for('preferences.switch_default_view') }}">Cambia vista</a>
 
-        {% if records %}
+        {% if records or rows %}
             {% if session.default_view == 'card' %}
             <!-- Visualizzazione a schede -->
             <ul class="card-container">
@@ -24,7 +24,10 @@
             </ul>
             {% elif session.default_view == 'grid' %}
             <!-- Visualizzazione a griglia -->
-            
+            {% import "include/table_macros.html" as tbl %}
+
+                {{ tbl.render_table(headers, rows) | safe }}
+
             {% endif %}
         {% else %}
             <p>Nessun record presente.</p>

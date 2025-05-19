@@ -6,7 +6,8 @@ from flask import (
     redirect, 
     url_for, 
     send_from_directory,
-    Response, 
+    Response,
+    session,
     current_app as app
 )
 from sqlalchemy import *
@@ -41,6 +42,33 @@ def build_table_for_reperti(reperti):
         ])
     return headers, rows
 
+def build_table_for_schede(schede):
+    headers = [
+        "US", "Descrizione", "Località", "Ente responsabile", "Data", "Quadrato", "Settore", "Colore",
+        "Composizione", "Consistenza", "Componenti organici", "Componenti inorganici", "Interpretazione",
+        "Misure", "Note" 
+    ]
+    rows = []
+    for r in schede:
+        rows.append([
+            f'<a href="{url_for("view.scheda", id=r.id)}">US {r.num_us}</a>',
+            r.descrizione,
+            r.localita.via if r.localita else "",
+            r.ente_responsabile.nome if r.ente_responsabile else "",
+            r.data.strftime('%d/%m/%Y') if r.data else '',
+            r.quadrato,
+            r.settore,
+            r.colore,
+            r.composizione,
+            r.consistenza,
+            r.comp_organici,
+            r.comp_inorganici,
+            r.interpretazione,
+            r.misure,
+            r.note or ""
+        ])
+    return headers, rows
+
 @bp.route("/manuale", methods=["GET"])
 def visualizza_manuale():
     page_title = "Manuale"
@@ -71,9 +99,21 @@ def visualizza_enti():
 @bp.route("/visualizza_schede", methods=["GET"])
 def visualizza_schede():
     page_title = "Schede US"
-
-    records = SchedaUS.query.order_by(SchedaUS.num_us.asc()).all()
-    return render_template("view/visualizza_schede.html", records=records, title=page_title)
+    view = session.get("default_view", "card")
+    
+    if view == "card":
+        records = SchedaUS.query.order_by(SchedaUS.num_us.asc()).all()
+        return render_template(
+            "view/visualizza_schede.html", 
+            records=records, 
+            title=page_title)
+    elif view == "grid":
+        headers, rows = build_table_for_schede(SchedaUS.query.order_by(SchedaUS.num_us.asc()).all())
+        return render_template(
+            "view/visualizza_schede.html", 
+            headers=headers,
+            rows=rows, 
+            title=page_title)
 
 @bp.route("/scheda/<int:id>")
 def scheda(id):
