@@ -86,18 +86,14 @@ class Ente(db.Model):
     scheda_responsabile = db.relationship("SchedaUS", backref="ente_responsabile", uselist=False, foreign_keys="SchedaUS.id_ente_resp")
 
     def __str__(self):
-        return f"{self.nome} {self.localita.via} {self.localita.citta}"
+        return f"{self.nome}"
 
     def update_search_vector(self):
         self.search_vector = " ".join([
             str(p) for p in [
                 self.nome,
                 self.tel,
-                self.email,
-                self.localita.via,
-                self.localita.citta,
-                self.localita.provincia,
-                self.localita.cap
+                self.email
             ] if p
         ])
 

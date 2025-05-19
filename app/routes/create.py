@@ -137,26 +137,42 @@ def nuovo_ente():
 
         tel = request.form.get("tel")
         email = request.form.get("email")
-        id_loc = request.form.get("id_loc")
+        id_loc_str = request.form.get("id_loc")
+        if not id_loc_str:
+            flash("La località è obbligatoria!", "error")
+            return redirect(url_for("create.nuovo_ente"))
+        
+        try:
+            id_loc = int(id_loc_str)
+        except ValueError:
+            flash("Località non valida!", "error")
+            return redirect(url_for("create.nuovo_ente"))
+        
+        loc = Localita.query.get(id_loc)
+        if not loc:
+            flash("La località selezionata non esiste!", "error")
+            return redirect(url_for("create.nuovo_ente"))
 
+        
         new_ente = Ente(
-            id_loc = id_loc,
-            nome = nome,
-            tel = tel,
-            email = email
+            id_loc=id_loc,
+            nome=nome,
+            tel=tel,
+            email=email
         )
-
+        
         db.session.add(new_ente)
-
-        # Aggiorna il vettore di ricerca
-        db.session.flush()
+        db.session.flush()  # qui può dare errore se i dati non sono coerenti
+        
         new_ente.update_search_vector()
-
-        # Applica i cambiamenti al database
         db.session.commit()
-
-        flash(f"Ente creato!", "success")
+        
+        flash("Ente creato!", "success")
         return redirect(url_for("view.visualizza_enti"))
+    
+        db.session.rollback()
+        flash(f"Errore nella creazione: {str(e)}", "error")
+        return redirect(url_for("create.nuovo_ente"))
     
     lista_localita=Localita.query.all()
     

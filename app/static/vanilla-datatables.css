@@ -1,9 +1,247 @@
-/*!
- *
- * Vanilla-DataTables
- * Copyright (c) 2015-2017 Karl Saunders (http://mobius.ovh)
- * Licensed under MIT (http://www.opensource.org/licenses/mit-license.php)
- *
- * Version: 1.6.16
- *
- */.dataTable-wrapper.no-header .dataTable-container{border-top:1px solid #d9d9d9}.dataTable-wrapper.no-footer .dataTable-container{border-bottom:1px solid #d9d9d9}.dataTable-bottom,.dataTable-top{padding:8px 10px}.dataTable-bottom>div:first-child,.dataTable-top>div:first-child{float:left}.dataTable-bottom>div:last-child,.dataTable-top>div:last-child{float:right}.dataTable-selector{padding:6px}.dataTable-input{padding:6px 12px}.dataTable-info{margin:7px 0}.dataTable-pagination ul{margin:0;padding-left:0}.dataTable-pagination li{list-style:none;float:left}.dataTable-pagination a{border:1px solid transparent;float:left;margin-left:2px;padding:6px 12px;position:relative;text-decoration:none;color:#333}.dataTable-pagination a:hover{background-color:#d9d9d9}.dataTable-pagination .active a,.dataTable-pagination .active a:focus,.dataTable-pagination .active a:hover{background-color:#d9d9d9;cursor:default}.dataTable-pagination .disabled a,.dataTable-pagination .disabled a:focus,.dataTable-pagination .disabled a:hover,.dataTable-pagination .ellipsis a{cursor:not-allowed}.dataTable-pagination .disabled a,.dataTable-pagination .disabled a:focus,.dataTable-pagination .disabled a:hover{cursor:not-allowed;opacity:.4}.dataTable-pagination .pager a{font-weight:700}.dataTable-table{max-width:100%;width:100%;border-spacing:0}.dataTable-table>tbody>tr>td,.dataTable-table>tbody>tr>th,.dataTable-table>tfoot>tr>td,.dataTable-table>tfoot>tr>th,.dataTable-table>thead>tr>td,.dataTable-table>thead>tr>th{vertical-align:top;padding:8px 10px}.dataTable-table th,.dataTable-table>tfoot>tr>th,.dataTable-table>thead>tr>th{vertical-align:bottom;text-align:left}.dataTable-table>thead>tr>th{border-bottom:1px solid #d9d9d9}.dataTable-table>tfoot>tr>th{border-top:1px solid #d9d9d9}.dataTable-table th a{text-decoration:none;color:inherit}.dataTable-sorter{display:inline-block;height:100%;position:relative;width:100%}.dataTable-sorter::after,.dataTable-sorter::before{content:"";height:0;width:0;position:absolute;right:4px;border-left:4px solid transparent;border-right:4px solid transparent;opacity:.2}.dataTable-sorter::before{border-top:4px solid #000;bottom:10px}.dataTable-sorter::after{border-bottom:4px solid #000;border-top:4px solid transparent;top:0}.asc .dataTable-sorter::after,.desc .dataTable-sorter::before{opacity:.6}.dataTables-empty{text-align:center}.dataTable-bottom::after,.dataTable-top::after{clear:both;content:" ";display:table}
+:root {
+    --primary: #8a6e56;
+    --background: #f0eae2;
+    --surface: #fff;
+    --bodytext: #3e2f23;
+    --secondary-text: #5f564f;
+    --border: #d6c6b4;
+    --hover: #a26945;
+    --disabledtext: #a89e94;
+}
+
+/* Wrapper bordi top/bottom */
+.datatable-wrapper.no-header .datatable-container {
+    border-top: 1px solid var(--border);
+}
+.datatable-wrapper.no-footer .datatable-container {
+    border-bottom: 1px solid var(--border);
+}
+
+/* Barra superiore/inferiore */
+.datatable-top,
+.datatable-bottom {
+    background: var(--surface);
+    color: var(--bodytext);
+    font-size: 1rem;
+    padding: 8px 20px;
+    border: none;
+    clear: both;
+    display: block;
+	margin-bottom: 40px;
+}
+.datatable-top > nav:first-child,
+.datatable-top > div:first-child,
+.datatable-bottom > nav:first-child,
+.datatable-bottom > div:first-child {
+    float: left;
+}
+.datatable-top > nav:last-child,
+.datatable-top > div:not(first-child),
+.datatable-bottom > nav:last-child,
+.datatable-bottom > div:last-child {
+    float: right;
+}
+.datatable-search {
+    margin-left: 12px;
+}
+.datatable-selector,
+.datatable-input {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 0;
+    color: var(--bodytext);
+    font-size: 0.95rem;
+    padding: 8px 12px;
+}
+.datatable-input:focus, .datatable-selector:focus {
+    outline: 2px solid var(--primary);
+    border-color: var(--primary);
+}
+.datatable-info {
+    color: var(--secondary-text);
+    font-size: 0.95rem;
+    margin: 8px 0;
+}
+
+/* Tabella */
+.datatable-table {
+    max-width: 100%;
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--surface);
+    font-size: 0.95rem;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+.datatable-table th, .datatable-table td {
+    border: 1px solid var(--border);
+    text-align: left;
+}
+.datatable-table > thead > tr > th {
+    vertical-align: middle;
+    padding: 2px 6px;
+    background: #f0eae5;
+    color: var(--primary);
+    font-weight: 700;
+    font-size: 0.92rem;
+    line-height: 1.15;
+    border-bottom: 1px solid var(--border);
+    position: relative;
+}
+.datatable-table > tbody > tr > td {
+    vertical-align: top;
+    padding: 5px 10px;
+    font-size: 0.96rem;
+}
+.datatable-table > tfoot > tr > th {
+    vertical-align: bottom;
+    text-align: left;
+    border-top: 1px solid var(--border);
+}
+.datatable-table th a {
+    text-decoration: none;
+    color: inherit;
+}
+.datatable-table th button,
+.datatable-pagination-list button {
+    color: inherit;
+    border: 0;
+    background-color: inherit;
+    cursor: pointer;
+    text-align: inherit;
+    font-family: inherit;
+    font-weight: inherit;
+    font-size: inherit;
+}
+.datatable-table tbody tr {
+    background: #fff;
+    transition: background 0.2s;
+}
+.datatable-table tbody tr:hover {
+    background: #f5eddc;
+}
+
+/* Ordinamento icone */
+.datatable-sorter, .datatable-filter {
+    display: inline-block;
+    height: 100%;
+    position: relative;
+    width: 100%;
+}
+.datatable-sorter::before,
+.datatable-sorter::after {
+    content: "";
+    height: 0;
+    width: 0;
+    position: absolute;
+    right: 4px;
+    border-left: 4px solid transparent;
+    border-right: 4px solid transparent;
+    opacity: 0.2;
+}
+.datatable-sorter::before {
+    border-top: 4px solid var(--primary);
+    bottom: 0px;
+}
+.datatable-sorter::after {
+    border-bottom: 4px solid var(--primary);
+    top: 0px;
+}
+.datatable-ascending .datatable-sorter::after,
+.datatable-descending .datatable-sorter::before {
+    opacity: 0.6;
+}
+.datatable-filter::before {
+    content: "";
+    position: absolute;
+    right: 4px;
+    opacity: 0.2;
+    width: 0;
+    height: 0;
+    border-left: 7px solid transparent;
+    border-right: 7px solid transparent;
+    border-radius: 50%;
+    border-top: 10px solid var(--primary);
+    top: 25%;
+}
+.datatable-filter-active .datatable-filter::before {
+    opacity: 0.6;
+}
+
+/* Paginatore */
+.datatable-pagination ul {
+    margin: 0;
+    padding-left: 0;
+}
+.datatable-pagination li {
+    list-style: none;
+    float: left;
+}
+.datatable-pagination li.datatable-hidden {
+    visibility: hidden;
+}
+.datatable-pagination a,
+.datatable-pagination button {
+    color: var(--primary);
+    background: #fff;
+    border: 1px solid var(--border);
+    margin: 0 2px;
+    padding: 6px 14px;
+    border-radius: 2px;
+    font-weight: 500;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s;
+}
+.datatable-pagination a:hover,
+.datatable-pagination button:hover {
+    background: var(--hover);
+    color: #fff;
+}
+.datatable-pagination .datatable-active a,
+.datatable-pagination .datatable-active button {
+    background: var(--primary);
+    color: #fff;
+    border-color: var(--primary);
+    cursor: default;
+}
+.datatable-pagination .datatable-disabled a,
+.datatable-pagination .datatable-disabled button {
+    color: var(--disabledtext);
+    background: #f7f1e5;
+    cursor: not-allowed;
+    opacity: 0.5;
+}
+.datatable-pagination .datatable-ellipsis a,
+.datatable-pagination .datatable-ellipsis button {
+    pointer-events: none;
+    color: var(--secondary-text);
+    background: #fff;
+}
+
+/* Stato vuoto */
+.datatable-empty {
+    text-align: center;
+    color: var(--secondary-text);
+    background: #faf4eb;
+    padding: 18px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .datatable-table th, .datatable-table td {
+        padding: 7px 6px;
+        font-size: 0.88rem;
+    }
+    .datatable-top, .datatable-bottom {
+        padding: 8px 6px;
+    }
+}
+
+/* Focus e selezione riga (accessibilità) */
+table.datatable-table:focus tr.datatable-cursor > td:first-child {
+    border-left: 3px blue solid;
+}
+table.datatable-table:focus {
+    outline: solid 1px black;
+    outline-offset: -1px;
+}
