@@ -153,26 +153,26 @@ def nuovo_ente():
             flash("La località selezionata non esiste!", "error")
             return redirect(url_for("create.nuovo_ente"))
 
-        
-        new_ente = Ente(
-            id_loc=id_loc,
-            nome=nome,
-            tel=tel,
-            email=email
-        )
-        
-        db.session.add(new_ente)
-        db.session.flush()  # qui può dare errore se i dati non sono coerenti
-        
-        new_ente.update_search_vector()
-        db.session.commit()
-        
-        flash("Ente creato!", "success")
-        return redirect(url_for("view.visualizza_enti"))
-    
-        db.session.rollback()
-        flash(f"Errore nella creazione: {str(e)}", "error")
-        return redirect(url_for("create.nuovo_ente"))
+        try:
+            new_ente = Ente(
+                id_loc=id_loc,
+                nome=nome,
+                tel=tel,
+                email=email
+            )
+            
+            db.session.add(new_ente)
+            db.session.flush()  # qui può dare errore se i dati non sono coerenti
+            
+            new_ente.update_search_vector()
+            db.session.commit()
+            
+            flash("Ente creato!", "success")
+            return redirect(url_for("view.visualizza_enti"))
+        except Exception as e:
+            db.session.rollback()
+            flash(f"Errore nella creazione: {str(e)}", "error")
+            return redirect(url_for("create.nuovo_ente"))
     
     lista_localita=Localita.query.all()
     
