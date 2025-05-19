@@ -1,4 +1,6 @@
 {% macro render_table(headers, rows, col_formats=None, table_class="wide-table") %}
+    <div id="table-controls"></div>    
+
     <div style="overflow-x: auto;">
         <table class="{{ table_class }}" id="interactive-table" style="table-layout: auto;">
             <thead>
@@ -26,4 +28,6 @@
             </tbody>
         </table>
     </div>
+
+    <div id="table-pagination"></div>
 {% endmacro %}
