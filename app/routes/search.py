@@ -51,7 +51,7 @@ def search():
         import re
         pattern = re.compile(re.escape(keyword), re.IGNORECASE)
         snippet = pattern.sub(r"<mark>\g<0></mark>", text)
-        return snippet if len(snippet) < 200 else snippet[:197] + "..."
+        return snippet if len(snippet) < 500 else snippet[:497] + "..."
     
     build_results(SchedaUS, "Scheda US", lambda o: url_for("view.scheda", id=o.id))
     build_results(RepertoNotevoleUS, "Reperto", lambda o: url_for("view.reperto_notevole", id=o.id))

@@ -16,6 +16,31 @@ from graphviz import Digraph
 
 bp = Blueprint("view", __name__)
 
+def build_table_for_reperti(reperti):
+    headers = [
+        "ID", "US", "Numero cassa", "Sito", "Data",
+        "Materiale", "Descrizione", "Quantità", "Lavato", "Siglato",
+        "Punto stazione totale", "Coordinate", "Note"
+    ]
+    rows = []
+    for r in reperti:
+        rows.append([
+            f'<a href="{url_for("view.reperto_notevole", id=r.id)}">Reperto №{r.id}</a>',
+            f'<a href="{url_for("view.scheda", id=r.scheda_us.id)}">US {r.scheda_us.num_us}</a>',
+            r.numero_cassa,
+            r.sito,
+            r.data.strftime('%d/%m/%Y') if r.data else '',
+            r.materiale,
+            r.descrizione,
+            r.quantita,
+            "&#10004;" if r.lavato else "",
+            "&#10004;" if r.siglato else "",
+            r.punto_stazione_totale,
+            f"{r.coord_x}, {r.coord_y}, {r.coord_z}" if r.coord_x and r.coord_y and r.coord_z else "Non presenti",
+            r.note or "",
+        ])
+    return headers, rows
+
 @bp.route("/manuale", methods=["GET"])
 def visualizza_manuale():
     page_title = "Manuale"
@@ -86,7 +111,14 @@ def visualizza_reperti_notevoli():
     page_title = "Reperti notevoli"
 
     reperti_notevoli = RepertoNotevoleUS.query.order_by(RepertoNotevoleUS.id_scheda_us.asc()).all()
-    return render_template("view/visualizza_reperti_notevoli.html", reperti_notevoli=reperti_notevoli, title=page_title)
+    headers, rows = build_table_for_reperti(reperti_notevoli)
+    
+    return render_template(
+        "view/visualizza_reperti_notevoli.html", 
+        headers=headers,
+        rows=rows, 
+        title=page_title
+        )
 
 @bp.route("/reperto_notevole/<int:id>")
 def reperto_notevole(id):

@@ -5,20 +5,27 @@
         {% include 'notifications.html' %}
 
         <h1>Schede US</h1>
+        <a href="{{ url_for('preferences.switch_default_view') }}">Cambia vista</a>
 
         {% if records %}
-        <ul class="card-container">
-            {% for scheda in records %}
-                <li class="card card--flex">
-                    <img src="{{ url_for('static', filename='img/document.png') }}" class="card-img">
-                    <div class="card-info">
-                        <h3><a href="{{ url_for('view.scheda', id=scheda.id) }}">Scheda {{ scheda.num_us }}</a></h3>
-                        {{ scheda.descrizione }} ({{ scheda.data.strftime('%d/%m/%Y') }})<br>
-                        {{ scheda.ente_responsabile.nome}}
-                    </div>
-                </li>
-            {% endfor %}
+            {% if session.default_view == 'card' %}
+            <!-- Visualizzazione a schede -->
+            <ul class="card-container">
+                {% for scheda in records %}
+                    <li class="card card--flex">
+                        <img src="{{ url_for('static', filename='img/document.png') }}" class="card-img">
+                        <div class="card-info">
+                            <h3><a href="{{ url_for('view.scheda', id=scheda.id) }}">Scheda {{ scheda.num_us }}</a></h3>
+                            {{ scheda.descrizione }} ({{ scheda.data.strftime('%d/%m/%Y') }})<br>
+                            {{ scheda.ente_responsabile.nome}}
+                        </div>
+                    </li>
+                {% endfor %}
             </ul>
+            {% elif session.default_view == 'grid' %}
+            <!-- Visualizzazione a griglia -->
+            
+            {% endif %}
         {% else %}
             <p>Nessun record presente.</p>
         {% endif %}

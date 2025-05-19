@@ -1,0 +1,29 @@
+{% macro render_table(headers, rows, col_formats=None, table_class="wide-table") %}
+    <div style="overflow-x: auto;">
+        <table class="{{ table_class }}" style="table-layout: auto;">
+            <thead>
+                <tr>
+                    {% for header in headers %}
+                        <th>{{ header }}</th>
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in rows %}
+                    <tr>
+                        {% for value in row %}
+                            {% set idx = loop.index0 %}
+                            <td>
+                                {% if col_formats and col_formats[idx] %}
+                                    {{ col_formats[idx](value) }}
+                                {% else %}
+                                    {{ value | safe }}
+                                {% endif %}
+                            </td>
+                        {% endfor %}
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endmacro %}

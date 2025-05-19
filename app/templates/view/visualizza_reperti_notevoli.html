@@ -1,60 +1,14 @@
 {% include 'header.html' %}
 
+{% import "include/table_macros.html" as tbl %}
+
 <body>
     <div class="container">
         {% include 'notifications.html' %}
 
         <h1>Inventario reperti notevoli</h1>
-
-        {% if reperti_notevoli %}
-            <div style="overflow-x: auto;">
-                <table class="wide-table" style="table-layout: auto;">
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>US</th>
-                            <th>Numero cassa</th>
-                            <th>Sito</th>
-                            <th>Data</th>
-                            <th>Quadrato</th>
-                            <th>Materiale</th>
-                            <th>Descrizione</th>
-                            <th>Quantità</th>
-                            <th>Lavato</th>
-                            <th>Siglato</th>
-                            <th>Punto stazione totale</th>
-                            <th>Coordinate</th>
-                            <th>Note</th>
-                        </tr>
-                    </thead>           
-                    <tbody>
-                        {% for reperto in reperti_notevoli %}
-                            <tr>
-                                <td><a href="{{ url_for('view.reperto_notevole', id=reperto.id) }}">Reperto №{{ reperto.id }}</a></td>
-                                <td><a href="{{ url_for('view.scheda', id=reperto.scheda_us.id) }}">US {{ reperto.scheda_us.num_us }}</a></td>
-                                <td>{{ reperto.numero_cassa }}</td>
-                                <td>{{ reperto.sito }}</td>
-                                <td>{{ reperto.data.strftime('%d/%m/%Y') }}</td>
-                                <td>{{ reperto.quadrato }}</td>
-                                <td>{{ reperto.materiale }}</td>
-                                <td>{{ reperto.descrizione }}</td>
-                                <td>{{ reperto.quantita }}</td>
-                                <td>{% if reperto.lavato %}&#10004;{% endif %}</td>
-                                <td>{% if reperto.siglato %}&#10004;{% endif %}</td>
-                                <td>{{ reperto.punto_stazione_totale }}</td>
-                                <td>
-                                        {% if reperto.coord_x and reperto.coord_y and reperto.coord_z %}
-                                            {{ reperto.coord_x }}, {{ reperto.coord_y }}, {{ reperto.coord_z }}
-                                        {% else %}
-                                            Non presenti
-                                        {% endif %}
-                                </td>
-                                <td>{{ reperto.note }}</td>
-                            </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
+        {% if rows %}
+            {{ tbl.render_table(headers, rows) | safe }}
         {% else %}
             <p>Nessun record presente.</p>
         {% endif %}
