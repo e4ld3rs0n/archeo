@@ -20,11 +20,8 @@
         setTimeout(function() {
             var wrapper = myTable.closest('.dataTable-wrapper');
             var controls = wrapper.querySelector('.dataTable-top');
-            var info = wrapper.querySelector('.dataTable-bottom');
             var topDiv = document.getElementById('table-controls');
-            var bottomDiv = document.getElementById('table-pagination');
             if (controls && topDiv) topDiv.appendChild(controls);
-            if (info && bottomDiv) bottomDiv.appendChild(info);
   }, 100);
 </script>
 
