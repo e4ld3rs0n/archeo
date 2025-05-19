@@ -43,17 +43,25 @@ def build_table_for_reperti(reperti):
     return headers, rows
 
 def build_table_for_schede(schede):
+    labels = {
+        "si": "Sì",
+        "no": "No",
+        "integrale": "Integrale",
+        "a_campione": "A campione"
+    }
+    
     headers = [
         "US", "Descrizione", "Località", "Ente responsabile", "Data", "Quadrato", "Settore", "Colore",
-        "Composizione", "Consistenza", "Componenti organici", "Componenti inorganici", "Interpretazione",
-        "Misure", "Note" 
+        "Composizione", "Consistenza", "Componenti organici", "Componenti inorganici", "Campionature", 
+        "Flottazione", "Setacciatura", "Interpretazione", "Misure", "Note" 
     ]
+        
     rows = []
     for r in schede:
         rows.append([
             f'<a href="{url_for("view.scheda", id=r.id)}">US {r.num_us}</a>',
             r.descrizione,
-            r.localita.via if r.localita else "",
+            f"{r.localita.via} - {r.localita.citta}" if r.localita else "",
             r.ente_responsabile.nome if r.ente_responsabile else "",
             r.data.strftime('%d/%m/%Y') if r.data else '',
             r.quadrato,
@@ -63,6 +71,9 @@ def build_table_for_schede(schede):
             r.consistenza,
             r.comp_organici,
             r.comp_inorganici,
+            "Sì" if r.campionature == True else "No",
+            labels.get(r.flottazione, r.flottazione),
+            labels.get(r.setacciatura, r.setacciatura),
             r.interpretazione,
             r.misure,
             r.note or ""

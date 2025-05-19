@@ -7,4 +7,4 @@ def init_preferences(app):
         Retrieve preferences from the database or set up default preferences for the user session.
         """
         if "default_view" not in session:
-            session["default_view"] = "card"
+            session["default_view"] = "grid"
