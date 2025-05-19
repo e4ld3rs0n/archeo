@@ -2,12 +2,7 @@ from db import db
 from sqlalchemy import event
 from sqlalchemy.orm import Mapper
 
-def register_search_vector_listener(model_class):
-    @event.listens_for(model_class, 'before_insert')
-    @event.listens_for(model_class, 'before_update')
-    def update_search_vector(mapper: Mapper, connection, target):
-        if hasattr(target, 'update_search_vector'):
-            target.update_search_vector()
+
 
 class Anagrafica(db.Model):
     __tablename__ = "anagrafica"
@@ -35,8 +30,6 @@ class Anagrafica(db.Model):
                 self.tel
             ] if p
         ])
-
-register_search_vector_listener(Anagrafica)
 
 class Localita(db.Model):
     __tablename__ = "localita"
@@ -70,8 +63,6 @@ class Localita(db.Model):
             ] if p
         ])
 
-register_search_vector_listener(Localita)
-
 class Ente(db.Model):
     __tablename__ = "ente"
 
@@ -86,18 +77,20 @@ class Ente(db.Model):
     scheda_responsabile = db.relationship("SchedaUS", backref="ente_responsabile", uselist=False, foreign_keys="SchedaUS.id_ente_resp")
 
     def __str__(self):
-        return f"{self.nome}"
+        return f"{self.nome} {self.localita.via} {self.localita.citta}"
 
     def update_search_vector(self):
         self.search_vector = " ".join([
             str(p) for p in [
                 self.nome,
                 self.tel,
-                self.email
+                self.email,
+                self.localita.via,
+                self.localita.citta,
+                self.localita.provincia,
+                self.localita.cap
             ] if p
         ])
-
-register_search_vector_listener(Ente)
 
 class SchedaUS(db.Model):
     __tablename__ = "scheda_us"
@@ -166,8 +159,6 @@ class SchedaUS(db.Model):
             ] if p
         ])
 
-register_search_vector_listener(SchedaUS)
-
 class FotoUS(db.Model):
     __tablename__ = "foto_us"
 
@@ -214,8 +205,6 @@ class RepertoNotevoleUS(db.Model):
                 self.note
             ] if p
         ])
-
-register_search_vector_listener(RepertoNotevoleUS)
 
 class SeqFisica(db.Model):
     __tablename__ = "seq_fisica"

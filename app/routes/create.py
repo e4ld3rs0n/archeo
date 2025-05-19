@@ -162,9 +162,9 @@ def nuovo_ente():
             )
             
             db.session.add(new_ente)
-            db.session.flush()  # qui può dare errore se i dati non sono coerenti
-            
+            db.session.flush()            
             new_ente.update_search_vector()
+            
             db.session.commit()
             
             flash("Ente creato!", "success")
@@ -243,20 +243,20 @@ def nuova_scheda_us():
             )
 
             db.session.add(new_scheda)
+
+            # Aggiorna il vettore di ricerca
+            db.session.flush()
+            new_scheda.update_search_vector()
+
+            # Applica i cambiamenti al database
+            db.session.commit()
+            flash("Scheda US creata", "success")
         except Exception as e:
             db.session.rollback()
             flash(f"Errore nella creazione: {str(e)}", "error")
 
             # If the creation fails, redirect to the previous page without processing the photos
             return redirect(url_for("create.nuova_scheda_us", title=page_title))
-
-        # Aggiorna il vettore di ricerca
-        db.session.flush()
-        new_scheda.update_search_vector()
-
-        # Applica i cambiamenti al database
-        db.session.commit()
-        flash("Scheda US creata", "success")
 
         # Handle photo upload
         try:
@@ -276,12 +276,11 @@ def nuova_scheda_us():
                     )
 
                     db.session.add(new_foto)
-
+                    db.session.commit()
         except Exception as e:
             db.session.rollback()
             flash(f"Errore nel caricamento dei file: {str(e)}", "error")
 
-        db.session.commit()
         return redirect(url_for("view.scheda", id=new_scheda.id, title=page_title))
 
     anagrafica = Anagrafica.query.all()
@@ -417,19 +416,18 @@ def nuovo_reperto_notevole():
             )
         
             db.session.add(new_reperto)
+
+            # Aggiorna il vettore di ricerca
+            db.session.flush()
+            new_reperto.update_search_vector()
+
+            # Applica i cambiamenti al database
+            db.session.commit()
+            flash("Reperto notevole creato!", "success")
         except Exception as e:
             db.session.rollback()
             flash(f"Errore nella creazione: {str(e)}", "error")
             return redirect(url_for("create.nuovo_reperto_notevole", title=page_title))
-
-        db.session.commit()
-
-        # Aggiorna il vettore di ricerca
-        db.session.flush()
-        new_reperto.update_search_vector()
-
-        # Applica i cambiamenti al database
-        flash("Reperto notevole creato!", "success")
 
     # Fetch existing data for the form
     schede = SchedaUS.query.order_by(SchedaUS.id).all()
@@ -475,14 +473,15 @@ def nuova_ortofoto():
                             flash(f"La scheda US {scheda.num_us} ha già una ortofoto associata", "warning")
                     else:
                         flash(f"La scheda selezionata con ID {scheda_id} non esiste nel database", "warning")
+            
+            db.session.flush()
+            db.session.commit()
+            flash("Ortofoto creata", "success")
 
         except Exception as e:
             db.rollback()
             flash(f"Errore: {str(e)}", "error")
             return redirect(url_for("create.nuova_ortofoto", title=page_title))
-        
-        db.session.commit()
-        flash("Ortofoto creata", "success")
 
     schede = SchedaUS.query.order_by(SchedaUS.id).all()
     anagrafiche = Anagrafica.query.all()
