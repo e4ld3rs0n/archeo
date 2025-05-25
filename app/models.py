@@ -200,6 +200,8 @@ class RepertoNotevoleUS(db.Model):
                 self.data.strftime("%d/%m/%Y") if self.data else "",
                 self.materiale,
                 self.descrizione,
+                "Lavato" if self.lavato else "",
+                "Siglato" if self.siglato else "",
                 self.quantita,
                 self.punto_stazione_totale,
                 self.note
@@ -234,3 +236,81 @@ class Ortofoto(db.Model):
     completato = db.Column(db.Boolean, nullable=False)
 
     operatore = db.relationship("Anagrafica", backref="ortofoto")
+
+class SacchettoMateriali(db.Model):
+    __tablename__ = 'sac_mat'
+
+    id = db.Column(db.Integer, primary_key=True)
+    num_sac = db.Column(db.String(50), unique=True, nullable=False)      # N. sacchetto
+    sito = db.Column(db.String(100), nullable=False)                     # Sito
+    data = db.Column(db.Date, nullable=False)                            # Data
+    id_us = db.Column(db.Integer, db.ForeignKey('scheda_us.id'), nullable=False)
+    quadrato = db.Column(db.String(10))                                  # Quadrato
+    materiale = db.Column(db.String(100), nullable=False)                # Materiale
+    lavato = db.Column(db.Boolean, nullable=False, default=False)        # Lavato
+    siglato = db.Column(db.Boolean, nullable=False, default=False)       # Siglato
+    disegnato = db.Column(db.Boolean, nullable=False, default=False)     # Disegnato
+    note = db.Column(db.Text)                                            # Note generali sul sacchetto
+
+    search_vector = db.Column(db.Text, index=True)  ### Search vector
+
+    # Relazioni
+    scheda_us = db.relationship('SchedaUS', backref=db.backref('sac_mat', lazy='dynamic'), foreign_keys=[id_us])
+    associazioni_casse = db.relationship('AssocSacCassa', back_populates='sacchetto', cascade='all, delete-orphan')
+
+    def update_search_vector(self):
+        self.search_vector = " ".join([
+            str(p) for p in [
+                self.num_sac,
+                self.sito,
+                self.data.strftime("%d/%m/%Y") if self.data else "",
+                f"Quadrato {self.quadrato}",
+                self.materiale,
+                "Lavato" if self.lavato else "",
+                "Siglato" if self.siglato else "",
+                "Disegnato" if self.disegnato else "",
+                self.note
+            ] if p
+        ])
+
+    def __str__(self):
+        return f"Sacchetto {self.num_sac}"
+
+
+class CassaMateriali(db.Model):
+    __tablename__ = 'cas_mat'
+
+    id = db.Column(db.Integer, primary_key=True)
+    num_cassa = db.Column(db.String(50), unique=True, nullable=False)   # N. cassa
+    descrizione = db.Column(db.Text)                                    # Descrizione o ubicazione della cassa
+
+    search_vector = db.Column(db.Text, index=True)  ### Search vector
+
+    # Relazioni
+    associazioni_sacchetti = db.relationship('AssocSacCassa', back_populates='cassa', cascade='all, delete-orphan')
+
+    def update_search_vector(self):
+        self.search_vector = " ".join([
+            str(p) for p in [
+                self.num_cassa,
+                self.descrizione,
+            ] if p
+        ])
+
+    def __str__(self):
+        return f"Cassa {self.num_cassa}"
+
+
+class AssocSacCassa(db.Model):
+    __tablename__ = 'assoc_sac_cassa'
+
+    id = db.Column(db.Integer, primary_key=True)
+    id_sacchetto = db.Column(db.Integer, db.ForeignKey('sac_mat.id'), nullable=False)
+    id_cassa = db.Column(db.Integer, db.ForeignKey('cas_mat.id'), nullable=False)
+    quantita_totale = db.Column(db.Integer, nullable=False)          # Quantità totale per questa relazione
+    quantita_diagnostica = db.Column(db.Integer)                    # Quantità diagnostica
+    note_associazione = db.Column(db.Text)                          # Note specifiche alla relazione
+
+    # Relazioni
+    sacchetto = db.relationship('SacchettoMateriali', back_populates='associazioni_casse')
+    cassa = db.relationship('CassaMateriali', back_populates='associazioni_sacchetti')

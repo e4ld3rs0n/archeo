@@ -1,6 +1,7 @@
 # Development stuff
-dbdata/
+db_data/
 uploads/
+nocodb/
 cleanup.sh
 *.sqlite3
 CHANGELOG.md

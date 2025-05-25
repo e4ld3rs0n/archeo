@@ -17,14 +17,14 @@ from graphviz import Digraph
 
 bp = Blueprint("view", __name__)
 
-def build_table_for_reperti(reperti):
+def build_table_for_reperti(record):
     headers = [
         "ID", "US", "Numero cassa", "Sito", "Data",
         "Materiale", "Descrizione", "Quantità", "Lavato", "Siglato",
         "Punto stazione totale", "Coordinate", "Note"
     ]
     rows = []
-    for r in reperti:
+    for r in record:
         rows.append([
             f'<a href="{url_for("view.reperto_notevole", id=r.id)}">Reperto №{r.id}</a>',
             f'<a href="{url_for("view.scheda", id=r.scheda_us.id)}">US {r.scheda_us.num_us}</a>',
@@ -42,7 +42,7 @@ def build_table_for_reperti(reperti):
         ])
     return headers, rows
 
-def build_table_for_schede(schede):
+def build_table_for_schede(record):
     labels = {
         "si": "Sì",
         "no": "No",
@@ -57,7 +57,7 @@ def build_table_for_schede(schede):
     ]
         
     rows = []
-    for r in schede:
+    for r in record:
         rows.append([
             f'<a href="{url_for("view.scheda", id=r.id)}">US {r.num_us}</a>',
             r.descrizione,
@@ -77,6 +77,31 @@ def build_table_for_schede(schede):
             r.interpretazione,
             r.misure,
             r.note or ""
+        ])
+    return headers, rows
+
+def build_table_for_ortofoto(record):
+    headers = [
+        "Descrizione", "Link", "US associate", "Data", "Operatore", "Completato", "Target", "Note"
+    ]
+        
+    rows = []
+    for r in record:        
+        schede_us = r.schede_us
+        us_list = ", ".join([f"<a href=\"{url_for('view.scheda', id=s.id)}\">US {s.num_us}</a>" for s in schede_us]) if schede_us else "N/D"
+
+        operatore = Anagrafica.query.get(r.id_operatore)
+        name_and_surname = f"{operatore.nome} {operatore.cognome}" if operatore else "N/A"
+
+        rows.append([
+            r.descrizione,
+            f'<a href="{r.path_ortofoto}">Apri link</a>',
+            us_list,
+            r.data.strftime('%d/%m/%Y') if r.data else '',
+            name_and_surname,
+            "&#10004;" if r.completato else "",
+            r.target,
+            r.note
         ])
     return headers, rows
 
@@ -196,9 +221,15 @@ def photo(filename):
 @bp.route("/visualizza_ortofoto", methods=["GET"])
 def visualizza_ortofoto():
     page_title = "Ortofoto"
-
     ortofoto = Ortofoto.query.order_by(Ortofoto.id.asc()).all()
-    return render_template("view/visualizza_ortofoto.html", ortofoto=ortofoto, title=page_title)
+    
+    headers, rows = build_table_for_ortofoto(ortofoto)
+
+    return render_template(
+        "view/visualizza_ortofoto.html", 
+        headers=headers,
+        rows=rows, 
+        title=page_title)
 
 @bp.route("/genera_grafo_stratigrafico", methods=["GET"])
 def genera_grafo():
