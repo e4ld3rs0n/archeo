@@ -1,0 +1,50 @@
+{% include 'header.html' %}
+    <div class="container">
+        <h1>Nuovo sacchetto materiali</h1>
+
+        {% include 'notifications.html' %}
+
+        <form method="POST">
+            <label for="id_scheda">Unità stratigrafica*:</label>
+            <select name="id_scheda" id="id_scheda" required>
+                {% for scheda in schede %}
+                    <option value="{{ scheda.id }}">US {{ scheda.num_us }} - {{ scheda.descrizione }}</option>
+                {% endfor %}
+            </select><br><br>
+
+            <label>Numero sacchetto*: <input type="text" name="num_sac" required></label><br>
+            <label>Sito*: <input type="text" name="sito" required></label><br>
+            <label>Data*: <input type="date" name="data" value="{{ today_date }}" required></label><br>
+            <label>Quadrato*: <input type="text" name="quadrato" required></label><br>
+            <label>Materiale*: <input type="text" name="materiale" required></label><br>
+
+            
+            <label>Lavato*:
+                <select name="lavato" required>
+                    <option value="true">Sì</option>
+                    <option value="false">No</option>
+                </select>
+            </label><br>
+
+            <label>Siglato*:
+                <select name="siglato" required>
+                    <option value="true">Sì</option>
+                    <option value="false">No</option>
+                </select>
+            </label><br>
+
+            <label>Disegnato*:
+                <select name="disegnato" required>
+                    <option value="true">Sì</option>
+                    <option value="false">No</option>
+                </select>
+            </label><br>
+
+            <label>Note: <textarea name="note"></textarea></label><br>
+
+            <button type="submit">Salva</button>
+        </form>
+    </div>
+
+    {% include 'footer.html' %}
+</html>

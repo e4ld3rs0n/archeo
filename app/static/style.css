@@ -9,6 +9,8 @@
     --disabledtext: #a89e94;    /* Muted grey-brown for disabled elements */
     --border: #d6c6b4;          /* Light earthy border */
     --hover: #a26945;           /* Warmer and clearer brown for interaction */
+    --font-body:   'Lora', serif;
+    --font-heading: 'Playfair Display', serif;
 }
 
 /* Global Styles */
@@ -263,7 +265,10 @@ a.button-link:hover {
 }
 
 /* Forms */
-form input, form select, form textarea {
+/* form input:not([type="checkbox"]):not([type="radio"]), */
+form input,
+form select,
+form textarea {
     width: 100%;
     padding: 10px;
     margin-bottom: 16px;
@@ -274,6 +279,21 @@ form input, form select, form textarea {
     box-sizing: border-box;  /* This line ensures consistent width calculation */
 }
 
+/* reset the generic input rules */
+form input[type="checkbox"].custom,
+form input[type="radio"].custom {
+  width: auto;
+  height: auto;
+  margin: 0.8rem 1rem 0.8rem 0;
+  padding: 0;
+  border: none;
+  background: none;
+  box-shadow: none;
+  vertical-align: middle;
+  cursor: pointer;
+  accent-color: var(--primary);
+}
+
 form textarea {
     resize: vertical;
 }
@@ -281,7 +301,7 @@ form textarea {
 form label {
     display: block;
     font-size: 0.8rem;
-    font-weight: 700;
+    font-weight: 600;
     color: var(--primary);
     max-width: 100%;  /* Prevent labels from overflowing */
 }

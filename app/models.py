@@ -99,7 +99,7 @@ class SchedaUS(db.Model):
     num_us = db.Column(db.String(16), nullable=False, unique=True)
     id_responsabile = db.Column(db.Integer, db.ForeignKey("anagrafica.id"), nullable=False)
     id_res_scientifico = db.Column(db.Integer, db.ForeignKey("anagrafica.id"), nullable=False)
-    descrizione = db.Column(db.String(255), nullable=False)
+    descrizione = db.Column(db.String(2000), nullable=False)
     id_ente_resp = db.Column(db.Integer, db.ForeignKey("ente.id"), nullable=False)
     id_localita = db.Column(db.Integer, db.ForeignKey("localita.id"), nullable=False)
     data = db.Column(db.DateTime, nullable=False)

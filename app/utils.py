@@ -23,6 +23,8 @@ def index():
     count_enti = db.session.query(Ente).count()
     count_us = db.session.query(SchedaUS).count()
     count_reperti = db.session.query(RepertoNotevoleUS).count()
+    count_sacchetti = db.session.query(SacchettoMateriali).count()
+    count_casse_materiali = db.session.query(CassaMateriali).count()
 
     return render_template(
         "index.html",
@@ -30,7 +32,9 @@ def index():
         count_anagrafiche=count_anagrafiche,
         count_us=count_us,
         count_enti=count_enti,
-        count_reperti=count_reperti
+        count_reperti=count_reperti,
+        count_sacchetti=count_sacchetti,
+        count_casse_materiali=count_casse_materiali
         )
 
 @bp.route("/initdb", methods=["GET"])

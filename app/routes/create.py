@@ -496,3 +496,47 @@ def nuova_ortofoto():
         from_id=from_id,
         title=page_title
     )
+
+@bp.route("/sacchetto_materiali", methods=["GET", "POST"])
+def nuovo_sacchetto_materiali():
+    page_title = "Nuovo sacchetto materiali"
+
+    if request.method == "POST":
+        try:
+            new_sacchetto = SacchettoMateriali(
+                num_sac = request.form.get("num_sac"),
+                sito = request.form.get("sito"),
+                data = datetime.strptime(request.form.get("data"), "%Y-%m-%d"),
+                id_us = request.form.get("id_scheda"),
+                quadrato = request.form.get("quadrato"),
+                materiale = request.form.get("materiale"),
+                lavato = True if request.form.get("lavato") else False,
+                siglato = True if request.form.get("siglato") else False,
+                disegnato = True if request.form.get("diseganto") else False,
+                note = request.form.get("note"),
+            )
+        
+            db.session.add(new_sacchetto)
+
+            # Aggiorna il vettore di ricerca
+            db.session.flush()
+            new_sacchetto.update_search_vector()
+
+            # Applica i cambiamenti al database
+            db.session.commit()
+            flash("Sacchetto materiali creato", "success")
+        except Exception as e:
+            db.session.rollback()
+            flash(f"Errore nella creazione: {str(e)}", "error")
+            return redirect(url_for("create.nuovo_sacchetto_materiali", title=page_title))
+
+    # Fetch existing data for the form
+    schede = SchedaUS.query.order_by(SchedaUS.id).all()
+    today_date = date.today().strftime('%Y-%m-%d')
+
+    return render_template(
+        "create/nuovo_sacchetto_materiali.html",
+        today_date=today_date,
+        schede=schede,
+        title=page_title
+    )
