@@ -99,7 +99,7 @@ class SchedaUS(db.Model):
     num_us = db.Column(db.String(16), nullable=False, unique=True)
     id_responsabile = db.Column(db.Integer, db.ForeignKey("anagrafica.id"), nullable=False)
     id_res_scientifico = db.Column(db.Integer, db.ForeignKey("anagrafica.id"), nullable=False)
-    descrizione = db.Column(db.String(2000), nullable=False)
+    descrizione = db.Column(db.Text, nullable=False)
     id_ente_resp = db.Column(db.Integer, db.ForeignKey("ente.id"), nullable=False)
     id_localita = db.Column(db.Integer, db.ForeignKey("localita.id"), nullable=False)
     data = db.Column(db.DateTime, nullable=False)
@@ -110,9 +110,9 @@ class SchedaUS(db.Model):
     consistenza = db.Column(db.String(255), nullable=False)
     comp_organici = db.Column(db.String(255))
     comp_inorganici = db.Column(db.String(255))
-    interpretazione = db.Column(db.String(255))
+    interpretazione = db.Column(db.Text)
     misure = db.Column(db.String(255))
-    note = db.Column(db.String(2000), nullable=True)
+    note = db.Column(db.Text, nullable=True)
     campionature = db.Column(db.Boolean, nullable=False)
     flottazione = db.Column(db.String(16), nullable=False)          ### Non è più un booleano
     setacciatura = db.Column(db.String(16), nullable=False)         ### Non è più un booleano
